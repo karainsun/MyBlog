@@ -1,6 +1,8 @@
 const path = require('path') 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// 映射 tsconfig 路径
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const isDev = process.env.NODE_ENV
 // 抽离公共部分
@@ -51,7 +53,12 @@ const config = {
     alias:{
       '@': path.join(__dirname, '../src')
     },
-    extensions: ['.ts', '.tsx', '.js', '.jsx']
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    plugins: [
+        new TsconfigPathsPlugin({
+            configFile: path.join(__dirname, '../tsconfig.json')
+        })
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({

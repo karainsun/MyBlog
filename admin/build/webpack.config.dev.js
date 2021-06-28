@@ -10,6 +10,8 @@ const base = require('./webpack.config')
 process.env.NODE_ENV = 'development'
 
 const config = merge(base, {
+  // 设置target，否则热更新无效
+  target: 'web',
   mode: process.env.NODE_ENV,
   devServer: {
     // 将 dist 目录下的文件，作为可访问文件
@@ -22,8 +24,7 @@ const config = merge(base, {
     noInfo: true, 
     overlay: {
       errors: true
-    }, 
-    disableHostCheck: true 
+    }
   },
   plugins: [
     new ReactRefreshPlugin()

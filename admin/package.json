@@ -7,7 +7,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack serve --config build/webpack.config.dev.js",
     "build": "cross-env NODE_ENV=production webpack --config build/webpack.config.prod.js",
-    "test": "cross-env NODE_ENV=test jest --config=jest.config.js --runInBand"
+    "test": "cross-env NODE_ENV=test jest --config=jest.config.js --runInBand",
+    "watch": "webpack --watch"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
@@ -41,6 +42,7 @@
     "redux-devtools": "^3.7.0",
     "style-loader": "^2.0.0",
     "ts-jest": "^27.0.2",
+    "tsconfig-paths-webpack-plugin": "^3.5.1",
     "typescript": "^4.3.2",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0",

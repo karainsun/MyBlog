@@ -38,6 +38,7 @@
     "postcss-preset-env": "^6.7.0",
     "react-refresh": "^0.10.0",
     "react-test-renderer": "^17.0.2",
+    "redux-devtools": "^3.7.0",
     "style-loader": "^2.0.0",
     "ts-jest": "^27.0.2",
     "typescript": "^4.3.2",
@@ -48,9 +49,12 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-private-methods": "^7.13.0",
-    "antd": "^4.16.1",
+    "antd": "^4.16.5",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.0",
+    "redux-thunk": "^2.3.0"
   },
   "browserslist": "> 0.25%, not dead"
 }

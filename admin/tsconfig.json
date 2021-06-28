@@ -19,9 +19,10 @@
     "noUnusedLocals": true,
     "outDir": "dist",
     "paths": {
-      "@compoents": ["./components/*"],
-      "@/*": ["./*"],
-    },  
+      "src": [
+        "./src"
+      ],
+    },
   },
   "include": [
     "src",
@@ -29,7 +30,7 @@
   "exclude": [
     "node_modules",
     "build",
-    "dist", 
+    "dist",
     "scripts",
     "acceptance-tests",
     "webpack",

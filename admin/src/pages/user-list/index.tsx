@@ -1,7 +1,7 @@
-import React, { FC } from "react"
+import React, { FC } from 'react';
 
 const UserList: FC = () => {
-  return <div>UserList</div>
-}
+  return <div>UserList</div>;
+};
 
-export default UserList
+export default UserList;

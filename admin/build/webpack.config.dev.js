@@ -1,13 +1,9 @@
-const {
-  join
-} = require('path')
-const {
-  merge
-} = require('webpack-merge');
-const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
-const base = require('./webpack.config')
+const { join } = require('path');
+const { merge } = require('webpack-merge');
+const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const base = require('./webpack.config');
 
-process.env.NODE_ENV = 'development'
+process.env.NODE_ENV = 'development';
 
 const config = merge(base, {
   // 设置target，否则热更新无效
@@ -21,14 +17,12 @@ const config = merge(base, {
     host: 'localhost',
     port: 3003,
     hot: true,
-    noInfo: true, 
+    noInfo: true,
     overlay: {
       errors: true
     }
   },
-  plugins: [
-    new ReactRefreshPlugin()
-  ]
-})
+  plugins: [new ReactRefreshPlugin()]
+});
 
-module.exports = config
+module.exports = config;

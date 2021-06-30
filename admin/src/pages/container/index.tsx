@@ -1,10 +1,10 @@
-import React, { FC } from "react"
-import { Layout } from 'antd'
+import React, { FC } from 'react';
+import { Layout } from 'antd';
 
-import Head from 'layouts/header'
-import Side from 'layouts/side'
+import Head from 'layouts/header';
+import Side from 'layouts/side';
 
-import Routes from 'router'
+import Routes from 'router';
 
 const Container: FC = () => {
   return (
@@ -17,14 +17,13 @@ const Container: FC = () => {
           style={{
             margin: '10px 10px',
             padding: 10,
-            minHeight: 'calc(100vh - 84px)',
-          }}
-        >
+            minHeight: 'calc(100vh - 84px)'
+          }}>
           <Routes />
         </Layout.Content>
       </Layout>
     </Layout>
-  )
-}
+  );
+};
 
-export default Container
+export default Container;

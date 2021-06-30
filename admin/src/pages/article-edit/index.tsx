@@ -1,7 +1,7 @@
-import React, { FC } from "react"
+import React, { FC } from 'react';
 
 const ArticleEdit: FC = () => {
-  return <div>ArticleEdit</div>
-}
+  return <div>ArticleEdit</div>;
+};
 
-export default ArticleEdit
+export default ArticleEdit;

@@ -1,9 +1,9 @@
 export const setCollapsed = (collapsed: any): object => {
-  return (dispatch: (arg: { type: string; collapsed: any; }) => void) => {
+  return (dispatch: (arg: { type: string; collapsed: any }) => void) => {
     (() => {
       dispatch({
-        type: "SET_COLLAPSED",
-        collapsed,
+        type: 'SET_COLLAPSED',
+        collapsed
       });
     })();
   };

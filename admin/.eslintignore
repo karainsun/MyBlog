@@ -1,0 +1,8 @@
+src/registerServiceWorker.js
+src/**/test/**
+config-overrides.js
+build
+.vscode
+src/serviceWorker.js
+typings
+public

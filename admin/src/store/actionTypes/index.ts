@@ -5,7 +5,7 @@
  */
 
 const actions = {
-  SET_COLLAPSED: "SET_COLLAPSED",
+  SET_COLLAPSED: 'SET_COLLAPSED'
 };
 
-export default actions
+export default actions;

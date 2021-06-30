@@ -1,18 +1,15 @@
-const path = require('path') 
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // 映射 tsconfig 路径
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
-const isDev = process.env.NODE_ENV
+const isDev = process.env.NODE_ENV;
 // 抽离公共部分
-const commonCssLoader = [
-  isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-  'css-loader',
-  'postcss-loader'
-];
+const commonCssLoader = [isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'];
 
-const commonRules = [{
+const commonRules = [
+  {
     test: /\.css$/,
     use: [...commonCssLoader]
   },
@@ -20,7 +17,7 @@ const commonRules = [{
     test: /\.less$/,
     use: [...commonCssLoader, 'less-loader']
   }
-]
+];
 
 const config = {
   entry: {
@@ -33,6 +30,12 @@ const config = {
   },
   module: {
     rules: [
+      {
+        test: /\.(jsx|js|ts|tsx)$/,
+        exclude: [/node_modules/],
+        use: ['eslint-loader'],
+        enforce: 'pre'
+      },
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node-modules/,
@@ -48,16 +51,16 @@ const config = {
         type: 'asset'
       }
     ]
-  }, 
+  },
   resolve: {
-    alias:{
+    alias: {
       '@': path.join(__dirname, '../src')
     },
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     plugins: [
-        new TsconfigPathsPlugin({
-            configFile: path.join(__dirname, '../tsconfig.json')
-        })
+      new TsconfigPathsPlugin({
+        configFile: path.join(__dirname, '../tsconfig.json')
+      })
     ]
   },
   plugins: [
@@ -67,6 +70,6 @@ const config = {
       template: path.join(__dirname, 'template.html')
     })
   ]
-}
+};
 
-module.exports = config
+module.exports = config;

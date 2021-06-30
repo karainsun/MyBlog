@@ -1,18 +1,13 @@
-import {
-  HomeOutlined,
-  BankOutlined,
-  UserOutlined,
-  AuditOutlined
-} from '@ant-design/icons'
+import { HomeOutlined, FileTextOutlined, UserOutlined, AppstoreOutlined, TeamOutlined } from '@ant-design/icons';
 
 /**
- * path 跳转的路径 
+ * path 跳转的路径
  * exact 匹配规则，true的时候则精确匹配。
  */
 
 export interface RouteProps {
   path: string;
-  name: string; 
+  name: string;
   key: string;
   type?: string;
   icon?: any;
@@ -22,28 +17,28 @@ export interface RouteProps {
 const routes: RouteProps[] = [
   {
     path: '/',
-    name: '首页', 
+    name: '首页',
     key: '/home',
-    icon: HomeOutlined 
+    icon: HomeOutlined
   },
   {
     path: '/article',
     name: '文章管理',
     key: '/article',
     type: 'subMenu',
-    icon: UserOutlined,
+    icon: FileTextOutlined,
     children: [
       {
         path: '/article/list',
-        name: '文章列表', 
+        name: '文章列表',
         type: 'menuItem',
-        key: '/article/list' 
+        key: '/article/list'
       },
       {
         path: '/article/edit',
-        name: '编辑文章', 
+        name: '编辑文章',
         type: 'menuItem',
-        key: '/article/edit' 
+        key: '/article/edit'
       }
     ]
   },
@@ -56,15 +51,15 @@ const routes: RouteProps[] = [
     children: [
       {
         path: '/user/list',
-        name: '用户列表', 
+        name: '用户列表',
         type: 'menuItem',
-        key: '/user/list' 
+        key: '/user/list'
       },
       {
         path: '/user/edit',
-        name: '编辑用户', 
+        name: '编辑用户',
         type: 'menuItem',
-        key: '/user/edit' 
+        key: '/user/edit'
       }
     ]
   },
@@ -73,19 +68,19 @@ const routes: RouteProps[] = [
     name: '分类管理',
     key: '/category',
     type: 'subMenu',
-    icon: AuditOutlined,
+    icon: AppstoreOutlined,
     children: [
       {
         path: '/category/list',
-        name: '分类列表', 
+        name: '分类列表',
         type: 'menuItem',
-        key: '/category/list' 
+        key: '/category/list'
       },
       {
         path: '/category/edit',
-        name: '编辑分类', 
+        name: '编辑分类',
         type: 'menuItem',
-        key: '/category/edit' 
+        key: '/category/edit'
       }
     ]
   },
@@ -94,28 +89,28 @@ const routes: RouteProps[] = [
     name: '角色管理',
     key: '/role',
     type: 'subMenu',
-    icon: BankOutlined,
+    icon: TeamOutlined,
     children: [
       {
         path: '/role/list',
-        name: '角色列表', 
+        name: '角色列表',
         type: 'menuItem',
-        key: '/role/list' 
+        key: '/role/list'
       }
     ]
-  },
+  }
   // {
   //   path: '/403',
-  //   name: '暂无权限', 
+  //   name: '暂无权限',
   //   icon: BankOutlined,
-  //   key: '/403' 
+  //   key: '/403'
   // },
   // {
   //   path: '/404',
-  //   name: 'NotFound', 
+  //   name: 'NotFound',
   //   icon: BankOutlined,
-  //   key: '/404' 
+  //   key: '/404'
   // }
-]
+];
 
-export default routes
+export default routes;

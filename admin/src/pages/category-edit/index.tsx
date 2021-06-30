@@ -1,7 +1,7 @@
-import React, { FC } from "react"
+import React, { FC } from 'react';
 
 const CategoryEdit: FC = () => {
-  return <div>CategoryEdit</div>
-}
+  return <div>CategoryEdit</div>;
+};
 
-export default CategoryEdit
+export default CategoryEdit;

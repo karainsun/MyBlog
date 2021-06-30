@@ -1,7 +1,7 @@
-import React, { FC } from "react"
+import React, { FC } from 'react';
 
 const ArticleList: FC = () => {
-  return <div>ArticleList</div>
-}
+  return <div>ArticleList</div>;
+};
 
-export default ArticleList
+export default ArticleList;

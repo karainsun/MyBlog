@@ -1,7 +1,7 @@
-import React, { FC } from "react"
+import React, { FC } from 'react';
 
 const Role: FC = () => {
-  return <div>Role</div>
-}
+  return <div>Role</div>;
+};
 
-export default Role
+export default Role;

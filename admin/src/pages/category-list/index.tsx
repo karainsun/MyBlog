@@ -1,7 +1,7 @@
-import React, { FC } from "react"
+import React, { FC } from 'react';
 
 const CategoryList: FC = () => {
-  return <div>CategoryList</div>
-}
+  return <div>CategoryList</div>;
+};
 
-export default CategoryList
+export default CategoryList;

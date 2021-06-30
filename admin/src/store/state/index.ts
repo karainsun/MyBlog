@@ -3,7 +3,7 @@ export interface StoreState {
 }
 
 const initState: StoreState = {
-  collapsed: false, // 菜单收起
-}
+  collapsed: false // 菜单收起
+};
 
-export default initState
+export default initState;

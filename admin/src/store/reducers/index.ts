@@ -1,15 +1,23 @@
-const init = {
-  number: 0,
-};
+import initState from "store/state";
+import actionTypes from "store/actionTypes";
 
-export default (state = init, action: { type: any; count: number; }) => {
-  console.log("aqwe", action);
+interface Action {
+  type: string;
+  collapsed: boolean;
+}
+
+const storeData = (state = initState, action: Action) => {
   switch (action.type) {
-    case "addCount":
-      return { ...state, number: action.count + 1 };
-    case "reduceCount":
-      return { ...state, number: action.count - 1 };
+    case actionTypes.SET_COLLAPSED:
+      return {
+        ...state,
+        collapsed: action.collapsed,
+      };
     default:
-      return state;
+      return {
+        ...state,
+      };
   }
 };
+
+export default storeData;

@@ -1,1 +1,16 @@
 @import '~antd/dist/antd.css';
+ 
+.scrollbar::-webkit-scrollbar {
+  width: 3px;
+  height: 1px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 3px; 
+  background: #535353;
+}
+
+.scrollbar::-webkit-scrollbar-track { 
+  border-radius: 3px;
+  background: #383838;
+}

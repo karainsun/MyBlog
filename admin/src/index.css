@@ -1,5 +1,8 @@
 @import '~antd/dist/antd.css';
- 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .scrollbar::-webkit-scrollbar {
   width: 3px;
   height: 1px;

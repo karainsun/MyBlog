@@ -23,7 +23,7 @@ const routes: RouteProps[] = [
   },
   {
     path: '/article',
-    name: '文章管理',
+    name: '文章',
     key: '/article',
     type: 'subMenu',
     icon: FileTextOutlined,
@@ -44,7 +44,7 @@ const routes: RouteProps[] = [
   },
   {
     path: '/user',
-    name: '用户管理',
+    name: '用户',
     key: '/user',
     type: 'subMenu',
     icon: UserOutlined,
@@ -65,7 +65,7 @@ const routes: RouteProps[] = [
   },
   {
     path: '/category',
-    name: '分类管理',
+    name: '分类',
     key: '/category',
     type: 'subMenu',
     icon: AppstoreOutlined,
@@ -86,7 +86,7 @@ const routes: RouteProps[] = [
   },
   {
     path: '/role',
-    name: '角色管理',
+    name: '角色',
     key: '/role',
     type: 'subMenu',
     icon: TeamOutlined,

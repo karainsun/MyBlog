@@ -1,6 +1,5 @@
 const { join } = require('path');
-const { merge } = require('webpack-merge');
-const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const { merge } = require('webpack-merge'); 
 const base = require('./webpack.config');
 
 process.env.NODE_ENV = 'development';
@@ -21,8 +20,7 @@ const config = merge(base, {
     overlay: {
       errors: true
     }
-  },
-  plugins: [new ReactRefreshPlugin()]
+  }
 });
 
 module.exports = config;

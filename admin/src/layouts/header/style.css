@@ -1,13 +1,15 @@
 .layout-header {
   background: #fff;
+  height: 50px;
+  line-height: 50px;
 }
 .layout-header .trigger {
   padding: 0 24px;
   font-size: 18px;
-  line-height: 64px;
+  line-height: 50px;
   cursor: pointer;
   transition: color 0.3s;
 }
-.layout-header:hover {
+.layout-header .trigger:hover {
   color: #1890ff;
 }

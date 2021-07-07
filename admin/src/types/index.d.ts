@@ -11,6 +11,10 @@ declare module 'redux-persist/lib/storage';
 declare module 'antd';
 declare module '@ant-design/icons';
 declare module 'antd/lib/locale/zh_CN';
+declare module "*.less" {
+  const css: { [key: string]: string };
+  export default css;
+}
 
 interface ReduxProps {
   storeData?: Record<string, any>;

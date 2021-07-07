@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // 映射 tsconfig 路径
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
-const isDev = process.env.NODE_ENV;
+const isDev = process.env.NODE_ENV; 
 // 抽离公共部分
 const commonCssLoader = [isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'];
 
@@ -53,9 +53,9 @@ const config = {
     ]
   },
   resolve: {
-    alias: {
-      '@': path.join(__dirname, '../src')
-    },
+    // alias: {
+    //   '@': path.join(__dirname, '../src')
+    // },
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     plugins: [
       new TsconfigPathsPlugin({

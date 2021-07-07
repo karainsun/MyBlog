@@ -1,4 +1,11 @@
-import { HomeOutlined, FileTextOutlined, UserOutlined, AppstoreOutlined, TeamOutlined } from '@ant-design/icons';
+import {
+  HomeOutlined,
+  FileTextOutlined,
+  UserOutlined,
+  AppstoreOutlined,
+  TeamOutlined,
+  SettingOutlined
+} from '@ant-design/icons';
 
 /**
  * path 跳转的路径
@@ -98,6 +105,12 @@ const routes: RouteProps[] = [
         key: '/role/list'
       }
     ]
+  },
+  {
+    path: '/setup',
+    name: '设置',
+    icon: SettingOutlined,
+    key: '/setup'
   }
   // {
   //   path: '/403',

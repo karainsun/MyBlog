@@ -15,6 +15,7 @@ import CategoryList from 'pages/category-list';
 import CategoryEdit from 'pages/category-edit';
 
 import RoleList from 'pages/role-list';
+import Setup from 'pages/setup';
 
 const route: FC = () => {
   return (
@@ -28,6 +29,7 @@ const route: FC = () => {
       <Route exact path="/category/list" component={CategoryList} />
       <Route exact path="/category/edit" component={CategoryEdit} />
       <Route exact path="/role/list" component={RoleList} />
+      <Route exact path="/setup" component={Setup} />
       <Route path="/error" component={ErrorPage} />
       <Route component={Notfound} />
     </Switch>

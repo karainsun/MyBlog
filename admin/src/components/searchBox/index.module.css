@@ -1,0 +1,24 @@
+.serachbox {
+  min-width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  border: 1px solid #e3e3e3;
+  padding: 2px 5px;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.serachbox:hover {
+  box-shadow: 0 0 0 2px #1890ff33;
+  transition: all 0.3s;
+}
+.serachbox input {
+  width: 0px;
+  height: 26px;
+  margin-left: 5px;
+  border-radius: 13px;
+  transition: 1s all;
+}
+.serachbox input:focus-visible {
+  outline: transparent;
+}

@@ -15,7 +15,7 @@ const config = merge(base, {
     compress: true,
     host: 'localhost',
     port: 3003,
-    hot: true,
+    hot: false,
     noInfo: true,
     overlay: {
       errors: true

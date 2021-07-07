@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
 import routes, { RouteProps } from 'router/config';
 import { useSelector } from 'react-redux';
@@ -19,6 +20,14 @@ const Side = () => {
   const { collapsed } = useSelector((state: StoreState) => state);
   const [openKeys, setOpenkeys] = useState<arr>([]);
   // const [rootSubmenuKeys, setrootSubmenuKeys] = useState<arr>([])
+  const getOpenKes = (path: string): Array<string> => {
+    return [path.split('/').map(i => '/' + i)[1]]
+  }
+
+  useEffect(() => {
+    // 设置当前展开菜单
+    setOpenkeys(getOpenKes(pathname))
+  }, [])
 
   const renderMenu = (list: RouteProps[]): JSX.Element[] => {
     return list.map((item): any => {
@@ -31,7 +40,7 @@ const Side = () => {
       } else {
         return (
           <Menu.Item key={item.key} title={item.name} icon={item.type === 'menuItem' ? '' : <item.icon />}>
-            <Link to={item.path}>{item.name}</Link>
+            <Link to={item.path} replace>{item.name}</Link>
           </Menu.Item>
         );
       }
@@ -53,7 +62,7 @@ const Side = () => {
       <div className="logo" />
       <Menu
         className="menu scrollbar"
-        theme="dark"
+        theme="light"
         mode="inline"
         onOpenChange={onOpenChange}
         openKeys={openKeys}

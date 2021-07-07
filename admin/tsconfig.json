@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowJs": true, // 是否允许编译 JavaScript 文件
     "declaration": true,
     "baseUrl": "./src",
     "module": "esnext",
@@ -12,7 +13,7 @@
     "forceConsistentCasingInFileNames": false,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noImplicitAny": true,
+    "noImplicitAny": true, // 是否需要显式的声明变量的类型 any
     "importHelpers": true,
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,

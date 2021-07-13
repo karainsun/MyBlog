@@ -5,7 +5,7 @@ import routes, { RouteProps } from 'router/config';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { StoreState } from 'store/state';
-import './style.less';
+import style from './style.module.less';
 
 type arr = Array<string | undefined>;
 
@@ -59,16 +59,18 @@ const Side = () => {
 
   return (
     <Layout.Sider trigger={null} collapsible collapsed={collapsed}>
-      <div className="logo" />
-      <Menu
-        className="menu scrollbar"
-        theme="light"
-        mode="inline"
-        onOpenChange={onOpenChange}
-        openKeys={openKeys}
-        defaultSelectedKeys={pathname}>
-        {renderMenu(routes)}
-      </Menu>
+      <div className={style.logo}>Kay`s Blog</div>
+      <div className="shadow-lg">
+        <Menu
+          className={style.menu}
+          theme="light"
+          mode="inline"
+          onOpenChange={onOpenChange}
+          openKeys={openKeys}
+          defaultSelectedKeys={pathname}>
+          {renderMenu(routes)}
+        </Menu>
+      </div>
     </Layout.Sider>
   );
 };

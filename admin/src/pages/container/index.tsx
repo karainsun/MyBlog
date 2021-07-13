@@ -6,20 +6,18 @@ import Side from 'layouts/side';
 
 import Routes from 'router';
 
+import style from './style.module.less'
+
 const Container: FC = () => {
   return (
     <Layout>
       <Side></Side>
       <Layout className="site-layout">
         <Head></Head>
-        <Layout.Content
-          className="site-layout-background"
-          style={{
-            margin: '10px 10px',
-            padding: 10,
-            minHeight: 'calc(100vh - 84px)'
-          }}>
-          <Routes />
+        <Layout.Content className={`${style.container} noscrollbar`}>
+          <div className={style.routeSite}>
+            <Routes />
+          </div>
         </Layout.Content>
       </Layout>
     </Layout>

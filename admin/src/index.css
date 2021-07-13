@@ -2,8 +2,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/**覆盖 antd 样式**/
+.ant-menu-vertical .ant-menu-item::after,
+.ant-menu-vertical-left .ant-menu-item::after,
+.ant-menu-vertical-right .ant-menu-item::after,
+.ant-menu-inline .ant-menu-item::after {
+  border-right: 0px solid #fff !important;
+}
+.ant-menu-item[title="首页"]{
+  background-color: #fff;
+}
+.weatherBox .ant-select{
+  font-size: 12px;
+}
+.weatherBox .ant-select:not(.ant-select-customize-input) .ant-select-selector{
+  border: none;
+}
 
-.scrollbar::-webkit-scrollbar {
+/**添加字体**/
+@font-face {
+  font-family: 'Slidefu';
+  src: local('Slidefu'), url(./assets/fonts/font-family/Slidefu-Regular-2.ttf) format('truetype');
+}
+@font-face {
+  font-family: "wanghanzong"; 
+  src: local('wanghanzong'),  url(./assets/fonts/font-family/wanghanzongkulihaibao.ttf) format('truetype');
+}
+
+.noscrollbar::-webkit-scrollbar {
   width: 0px;
   height: 0px;
 }

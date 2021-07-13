@@ -1,0 +1,26 @@
+.logo {
+  height: 50px;
+  background: #fff;
+  line-height: 50px;
+  text-align: center;
+  font-family: 'wanghanzong';
+  font-size: 28px;
+  color: #a5a5a5;
+}
+.menu {
+  box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.05);
+  height: calc(100vh - 50px);
+  overflow-y: scroll;
+}
+.menu::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+.menu::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: #535353;
+}
+.menu::-webkit-scrollbar-track {
+  border-radius: 3px;
+  background: #383838;
+}

@@ -4,7 +4,7 @@ import { Breadcrumb } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import routes from 'router/config'
 import { flatten, arrToObj } from 'utils'
-import './style.less'
+import style from './style.module.less'
 
 const routesFlat = arrToObj(flatten(routes, 'children'))
 
@@ -15,14 +15,13 @@ const CustomBread: FC = () => {
   if (pathSnippets.length > 1) {
     pathSnippets.splice(pathSnippets.length - 1, 1, pathname)
   }
-  return (<div className="breadcrumb">
-    <Breadcrumb>
-      <Breadcrumb.Item><Link to={'/'}><HomeOutlined/></Link></Breadcrumb.Item>
+  return (<div className={style.breadcrumb}>
+    <Breadcrumb separator="•">
+      <Breadcrumb.Item><Link to={'/'}><HomeOutlined style={{ marginTop: '-3px' }}/></Link></Breadcrumb.Item>
       {
         pathSnippets.map((item, index) => {
           return <Breadcrumb.Item key={index}>{routesFlat[item]}</Breadcrumb.Item>
-        })
-
+        }) 
       }
     </Breadcrumb>
   </div>)

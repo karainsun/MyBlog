@@ -26,7 +26,7 @@ const config = {
   output: {
     filename: 'js/[contenthash:8].js',
     path: path.join(__dirname, '../dist'),
-    assetModuleFilename: 'img/[name].[hash:8].[ext]'
+    assetModuleFilename: 'images/[name].[hash:6].[ext]'
   },
   module: {
     rules: [
@@ -49,6 +49,13 @@ const config = {
       {
         test: /\.(png|jpg|jpeg|gif|webp)$/,
         type: 'asset'
+      },
+      {
+        test: /\.(ttf|woff|eot|svg|woff2)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'fonts/[name].[hash:6].[ext]',
+        },
       }
     ]
   },
@@ -65,7 +72,7 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: '管理后台',
+      title: 'Kay`s admin',
       filename: 'index.html',
       template: path.join(__dirname, 'template.html')
     })

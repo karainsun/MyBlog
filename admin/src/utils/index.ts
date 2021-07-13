@@ -38,3 +38,22 @@ export const arrToObj = (arr: Array<{ path?: string; name?: string }>) => {
     return prev;
   }, {} as { [key: string]: string | undefined });
 };
+// 获取当前地理坐标  121.445   31.213
+export const getLocation = (): any => {
+  if (navigator.geolocation) {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          resolve(position.coords);
+        },
+        function (e) {
+          // throw new Error('faild')
+          reject(e);
+          // return e
+          // throw e
+        },
+        { enableHighAccuracy: true }
+      );
+    });
+  }
+}; 

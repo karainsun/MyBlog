@@ -1,0 +1,21 @@
+.comments-list .comment-item .comment-title {
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.comments-list .comment-item .comment-title:hover {
+  text-decoration: underline;
+  transform: translateX(3px);
+  transition: all 0.3s;
+}
+.comments-list::-webkit-scrollbar {
+  width: 2px;
+  height: 10px;
+}
+.comments-list::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: #d8d8d8;
+}
+.comments-list::-webkit-scrollbar-track {
+  border-radius: 3px;
+  background: #fff;
+}

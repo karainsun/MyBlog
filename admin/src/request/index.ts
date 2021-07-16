@@ -18,7 +18,7 @@ export const getWeather = (params: WeatherParams) =>
     url: 'https://devapi.qweather.com/v7/weather/now',
     params
   });
-
+// 获取热门城市
 export const getTopCity = (params: CityParams) => ajax({
   method: 'GET',
   url: 'https://geoapi.qweather.com/v2/city/top',

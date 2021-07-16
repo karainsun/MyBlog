@@ -1,3 +1,6 @@
+.weatherBox {
+  min-height: 120px;
+}
 .weatherBox .temp {
   position: relative;
 }

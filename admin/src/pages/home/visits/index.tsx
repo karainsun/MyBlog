@@ -1,4 +1,5 @@
-import React, { FC, useMemo } from 'react'; 
+import React, { FC, useMemo, useState, useEffect } from 'react';
+import { Skeleton } from 'antd';
 import { EChartsOption } from "echarts";
 import ReactEcharts from "echarts-for-react";
 
@@ -50,25 +51,30 @@ const firstOption: EChartsOption = {
 }
 
 const EchartsTpl: FC<EchartsProps> = () => {
+  const [loading, setLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
+  }, [])
   const getOption = () => {
     return firstOption;
   };
 
   // 数据变化才调用options
   const actiongetOption = useMemo(() => getOption(), [])
-  // 数据变化调用click事件
-  // const handleChartClickEvents = useMemo(()=>handleChartClick,[])
 
-
-  return (<div>
-    <ReactEcharts
-      style={{ background: "#fff", height: "300px", width: "100%" }}
-      option={actiongetOption}
-      notMerge={true}
-      lazyUpdate={true}
-    />
-
-  </div>)
+  return (
+    <Skeleton loading={loading} active paragraph={{ rows: 6 }}>
+      <ReactEcharts
+        style={{ background: "#fff", height: "300px", width: "100%" }}
+        option={actiongetOption}
+        notMerge={true}
+        lazyUpdate={true}
+      />
+    </Skeleton>
+  )
 }
 
 export default EchartsTpl

@@ -1,0 +1,31 @@
+.article-list{
+  .article-item{
+    img{
+      object-fit: cover;
+      transition: all .3s; 
+    } 
+    &:hover img{
+      transform: scale(1.1);
+      transition: all .3s;
+    }
+    .article-content{
+      transform:translateY(28px);
+      transition: all .3s;
+      background-color: rgba(255, 255, 255, 0.6);
+      .article-title{
+        font-size: 16px;
+      }
+      .article-option{
+        color: #666;
+        span{
+          display: inline-block;
+          vertical-align: middle; 
+        }
+      }
+    }
+    &:hover .article-content{
+      transform:translateY(0px);
+      transition: all .3s;
+    }
+  } 
+}

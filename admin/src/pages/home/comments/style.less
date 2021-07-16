@@ -1,0 +1,27 @@
+.comments-list{
+  .comment-item{
+    .comment-title{
+      cursor: pointer;
+      transition: all .3s;
+      &:hover{
+        text-decoration: underline;
+        transform: translateX(3px);
+        transition: all .3s;
+      }
+    }
+  }
+}
+.comments-list::-webkit-scrollbar {
+  width: 2px;
+  height: 10px;
+}
+
+.comments-list::-webkit-scrollbar-thumb {
+  border-radius: 3px; 
+  background: rgb(216, 216, 216);
+}
+
+.comments-list::-webkit-scrollbar-track { 
+  border-radius: 3px;
+  background: #fff;
+}

@@ -1,0 +1,9 @@
+.message-list .message-item {
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.message-list .message-item:hover {
+  transform: translateY(3px);
+  transition: all 0.3s;
+  background-color: #fafafa;
+}

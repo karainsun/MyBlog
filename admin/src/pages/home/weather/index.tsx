@@ -55,7 +55,7 @@ const Weather: FC<WeatherProps> = () => {
     setCityName(arr[1])
   } 
 
-  return !isshow ? <Skeleton /> : (
+  return !isshow ? <div style={{ height: '120px' }}><Skeleton active paragraph={{ rows: 2 }} /></div> : (
     <div className={`${style.weatherBox} relative weatherBox`}>
       <div className="flex items-end">
         <span className="absolute top-0 right-0 text-xs">{dayjs(weatherInfo?.obsTime).format('YYYY-MM-DD HH:mm')}</span>
@@ -70,15 +70,15 @@ const Weather: FC<WeatherProps> = () => {
             }
           </Select>
         </div>
-        <div className="w-20">
-          <img className="w-20" src={weatherImg} alt="" />
+        <div className="w-16">
+          <img className="w-16" src={weatherImg} alt="" />
         </div>
         <div className="ml-4">
           <span className={`${style.temp} text-4xl`}>{weatherInfo?.temp}</span>
           <span className="ml-4">{weatherInfo?.text}</span>
         </div>
       </div>
-      <ul className="grid grid-cols-5 mt-8">
+      <ul className="grid grid-cols-5 mt-4">
         <li className="flex justify-center items-center">
           <div className="iconfont icon-weather1"></div>
           <div className="ml-2">

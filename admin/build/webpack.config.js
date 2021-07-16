@@ -60,9 +60,9 @@ const config = {
     ]
   },
   resolve: {
-    // alias: {
-    //   '@': path.join(__dirname, '../src')
-    // },
+    alias: {
+      'react-dom': '@hot-loader/react-dom'
+    },
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     plugins: [
       new TsconfigPathsPlugin({

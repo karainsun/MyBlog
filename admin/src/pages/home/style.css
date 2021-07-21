@@ -1,0 +1,17 @@
+.container {
+  animation: identifier 0.5s;
+}
+.container ul li {
+  background-color: #fff;
+  box-sizing: border-box;
+}
+@keyframes identifier {
+  0% {
+    opacity: 0;
+    transform: scale(0.7, 0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+}

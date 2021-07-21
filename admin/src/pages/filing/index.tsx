@@ -13,8 +13,7 @@ interface Columns {
 interface DataType {
   id: number;
   key: string;
-  title: string;
-  desc: string;
+  name: string;
   date: string;
 }
 
@@ -25,13 +24,8 @@ const columns: Columns[] = [
     width: 50,
   },
   {
-    title: '文章标题',
-    dataIndex: 'title',
-    width: 150,
-  },
-  {
-    title: '文章描述',
-    dataIndex: 'desc',
+    title: '标签名称',
+    dataIndex: 'name',
     width: 150,
   },
   {
@@ -46,13 +40,12 @@ for (let i = 0; i < 100; i++) {
   data.push({
     id: i,
     key: `a${i}`,
-    title: `这是第${i}章文章`,
-    desc: `这是第${i}章文章的描述`,
+    name: `这是第${i}个标签`,
     date: '2021-07-20'
   });
-} 
+}
 
-const ArticleList: FC = () => {
+const Filing: FC = () => {
   const [form] = Form.useForm();
   const [selectedRowKeys, setSelectedRowKeysstate] = useState<Array<any>>([])
 
@@ -116,4 +109,4 @@ const ArticleList: FC = () => {
   )
 };
 
-export default ArticleList;
+export default Filing;

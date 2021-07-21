@@ -1,20 +1,32 @@
 type arrType = Array<any>;
 
 /**
- * reduce 数组扁平化
+ * reduce 路由数组扁平化
  * @param {object[]} arr 数组
  * @param {string} key 键名
  */
 
-export const flatten = (arr: arrType, key: string): arrType => {
+export const routerFlatten = (arr: arrType, key: string): arrType => {
   const newArr = arr.map((f) =>
     Object.assign({}, { path: f.path, name: f.name })
   );
   return arr.reduce((res, item) => {
     const resCon = res.concat(
-      Array.isArray(item[key]) ? flatten(item[key], key) : item
+      Array.isArray(item[key]) ? routerFlatten(item[key], key) : item
     );
     return resCon.concat(newArr);
+  }, []);
+};
+
+/**
+ * reduce 数组扁平化
+ * @param {object[]} arr 数组
+ */
+export const flatten = (arr: arrType): arrType => {
+  return arr.reduce((res, item) => {
+    return res.concat(
+      Array.isArray(item.children) ? flatten(item.children) : item
+    );
   }, []);
 };
 
@@ -56,4 +68,20 @@ export const getLocation = (): any => {
       );
     });
   }
-}; 
+};
+
+export const setHeight = (h: number): number => {
+  let clientHeight = 0;
+  if (document.body.clientHeight && document.documentElement.clientHeight) {
+    clientHeight =
+      document.body.clientHeight < document.documentElement.clientHeight
+        ? document.body.clientHeight
+        : document.documentElement.clientHeight;
+  } else {
+    clientHeight =
+      document.body.clientHeight > document.documentElement.clientHeight
+        ? document.body.clientHeight
+        : document.documentElement.clientHeight;
+  }
+  return (clientHeight - h);
+};

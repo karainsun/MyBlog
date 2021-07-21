@@ -43,3 +43,16 @@
   border-radius: 3px;
   background: #383838;
 }
+.componentBox{ 
+  background-color: #fff;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.borderb-1{
+  border-bottom: 1px solid #e3e3e3
+}
+.componentList{
+  height: calc(100vh - 80px);
+  background-color: #fff;
+  padding: 16px;
+}

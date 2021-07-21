@@ -1,10 +1,13 @@
+import React from 'react';
+// import AsyncComponent from 'components/asyncComponent/index.js'
+
 import {
   HomeOutlined,
   FileTextOutlined,
   UserOutlined,
-  AppstoreOutlined,
-  TeamOutlined,
-  SettingOutlined
+  SettingOutlined,
+  MessageOutlined,
+  CommentOutlined
 } from '@ant-design/icons';
 
 /**
@@ -18,7 +21,9 @@ export interface RouteProps {
   key: string;
   type?: string;
   icon?: any;
+  exact?: true;
   children?: RouteProps[];
+  Component?: React.ComponentType;
 }
 
 const routes: RouteProps[] = [
@@ -26,7 +31,8 @@ const routes: RouteProps[] = [
     path: '/',
     name: '首页',
     key: '/home',
-    icon: HomeOutlined
+    icon: HomeOutlined,
+    // Component AsyncComponent(() => import('pages/home'))
   },
   {
     path: '/article',
@@ -39,15 +45,52 @@ const routes: RouteProps[] = [
         path: '/article/list',
         name: '文章列表',
         type: 'menuItem',
-        key: '/article/list'
+        key: '/article/list',
+        // Component AsyncComponent(() => import('pages/article-list'))
       },
       {
-        path: '/article/edit',
-        name: '编辑文章',
+        path: '/article/create',
+        name: '新建文章',
         type: 'menuItem',
-        key: '/article/edit'
+        key: '/article/create',
+        // Component AsyncComponent(() => import('pages/article-create'))
+      },
+      {
+        path: '/article/filing',
+        name: '归档',
+        type: 'menuItem',
+        key: '/article/filing',
+        // Component AsyncComponent(() => import('pages/filing'))
+      },
+      {
+        path: '/article/category',
+        name: '分类',
+        type: 'menuItem',
+        key: '/article/category',
+        // Component AsyncComponent(() => import('pages/category-list'))
+      },
+      {
+        path: '/article/tags',
+        name: '标签',
+        type: 'menuItem',
+        key: '/article/tags',
+        // Component AsyncComponent(() => import('pages/tags'))
       }
     ]
+  },
+  {
+    path: '/messageboard',
+    name: '留言板',
+    icon: MessageOutlined,
+    key: '/messageboard',
+    // Component AsyncComponent(() => import('pages/message-board'))
+  },
+  {
+    path: '/commentlist',
+    name: '评论',
+    icon: CommentOutlined,
+    key: '/commentlist',
+    // Component AsyncComponent(() => import('pages/comment-list'))
   },
   {
     path: '/user',
@@ -60,49 +103,22 @@ const routes: RouteProps[] = [
         path: '/user/list',
         name: '用户列表',
         type: 'menuItem',
-        key: '/user/list'
+        key: '/user/list',
+        // Component AsyncComponent(() => import('pages/user-list'))
       },
       {
-        path: '/user/edit',
-        name: '编辑用户',
+        path: '/user/create',
+        name: '新建用户',
         type: 'menuItem',
-        key: '/user/edit'
-      }
-    ]
-  },
-  {
-    path: '/category',
-    name: '分类',
-    key: '/category',
-    type: 'subMenu',
-    icon: AppstoreOutlined,
-    children: [
-      {
-        path: '/category/list',
-        name: '分类列表',
-        type: 'menuItem',
-        key: '/category/list'
+        key: '/user/create',
+        // Component AsyncComponent(() => import('pages/user-create'))
       },
       {
-        path: '/category/edit',
-        name: '编辑分类',
+        path: '/user/role',
+        name: '权限',
         type: 'menuItem',
-        key: '/category/edit'
-      }
-    ]
-  },
-  {
-    path: '/role',
-    name: '角色',
-    key: '/role',
-    type: 'subMenu',
-    icon: TeamOutlined,
-    children: [
-      {
-        path: '/role/list',
-        name: '角色列表',
-        type: 'menuItem',
-        key: '/role/list'
+        key: '/user/role',
+        // Component AsyncComponent(() => import('pages/user-role'))
       }
     ]
   },
@@ -110,20 +126,9 @@ const routes: RouteProps[] = [
     path: '/setup',
     name: '设置',
     icon: SettingOutlined,
-    key: '/setup'
+    key: '/setup',
+    // Component AsyncComponent(() => import('pages/setup'))
   }
-  // {
-  //   path: '/403',
-  //   name: '暂无权限',
-  //   icon: BankOutlined,
-  //   key: '/403'
-  // },
-  // {
-  //   path: '/404',
-  //   name: 'NotFound',
-  //   icon: BankOutlined,
-  //   key: '/404'
-  // }
 ];
 
 export default routes;

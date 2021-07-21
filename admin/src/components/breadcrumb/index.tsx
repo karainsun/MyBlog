@@ -3,10 +3,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { Breadcrumb } from 'antd';
 import { HomeOutlined } from '@ant-design/icons';
 import routes from 'router/config'
-import { flatten, arrToObj } from 'utils'
+import { routerFlatten, arrToObj } from 'utils'
 import style from './style.module.less'
 
-const routesFlat = arrToObj(flatten(routes, 'children'))
+const routesFlat = arrToObj(routerFlatten(routes, 'children'))
 
 const CustomBread: FC = () => {
   const { pathname } = useLocation()

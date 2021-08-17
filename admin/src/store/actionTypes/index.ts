@@ -5,7 +5,8 @@
  */
 
 const actions = {
-  SET_COLLAPSED: 'SET_COLLAPSED'
+  SET_COLLAPSED: 'SET_COLLAPSED',
+  USER_INFO: 'USER_INFO' 
 };
 
 export default actions;

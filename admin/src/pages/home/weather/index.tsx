@@ -30,7 +30,7 @@ const Weather: FC<WeatherProps> = () => {
         key: '1bc4bbd3e4e84851a1a9eb5daaf1a2da'
       }
       try {
-        const { data: { now, code } } = await getWeather(weatherParams)
+        const { now, code }: any = await getWeather(weatherParams)
         if (code === '200') {
           setWeatherInfo(now)
           setWeatherImg(weatherIcons[now.icon])

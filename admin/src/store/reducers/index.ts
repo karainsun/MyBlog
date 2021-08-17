@@ -1,23 +1,27 @@
 import initState from 'store/state';
 import actionTypes from 'store/actionTypes';
+import { produce } from 'immer'
 
 interface Action {
   type: string;
   collapsed: boolean;
+  userInfo: any; 
 }
 
-const storeData = (state = initState, action: Action) => {
+const storeData = produce((draft = initState, action: Action) => {  
   switch (action.type) {
     case actionTypes.SET_COLLAPSED:
-      return {
-        ...state,
-        collapsed: action.collapsed
-      };
+      draft.collapsed = action.collapsed;
+      break;
+    case actionTypes.USER_INFO:
+      for (const key in action.userInfo) {
+        draft.userInfo[key] = action.userInfo[key];
+      } 
+      break; 
     default:
-      return {
-        ...state
-      };
+      break;
   }
-};
+  return draft;
+});
 
 export default storeData;

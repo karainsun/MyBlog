@@ -1,24 +1,23 @@
 import React, { FC, useState } from 'react';
 import { Layout, Row, Col, Avatar, Image } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined, SkinOutlined, FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
-import { useSelector, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import screenfull from 'screenfull';
-import { StoreState } from 'store/state';
+import { StoreState, UserInfo } from 'store/state';
 import { setCollapsed } from 'store/actions';
 import BreadCrumb from 'components/breadcrumb'
 import Search from 'components/searchBox'
 import UserSelect from 'components/userSelect';
 // import ThemeBox from 'components/themebox';
 import style from './style.module.less';
+import { produce } from 'immer'
 
-const HeaderFc: FC = () => {
-  const { collapsed } = useSelector((state: StoreState) => state);
-  const [isFull, setIsFull] = useState(false)
+const HeaderFc: FC<{ collapsed: boolean, userInfo: UserInfo, collapsedToSet: (c: boolean) => void }> = (props) => {
+  const { collapsed, userInfo, collapsedToSet } = props 
+  const [isFull, setIsFull] = useState(false) 
 
-  const dispatch = useDispatch();
-
-  const toggleMenu = (): void => {
-    dispatch(setCollapsed(!collapsed));
+  const toggleMenu = (): void => { 
+    collapsedToSet(!collapsed)
   };
 
   const fullScreen = (): void => {
@@ -49,9 +48,11 @@ const HeaderFc: FC = () => {
               onClick: fullScreen,
               title: isFull ? "复原" : "全屏"
             })}
-            <Avatar
-              src={<Image src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-            />
+            <Avatar 
+              src={<Image className="object-fill w-full h-full" src={
+                userInfo.avatar ? userInfo.avatar : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+              } />}
+            /> 
             <UserSelect></UserSelect>
           </div>
         </Col>
@@ -60,4 +61,17 @@ const HeaderFc: FC = () => {
   );
 };
 
-export default HeaderFc;
+const mapStateToProps = produce((state: StoreState) => {
+  return {
+    collapsed: state.collapsed,
+    userInfo: state.userInfo,
+  };
+});
+
+const mapDispatchToProps = (dispatch: (e: any) => void) => {
+  return {
+    collapsedToSet: (e: boolean) => dispatch(setCollapsed(e))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(React.memo(HeaderFc));

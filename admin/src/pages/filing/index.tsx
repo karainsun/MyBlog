@@ -104,7 +104,7 @@ const Filing: FC = () => {
         pagination={{ pageSize: 50 }}
         rowSelection={rowSelection}
         scroll={{ y: scrollHeight }}
-      />,
+      />
     </div>
   )
 };

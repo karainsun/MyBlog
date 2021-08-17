@@ -69,7 +69,7 @@ export const getLocation = (): any => {
     });
   }
 };
-
+// 重置高度
 export const setHeight = (h: number): number => {
   let clientHeight = 0;
   if (document.body.clientHeight && document.documentElement.clientHeight) {
@@ -85,3 +85,14 @@ export const setHeight = (h: number): number => {
   }
   return (clientHeight - h);
 };
+// 批量删除
+export const batchDelete = (keys: any[], arr: any[]): any[] => {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    for (let j = 0; j < keys.length; j++) {
+      if(keys[j] === arr[i].id) {
+        arr.splice(j, 1)
+      }
+    } 
+  }
+  return arr
+}

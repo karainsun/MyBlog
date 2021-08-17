@@ -55,13 +55,13 @@ const routes: RouteProps[] = [
         key: '/article/create',
         // Component AsyncComponent(() => import('pages/article-create'))
       },
-      {
-        path: '/article/filing',
-        name: '归档',
-        type: 'menuItem',
-        key: '/article/filing',
-        // Component AsyncComponent(() => import('pages/filing'))
-      },
+      // {
+      //   path: '/article/filing',
+      //   name: '归档',
+      //   type: 'menuItem',
+      //   key: '/article/filing',
+      //   // Component AsyncComponent(() => import('pages/filing'))
+      // },
       {
         path: '/article/category',
         name: '分类',
@@ -106,20 +106,20 @@ const routes: RouteProps[] = [
         key: '/user/list',
         // Component AsyncComponent(() => import('pages/user-list'))
       },
-      {
-        path: '/user/create',
-        name: '新建用户',
-        type: 'menuItem',
-        key: '/user/create',
-        // Component AsyncComponent(() => import('pages/user-create'))
-      },
-      {
-        path: '/user/role',
-        name: '权限',
-        type: 'menuItem',
-        key: '/user/role',
-        // Component AsyncComponent(() => import('pages/user-role'))
-      }
+      // {
+      //   path: '/user/create',
+      //   name: '新建用户',
+      //   type: 'menuItem',
+      //   key: '/user/create',
+      //   // Component AsyncComponent(() => import('pages/user-create'))
+      // },
+      // {
+      //   path: '/user/role',
+      //   name: '权限',
+      //   type: 'menuItem',
+      //   key: '/user/role',
+      //   // Component AsyncComponent(() => import('pages/user-role'))
+      // }
     ]
   },
   {

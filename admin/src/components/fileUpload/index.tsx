@@ -1,22 +1,25 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { Upload, message } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 import { fileUpload } from 'request'
 
 interface UploadProps {
-  sendFile: (val: any) => void
+  initSrc: string;
+  sendFile: (val: any) => void;
+  style: { [key: string]: string };
 }
 
-const FileUpload: FC<UploadProps> = ({ sendFile }) => {
-  const [fileList, setFileList] = useState<Array<any>>([])
+const FileUpload: FC<UploadProps> = ({ sendFile, initSrc, style }) => { 
+  const [fileList, setFileList] = useState<Array<any>>([initSrc])
   const [uploading, setUploading] = useState<boolean>(false)
-  const [imageUrl, setImageUrl] = useState<string>('')
+  const [imageUrl, setImageUrl] = useState<string>(initSrc)
 
   const uploadStyle = {
     border: '1px dashed #d9d9d9',
     backgroundColor: '#fafafa',
     borderRadius: '2px',
-    color: '#999'
+    color: '#999',
+    ...style
   }
 
   const iconStyle = { fontSize: '36px', marginTop: '30px' }
@@ -28,25 +31,32 @@ const FileUpload: FC<UploadProps> = ({ sendFile }) => {
     </div>
   )
 
+  useEffect(() => { 
+    setImageUrl(initSrc)
+    return () => {
+      setImageUrl('')
+    }
+  }, [initSrc])
+
   const handleUpload = () => {
     const formData = new FormData();
     fileList.forEach(file => {
-      formData.append('files[]', file);
+      formData.append('file', file);
     });
 
     setUploading(true);
 
-    fileUpload(formData).then(({ status, data }) => {
-      if (status && status === 200) {
-        const { name, url } = data;
+    fileUpload(formData).then((res) => {  
+      if (res.status && res.status as unknown as string === "success") { 
+        const { name, url }: any = res.data
         setFileList([{ name, url }])
         sendFile([{ name, url }])
         setImageUrl(url)
-        message.success('upload successfully!');
+        message.success('上传成功!');
       }
     }).catch(error => {
       console.log(error);
-      message.error('upload failed.');
+      message.error('上传失败!');
     }).finally(() => {
       setUploading(false);
     })
@@ -67,7 +77,7 @@ const FileUpload: FC<UploadProps> = ({ sendFile }) => {
   return (
     <div className="relative">
       <Upload {...props} maxCount={1} showUploadList={false}>
-        <div className="w-48 h-32 overflow-hidden text-center" style={uploadStyle}>
+        <div className="overflow-hidden text-center" style={uploadStyle}>
           {imageUrl ? <img src={imageUrl} alt="avatar" className="w-full h-full object-cover" /> : uploadBtn}
         </div>
       </Upload>

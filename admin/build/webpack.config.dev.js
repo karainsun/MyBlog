@@ -19,6 +19,12 @@ const config = merge(base, {
     noInfo: true,
     overlay: {
       errors: true
+    },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        pathRewrite: { '^/api': '' }
+      }
     }
   }
 });

@@ -1,53 +1,128 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useState } from 'react';
-import { Form, Input, Button, Select, Switch } from 'antd';
+import { useHistory, RouteComponentProps } from 'react-router-dom'
+import { Form, Input, Button, Select, Switch, message } from 'antd';
 import FileUpload from 'components/fileUpload';
+import { articleCreate, categoryAll, tagAll, fileUpload, articleDetail, articleUpdate } from 'request'
+import Editor from 'components/editor'
+
+type SLocation = { state?: { id: number } }
+type MLocation<S> = { location: S }
+type combineProps = RouteComponentProps & MLocation<SLocation>
+
+interface OptionTypes {
+  id: number;
+  name: string;
+  parent_name?: string;
+}
 
 const { TextArea } = Input;
-const { Option } = Select
+const { Option } = Select;
 
-const ArticleCreat: FC = () => {
+const ArticleCreat: FC<combineProps> = (props) => {
+  const articleId = props.location.state?.id 
   const [form] = Form.useForm();
   const [imgList, setImgList] = useState<Array<any>>()
+  const [defaultImg, setDefaultImg] = useState<string>('')
+  const [cates, setCates] = useState<Array<OptionTypes>>([])
+  const [tags, setTags] = useState<Array<OptionTypes>>([])
+  const [content, setContent] = useState<any>('')
+  const [defaultContent, setDefaultContent] = useState<string>('')
+  const [isCreate, setIsCreate] = useState<boolean>(true)
+  // let editorRef = useRef(null)
+
+  const history = useHistory();
 
   useEffect(() => {
     form.setFields([
-      { name: 'category', value: "lucy" },
-      { name: 'tags', value: ['JS', 'Vue'] },
       { name: 'isComent', value: true },
       { name: 'isReprint', value: false }
     ]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    Promise.all([categoryAll({}), tagAll({})]).then((res) => {
+      setCates(res[0].data)
+      setTags(res[1].data)
+    }).catch(error => {
+      console.log(error);
+    })
   }, []);
-
+  // 监听图片上传操作
   useEffect(() => {
     form.setFieldsValue({ image: imgList })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imgList]);
+  // 监听文章内容变化
+  useEffect(() => {
+    form.setFieldsValue({ content: content })
+  }, [content]);
 
+  useEffect(() => {
+    if (articleId && typeof articleId === 'number') {
+      setIsCreate(false)
+      articleDetail({ id: articleId }).then(({ code, status, data }: any) => {
+        if (code === 200 && status === 'success') {
+          let arr = []
+          for (const key in data) {
+            arr.push({ name: key, value: data[key] })
+          }
+          form.setFields(arr)
+          setDefaultContent(data.content)
+          setDefaultImg(data.image[0].url)
+        }
+      }).catch(error => {
+        console.log('详情加载失败：', error);
+      })
+    }
+  }, [articleId])
+
+  const SelectItem = (cates: Array<OptionTypes>) => {
+    return cates.map(({ name, id }) => {
+      return <Option value={name} key={id}>{name}</Option>
+    })
+  }
 
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    if (!isCreate) values.id = articleId;
+    const subFnc = isCreate ? articleCreate(values) : articleUpdate(values)
+    subFnc.then((res: any) => {
+      if (res.status === 'success') {
+        message.success(res.msg)
+        history.push('/article/list')
+      } else {
+        message.warning(res.msg)
+      }
+    }).catch(error => {
+      console.log(error);
+      message.error('提交失败')
+    })
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+    console.log('表单未通过验证:', errorInfo);
   };
-
-  const categorySelect = (value: any) => {
-    console.log(`分类： ${value}`);
-  }
-
-  const tagsSelect = (value: any) => {
-    console.log(`标签： ${value}`);
-  }
 
   const getFiles = (val: any) => {
     setImgList(val)
-  } 
+  }
+
+  // 七牛上传并插入图片
+  const uploadImg = (resultFiles: any, insertImgFn: any) => {
+    // resultFiles 是 input 中选中的文件列表
+    // insertImgFn 是获取图片 url 后，插入到编辑器的方法 
+    const formData = new FormData();
+    formData.append('file', resultFiles[0]);
+    fileUpload(formData).then((res: any) => {
+      if (res.code === 200 && res.status === 'success') {
+        // 上传图片，返回结果，将图片插入到编辑器中
+        insertImgFn(res.data.url)
+      }
+    }).catch(error => {
+      console.log('上传上失败：', error);
+      message.error('上传上失败')
+    })
+  }
 
   return (
     <div className="componentBox noscrollbar" style={{ overflowY: 'scroll' }}>
-      <h1 className="font-bold pb-2 mb-6 borderb-1">创建文章</h1>
+      <h1 className="font-bold pb-2 mb-6 borderb-1">{isCreate ? '创建' : '编辑'}文章</h1>
       <div className="noscrollbar" style={{ height: 'calc(100vh - 170px)', overflowY: 'scroll' }}>
         <Form
           className="m-auto w-3/4"
@@ -57,6 +132,7 @@ const ArticleCreat: FC = () => {
           wrapperCol={{ span: 20 }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
+          scrollToFirstError={true}
         >
           <Form.Item
             label="文章标题"
@@ -79,7 +155,7 @@ const ArticleCreat: FC = () => {
             name="image"
             rules={[{ required: true, message: '请上传封面！' }]}
           >
-            <FileUpload sendFile={getFiles} />
+            <FileUpload style={{ width: '200px', height: '140px' }} sendFile={getFiles} initSrc={defaultImg} />
           </Form.Item>
 
           <Form.Item
@@ -87,12 +163,7 @@ const ArticleCreat: FC = () => {
             name="category"
             rules={[{ required: true, message: '请选择分类！' }]}
           >
-            <Select style={{ width: 200 }} onChange={categorySelect}>
-              <Option value="jack">Jack</Option>
-              <Option value="lucy">Lucy</Option>
-              <Option value="kay">Kay</Option>
-              <Option value="Yiminghe">yiminghe</Option>
-            </Select>
+            <Select style={{ width: 200 }}>{SelectItem(cates)}</Select>
           </Form.Item>
 
           <Form.Item
@@ -102,14 +173,10 @@ const ArticleCreat: FC = () => {
           >
             <Select
               style={{ width: 500 }}
-              onChange={tagsSelect}
               mode="multiple"
               allowClear
             >
-              <Option value="JS">JS</Option>
-              <Option value="Vue">Vue</Option>
-              <Option value="React">React</Option>
-              <Option value="Angular">Angular</Option>
+              {SelectItem(tags)}
             </Select>
           </Form.Item>
 
@@ -141,11 +208,10 @@ const ArticleCreat: FC = () => {
             name="content"
             rules={[{ required: true, message: '请填写文章内容！' }]}
           >
-            <TextArea />
+            <Editor value={defaultContent} uploadImage={uploadImg} valChange={(html: any) => setContent(html)} />
           </Form.Item>
-
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
+          <Form.Item>
+            <Button className="m-auto block mt-4" type="primary" htmlType="submit">
               提交
             </Button>
           </Form.Item>

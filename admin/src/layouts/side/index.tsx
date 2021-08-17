@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu } from 'antd';
 import routes, { RouteProps } from 'router/config';
@@ -17,6 +16,7 @@ flatRoutes.forEach((e: RouteProps) => rootSubmenuKeys.push(e.path));
 
 const Side = () => {
   const { pathname } = useLocation();
+  const [defaultPathname, setDefaultPathname] = useState<string>(pathname);
   const { collapsed } = useSelector((state: StoreState) => state);
   const [openKeys, setOpenkeys] = useState<arr>([]);
   // const [rootSubmenuKeys, setrootSubmenuKeys] = useState<arr>([])
@@ -26,8 +26,9 @@ const Side = () => {
 
   useEffect(() => {
     // 设置当前展开菜单
-    setOpenkeys(getOpenKes(pathname))
-  }, [])
+    setOpenkeys(getOpenKes(pathname)) 
+    setDefaultPathname(pathname)
+  }, [pathname])
 
   const renderMenu = (list: RouteProps[]): JSX.Element[] => {
     return list.map((item): any => {
@@ -67,7 +68,9 @@ const Side = () => {
           mode="inline"
           onOpenChange={onOpenChange}
           openKeys={openKeys}
-          defaultSelectedKeys={pathname}>
+          defaultSelectedKeys={[pathname]}
+          selectedKeys={[defaultPathname]}
+        >
           {renderMenu(routes)}
         </Menu>
       </div>

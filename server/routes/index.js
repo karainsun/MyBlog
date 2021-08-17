@@ -1,19 +1,5 @@
-const router = require('koa-router')()
+const { resolve } = require('path'); 
+const { importByDir } = require('../utils/tools');
 
-router.get('/', async (ctx, next) => {
-  await ctx.render('index', {
-    title: 'Hello Koa 2!'
-  })
-})
-
-router.get('/string', async (ctx, next) => {
-  ctx.body = 'koa2 string'
-})
-
-router.get('/json', async (ctx, next) => {
-  ctx.body = {
-    title: 'koa2 json'
-  }
-})
-
-module.exports = router
+// 动态路由
+module.exports = importByDir(resolve(__dirname, './../routes')); 

@@ -2,54 +2,46 @@ import React, { FC } from 'react';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import './style.css'
-import { flatten } from 'utils'
-import routes, { RouteProps } from './config'
 
 import Home from 'pages/home';
 import Notfound from 'pages/notfound';
-
 import ArticleList from 'pages/article-list';
 import ArticleCreate from 'pages/article-create';
-import Filing from 'pages/filing';
 import CategoryList from 'pages/category-list';
 import Tags from 'pages/tags';
-
 import MessageBoard from 'pages/message-board';
 import CommentList from 'pages/comment-list';
-
 import UserList from 'pages/user-list';
-import UserCreate from 'pages/user-create';
-
-import UserRole from 'pages/user-role';
 import Setup from 'pages/setup';
 
-const routeList: RouteProps[] = flatten(routes)
-// console.log(routeList);
+const routeList = [
+  { path: "/home", name: "首页", Component: Home, auth: true },
+  { path: "/article/list", name: "文章列表", Component: ArticleList, auth: true },
+  { path: "/article/create", name: "创建文章", Component: ArticleCreate, auth: true },
+  { path: "/article/category", name: "分类列表", Component: CategoryList, auth: true },
+  { path: "/article/tags", name: "标签列表", Component: Tags, auth: true },
+  { path: "/messageboard", name: "留言板", Component: MessageBoard, auth: true },
+  { path: "/commentlist", name: "评论列表", Component: CommentList, auth: true },
+  { path: "/user/list", name: "用户列表", Component: UserList, auth: true },
+  { path: "/setup", name: "个人设置", Component: Setup, auth: true }
+]
 
 const Routebox: FC = () => {
   const location = useLocation();
+  const token = localStorage.getItem('k_token')
   return (
     <TransitionGroup>
       <CSSTransition key={location.pathname} classNames="page" timeout={500}>
         <Switch location={location}>
           <Redirect from="/" exact to="/home" />
-          <Route exact path="/home" component={Home} />
-          <Route exact path="/article/list" component={ArticleList} />
-          <Route exact path="/article/create" component={ArticleCreate} />
-          <Route exact path="/article/filing" component={Filing} />
-          <Route exact path="/article/category" component={CategoryList} /> 
-          <Route exact path="/article/tags" component={Tags} />
-          <Route exact path="/messageboard" component={MessageBoard} />
-          <Route exact path="/commentlist" component={CommentList} />
-          <Route exact path="/user/list" component={UserList} />
-          <Route exact path="/user/create" component={UserCreate} />
-          <Route exact path="/user/role" component={UserRole} /> 
-          <Route exact path="/setup" component={Setup} /> 
-          {/* {
-            routeList.map(({ path, exact = true, key, Component }) => {
-              <Route exact={exact} path={path} component={Component} key={key} />
-            })
-          } */}
+          {routeList.map((item, index) => {
+            return <Route key={index} path={item.path} exact render={(props: any) =>
+            (!item.auth ? (<item.Component {...props} />) : (token ? <item.Component {...props} /> : <Redirect to={{
+              pathname: '/login',
+              state: { from: props.location }
+            }} />)
+            )} />
+          })}
           <Route component={Notfound} />
         </Switch>
       </CSSTransition>

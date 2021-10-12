@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect, useState } from 'react'; 
+import React, { FC, useEffect, useState, useRef } from 'react'; 
 import { Form, Input, Button, message, Spin } from 'antd';
 import { connect } from 'react-redux'
 import FileUpload from 'components/fileUpload';
-import Editor from 'components/editor'
+import ReactEditor from 'wangeditor-for-react'
 import { fileUpload, userDetail, userUpdate } from 'request'
 import { produce } from 'immer'
 import { StoreState, UserInfo } from 'store/state'
@@ -13,8 +13,8 @@ const Setup: FC<{ userInfo: UserInfo, userInfoToSet: (info: any) => void }> = ({
   const [form] = Form.useForm();
   const [imgList, setImgList] = useState<Array<any>>()
   const [defaultImg, setDefaultImg] = useState<string>('')
-  const [content, setContent] = useState<any>('')
-  const [defaultContent, setDefaultContent] = useState<string>('')
+  const [content, setContent] = useState<any>('') 
+  let editorRef = useRef<any>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [insert, setInsert] = useState<number>(0)
 
@@ -26,8 +26,8 @@ const Setup: FC<{ userInfo: UserInfo, userInfoToSet: (info: any) => void }> = ({
         for (const key in data) {
           arr.push({ name: key, value: data[key] })
         }
-        form.setFields(arr)
-        setDefaultContent(data.introduction)
+        form.setFields(arr) 
+        editorRef.current.editor.txt.html(data.introduction);
         setDefaultImg(data.avatar)
       }
     })
@@ -131,7 +131,16 @@ const Setup: FC<{ userInfo: UserInfo, userInfoToSet: (info: any) => void }> = ({
               label="个人简介"
               name="introduction"
             >
-              <Editor value={defaultContent} uploadImage={uploadImg} valChange={(html: any) => setContent(html)} />
+              <ReactEditor
+              ref={editorRef}
+              config={{ 
+                uploadImgShowBase64: true,
+                customUploadImg: uploadImg
+              }} 
+              onChange={(html: string) => {
+                setContent(html)
+              }}
+            />
             </Form.Item>
 
             <Form.Item>

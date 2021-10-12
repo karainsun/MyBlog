@@ -5,20 +5,13 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
-const cors = require('koa2-cors')
-const koaBody = require('koa-body');  
-const path = require('path')
-
-const article = require('./routes/article')
-const category = require('./routes/category')
-const tag = require('./routes/tag')
-const upload = require('./routes/upload')
-const user = require('./routes/user')
-const admin = require('./routes/admin')
-const koajwt = require('koa-jwt')
+const cors = require('koa2-cors') 
+const path = require('path')  
 const { verify } = require('./utils/routeVerify')
+const whiteList = require('./middleware/whiteList')
 
-require('./models')
+const loadRouter = require('./routes')
+const db = require('./models')
 
 // error handler
 onerror(app)
@@ -35,8 +28,28 @@ app.use(require('koa-static')(path.join(__dirname, 'public')))
 
 // app.use(views(__dirname + '/views', {
 //   extension: 'pug'
-// }))
+// })) 
 
+// 登录和注册的路由不做任何限制
+const user = require('./routes/user')
+app.use(user.routes()).use(user.allowedMethods())
+// 白名单
+whiteList(app)
+
+// token二次验证加权限校验
+app.use(async (ctx, next) => {  
+  const result = await verify(ctx, next)  
+  if (typeof result === 'object') {  
+    ctx.state.userInfo = result
+    await next()
+  } else { 
+    ctx.body = {
+      code: 501,
+      msg: result,
+      status: 'field'
+    }
+  }
+})
 // 日志：logger
 app.use(async (ctx, next) => {
   const start = new Date()
@@ -59,49 +72,23 @@ app.use(async (ctx, next) => {
   })
 });
 
-// jwt鉴权（首次token验证）中间件，注意：放在路由前面
-app.use(koajwt({
-  secret: 'k_token'
-}).unless({ // 配置白名单
-  path: [/\/user\/register/, /\/user\/login/]
-})) 
-
-// 路由：routes
-app.use(user.routes(), user.allowedMethods())
-// token二次验证加权限校验
-app.use(async (ctx, next) => { 
-  const result = await verify(ctx) 
-  if (typeof result === 'object') {
-    ctx.state.userInfo = result
-    await next()
-  } else { 
-    ctx.body = {
-      code: 501,
-      msg: result,
-      status: 'field'
-    }
-  }
-})
-
-app.use(article.routes(), article.allowedMethods())
-app.use(category.routes(), category.allowedMethods())
-app.use(tag.routes(), tag.allowedMethods()) 
-app.use(admin.routes(), admin.allowedMethods()) 
-app.use(koaBody({
-  multipart: true,
-  formidable: {
-    // 上传目录
-    // uploadDir: path.join(__dirname, 'public/uploads'),
-    // 保留文件扩展名
-    keepExtensions: true,
-    maxFileSize: 200 * 1024 * 1024 // 设置上传文件大小最大限制，默认2M
-  }
-}));
-app.use(upload.routes(), upload.allowedMethods()) 
+// 路由
+loadRouter(app) 
 
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
 });
 
-module.exports = app
+const ServePort = '3000'
+app.listen(ServePort, () => {
+  db.sequelize
+    .sync({ force: false }) // If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
+    .then(async () => { 
+      console.log('sequelize connect success')
+      console.log(`sever listen on http://127.0.0.1:${ServePort}`)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+})

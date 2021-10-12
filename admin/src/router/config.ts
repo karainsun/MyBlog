@@ -7,7 +7,9 @@ import {
   UserOutlined,
   SettingOutlined,
   MessageOutlined,
-  CommentOutlined
+  CommentOutlined,
+  AppstoreOutlined,
+  PictureOutlined
 } from '@ant-design/icons';
 
 /**
@@ -93,6 +95,27 @@ const routes: RouteProps[] = [
     // Component AsyncComponent(() => import('pages/comment-list'))
   },
   {
+    path: '/collect',
+    name: '收藏',
+    key: '/collect',
+    type: 'subMenu',
+    icon: AppstoreOutlined,
+    children: [
+      {
+        path: '/collect/list',
+        name: '收藏列表',
+        type: 'menuItem',
+        key: '/collect/list' 
+      }, 
+      {
+        path: '/collect/category',
+        name: '收藏分类',
+        type: 'menuItem',
+        key: '/collect/category' 
+      }
+    ]
+  },
+  {
     path: '/user',
     name: '用户',
     key: '/user',
@@ -121,6 +144,13 @@ const routes: RouteProps[] = [
       //   // Component AsyncComponent(() => import('pages/user-role'))
       // }
     ]
+  },
+  {
+    path: '/banner',
+    name: 'Banner管理',
+    icon: PictureOutlined,
+    key: '/banner',
+    // Component AsyncComponent(() => import('pages/setup'))
   },
   {
     path: '/setup',

@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import dayjs from 'dayjs'
-import { Form, Row, Col, Input, Button, Table, Select, message, Popconfirm } from 'antd';
+import { Form, Row, Col, Input, Button, Table, Select, message } from 'antd';
 import { setHeight } from 'utils'
 import { categoryCreate, categoryList, categoriesDelete, categoryUpdate } from 'request'
 import ModalForm from 'components/modalForm';
@@ -176,8 +176,7 @@ const CategoryList: FC = () => {
   const cateUpdate = () => {
     if (selectedRowKeys.length !== 1) {
       message.warning('请选择且只能选择一条数据')
-    } else {
-      
+    } else { 
       const item = categories.filter(item => item.id === selectedRowKeys[0])  
       setFormVal({
         name: item[0].name,
@@ -205,16 +204,11 @@ const CategoryList: FC = () => {
             <Form.Item label="" name="name">
               <Input placeholder="分类名称" />
             </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="" name="parent_name">
-              <Input placeholder="父级分类名称" />
-            </Form.Item>
-          </Col>
+          </Col> 
           <Col span={2}>
             <Form.Item><Button htmlType="submit">搜索</Button></Form.Item>
           </Col>
-          <Col span={2}>
+          {/* <Col span={2}>
             <Form.Item><Button onClick={modalShow}>新建</Button></Form.Item>
           </Col>
           <Col span={2}>
@@ -231,7 +225,7 @@ const CategoryList: FC = () => {
           </Col>
           <Col span={2}>
             <Form.Item><Button onClick={cateUpdate} type="primary" ghost>编辑</Button></Form.Item>
-          </Col>
+          </Col> */}
         </Row>
       </Form>
       <Table

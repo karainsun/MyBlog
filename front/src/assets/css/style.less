@@ -1,0 +1,139 @@
+@import './variable.less';
+// 配置主题
+body {
+  background-color: @bgColor;
+}
+
+.w-1200 {
+  width: 1200px;
+}
+.w-min-1200 {
+  min-width: 1200px;
+}
+.w-full {
+  width: 100%;
+}
+.w-100vw {
+  width: 100vw;
+}
+.h-full {
+  height: 100%;
+}
+.h-100vw {
+  height: 100vw;
+}
+.box-sizing {
+  box-sizing: border-box;
+}
+.border-b-f3 {
+  border-bottom: 1px solid #f3f3f3;
+}
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.text-hide {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pointer {
+  cursor: pointer;
+}
+.shadow-all {
+  box-shadow: 0 0 15px 1px var(--bd-shadow);
+}
+
+// flex
+.d-flex {
+  display: flex;
+}
+.flex-1 {
+  flex: 1;
+}
+.flex-grow-1 {
+  flex-grow: 1;
+}
+
+// 详情目录
+.nav-tit {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 20px;
+  &:hover {
+    color: var(--h1-color);
+  }
+}
+.tit1 {
+  margin-bottom: 10px;
+}
+.tit2 {
+  margin-left: 10px;
+  &::before {
+    content: "•";
+    padding-right: 5px;
+  }
+}
+.tit3 {
+  margin-left: 30px;
+  &::before {
+    content: "•";
+    padding-right: 5px;
+  }
+}
+// 定义颜色 color 类
+each(@colors, {
+  .text-@{key} {
+    color: @value;
+  }
+  .bg-@{key} {
+    background-color: @value;
+  }
+});
+// 定义 text-align 类
+each(@text-align, {
+  .text-@{key} {
+    text-align: @value;
+  }
+})
+// 定义 font-size 类
+each(@font-size, {
+  .fs-@{key} {
+    font-size: @value;
+  }
+})
+// 定义 position 类
+each(@position, {
+  .pos-@{key} {
+    position: @value;
+  }
+})
+// 定义 justify-content 类
+each(@flex-jc, {
+  .js-@{key} {
+    justify-content: @value;
+  }
+})
+// 定义 align-items 类
+each(@flex-ai, {
+  .ai-@{key} {
+    align-items: @value;
+  }
+})
+// 定义 space(内外边距) 类
+each(@spacing-types, .(@tv, @tk) {
+  each(@spacing-directions, .(@dv, @dk){
+    each(@spacing-sizes, .(@size){
+      .@{tk}@{dk}-@{size} {
+        @{tv}-@{dv}: @size * @spacing-base-size;
+      }
+    })
+  })
+  each(@spacing-sizes, .(@size){
+    .@{tk}-@{size} {
+      @{tv}: @size * @spacing-base-size;
+    }
+  })
+});

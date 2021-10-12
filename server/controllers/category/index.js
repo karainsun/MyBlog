@@ -1,26 +1,31 @@
-const Category = require('../../models/category')
+const { category: Category } = require('../../models')
 const { successResult } = require('../../utils/tools')
 const _ = require('lodash')
 const { Op } = require('sequelize')
+const sequelize = require('../../utils/sequelize')
 
 // 查询全部
 const categoryAll = async (ctx) => {
-  const resData = await Category.findAll()
+  const resData = await Category.findAll({
+    attributes: ['name', 'id', [sequelize.fn('COUNT', sequelize.col('name')), 'count']],
+    group: 'name',
+    where: {
+      articleId: { [Op.not]: null }
+    },
+    order: [[sequelize.fn('COUNT', sequelize.col('name')), 'desc']]
+  })
   ctx.body = successResult(resData)
 }
 // 条件查询
 const categoryList = async (ctx) => {
-  let { pageNo, pageSize, name, parent_name } = ctx.request.query
+  let { pageNo, pageSize, name } = ctx.request.query
   name = (!name || _.isEmpty(name)) ? '' : name 
-  parent_name = (!parent_name || _.isEmpty(parent_name)) ? '' : parent_name  
   const { count, rows } = await Category.findAndCountAll({
     limit: Number(pageSize),
     offset: (Number(pageNo) - 1) * Number(pageSize),
     where: {
       [Op.and]: [
-        { name: { [Op.like]: `%${name}%` } },
-        { parent_name: { [Op.like]: `%${parent_name}%` }
-        }
+        { name: { [Op.like]: `%${name}%` } }
       ]
     }
   })

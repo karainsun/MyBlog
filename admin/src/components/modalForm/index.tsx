@@ -9,6 +9,7 @@ interface CollectionCreateFormProps {
   onCancel: () => void;
   val: any;
   children: any;
+  bodyStyle?: any;
 }
 
 const ModalForm: React.FC<CollectionCreateFormProps> = ({
@@ -17,12 +18,13 @@ const ModalForm: React.FC<CollectionCreateFormProps> = ({
   onCreate,
   onCancel,
   val,
-  children
+  children,
+  bodyStyle
 }) => {
   const [form] = Form.useForm(); 
   //TODO: 记录usseState更新后视图不变的问题
   // antd有些组件就是这样的，defuatValue不允许被修改, 一旦初始化，就不会变了
-  useEffect(() => { 
+  useEffect(() => {  
     for (const key in val) {
       if (Object.prototype.hasOwnProperty.call(val, key)) { 
         form.setFieldsValue({ [key]: val[key] })
@@ -32,8 +34,10 @@ const ModalForm: React.FC<CollectionCreateFormProps> = ({
 
   return (
     <Modal
+      getContainer={false}
       visible={visible}
       title={title}
+      bodyStyle={bodyStyle}
       okText="确认"
       cancelText="取消"
       onCancel={() => {

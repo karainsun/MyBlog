@@ -32,7 +32,7 @@ ajax.interceptors.request.use(
 );
 
 ajax.interceptors.response.use(
-  (res: ResData) => { 
+  (res: ResData) => {  
     if (res.headers.authorization) {
       localStorage.setItem('k_token', res.headers.authorization);
     } else { 
@@ -46,10 +46,10 @@ ajax.interceptors.response.use(
       return Promise.reject(res.data);
     }
   },
-  (error) => {
-    const { response } = error;
+  (error) => { 
+    const { response } = error; 
     if (response) {  
-      if(response.data.code === 401) { 
+      if(response.status === 401) { 
         message.success('请重新登陆', 1)
         return window.location.hash="/login" 
       } else {

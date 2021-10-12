@@ -24,9 +24,7 @@ const importByDir = (dirName) => {
     code,
     data
   }
-}
-
-
+}  
 
 module.exports = {
   importByDir,

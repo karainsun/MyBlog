@@ -27,7 +27,7 @@ interface ArticleParams {
   pageNo: number;
   pageSize: number;
   title: string;
-  tag: string;
+  category: string;
 }
 
 const columns: Columns[] = [
@@ -50,11 +50,19 @@ const columns: Columns[] = [
   {
     title: '封面图',
     dataIndex: 'image',
-    width: 250,
+    width: 100,
     render: img => (
       <div className="w-10 h-6 overflow-hidden">
         <img className="w-full object-fill" src={img[0].url} alt="" />
       </div>
+    ),
+  },
+  {
+    title: '分类',
+    dataIndex: 'category',
+    width: 120,
+    render: cate => (
+      <span>{cate.name}</span>
     ),
   },
   {
@@ -63,11 +71,11 @@ const columns: Columns[] = [
     width: 200,
     render: tags => (
       <span>
-        {tags.map((tag: string) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
+        {tags.map((tag: { name: string }) => {
+          let color = tag.name.length > 5 ? 'geekblue' : 'green';
           return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
+            <Tag color={color} key={tag.name}>
+              {tag.name.toUpperCase()}
             </Tag>
           );
         })}
@@ -93,7 +101,7 @@ const ArticleList: FC = () => {
     pageNo: 1,
     pageSize: 10,
     title: '',
-    tag: ''
+    category: ''
   })
   const [tableLoading, setTableLoading] = useState<boolean>(false)
   const [total, setTotal] = useState<number>(0)
@@ -142,8 +150,8 @@ const ArticleList: FC = () => {
     }
   }
 
-  const searchFinish = ({ title, tag }: { title: string, tag: string }) => {
-    setParams({ ...params, title, tag })
+  const searchFinish = ({ title, category }: { title: string, category: string }) => {
+    setParams({ ...params, title, category })
   };
 
   const selectChange = (selectedKeys: any) => {
@@ -183,8 +191,8 @@ const ArticleList: FC = () => {
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item label="" name="tags">
-              <Input placeholder="标签" />
+            <Form.Item label="" name="category">
+              <Input placeholder="分类" />
             </Form.Item>
           </Col>
           <Col span={2}>

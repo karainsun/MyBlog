@@ -11,6 +11,11 @@ export interface CityParams {
   key: string;
 }
 
+export interface CommonParams {
+  pageSize: number;
+  pageNo: number;
+}
+
 // 获取天气信息
 export const getWeather = (params: WeatherParams) =>
   ajax({
@@ -175,5 +180,123 @@ export const userDetail = ({ id }: { id: number }) => ajax({
 export const userUpdate = (params: any) => ajax({
   method: 'PUT',
   url: '/user/update',
+  data: params 
+});
+
+/**********************************--评论 API--**********************************/
+// 评论列表
+export const commentList = (params: any) => ajax({
+  method: 'GET',
+  url: '/comment/list',
+  params 
+});
+// 回复评论
+export const commentReply = (params: any) => ajax({
+  method: 'POST',
+  url: '/reply/comment',
+  data: params 
+});
+// 批量删除评论
+export const commentsDelete = (params: { ids: Array<number>}) => ajax({
+  method: 'POST',
+  url: '/comment/delete',
+  data: params 
+});
+
+/**********************************--收藏分类 API--**********************************/
+// 创建收藏分类
+export const collectCategoryCreate = (params: { name: string}) => ajax({
+  method: 'POST',
+  url: '/collect_category/create',
+  data: params 
+});
+// 全部收藏分类
+export const collectCategoryAll = (params: any) => ajax({
+  method: 'GET',
+  url: '/collect_category/all',
+  params 
+});
+// 收藏分类列表
+export const collectCategoryList = (params: any) => ajax({
+  method: 'GET',
+  url: '/collect_category/list',
+  params 
+});
+// 更新收藏分类
+export const collectCategoryUpdate = (params: any) => ajax({
+  method: 'PUT',
+  url: '/collect_category/update',
+  data: params 
+});
+// 批量删除收藏分类
+export const collectCategoryDelete = (params: { ids: Array<number>}) => ajax({
+  method: 'POST',
+  url: '/collect_category/delete',
+  data: params 
+});
+
+/**********************************--收藏 API--**********************************/
+// 创建收藏
+export interface CollectParams {
+  name: string;
+  logo: string;
+  url: string;
+  description: string;
+  category: string;
+}
+// 创建收藏
+export const collectCreate = (params: CollectParams) => ajax({
+  method: 'POST',
+  url: '/collect/create',
+  data: params 
+});
+// 收藏列表
+export const collectList = (params: any) => ajax({
+  method: 'GET',
+  url: '/collect/list',
+  params 
+});
+// 批量删除收藏
+export const collectDelete = (params: { ids: Array<number>}) => ajax({
+  method: 'POST',
+  url: '/collect/delete',
+  data: params 
+});
+// 更新收藏
+export const collectUpdate = (params: any) => ajax({
+  method: 'PUT',
+  url: '/collect/update',
+  data: params 
+});
+
+/**********************************--Banner API--**********************************/
+// 创建 Banner
+export interface BannerParams {
+  title: string;
+  desc: string;
+  banner: string;
+  order: number; 
+}
+// 创建 Banner
+export const bannerCreate = (params: CollectParams) => ajax({
+  method: 'POST',
+  url: '/banner/create',
+  data: params 
+});
+// Banner列表
+export const bannerList = () => ajax({
+  method: 'GET',
+  url: '/banner/all' 
+});
+// 批量删除 Banner
+export const bannerDelete = (params: { ids: Array<number>}) => ajax({
+  method: 'POST',
+  url: '/banner/delete',
+  data: params 
+});
+// 更新 Banner
+export const bannerUpdate = (params: any) => ajax({
+  method: 'PUT',
+  url: '/banner/update',
   data: params 
 });

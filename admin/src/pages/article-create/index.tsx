@@ -1,17 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useRef } from 'react';
 import { useHistory, RouteComponentProps } from 'react-router-dom'
 import { Form, Input, Button, Select, Switch, message } from 'antd';
 import FileUpload from 'components/fileUpload';
 import { articleCreate, categoryAll, tagAll, fileUpload, articleDetail, articleUpdate } from 'request'
-import Editor from 'components/editor'
+import ReactEditor from 'wangeditor-for-react'
+import './style.less'
 
 type SLocation = { state?: { id: number } }
 type MLocation<S> = { location: S }
 type combineProps = RouteComponentProps & MLocation<SLocation>
 
 interface OptionTypes {
-  id: number;
+  id?: number;
   name: string;
   parent_name?: string;
 }
@@ -20,16 +21,17 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 const ArticleCreat: FC<combineProps> = (props) => {
-  const articleId = props.location.state?.id 
+  const articleId = props.location.state?.id
   const [form] = Form.useForm();
   const [imgList, setImgList] = useState<Array<any>>()
   const [defaultImg, setDefaultImg] = useState<string>('')
   const [cates, setCates] = useState<Array<OptionTypes>>([])
   const [tags, setTags] = useState<Array<OptionTypes>>([])
   const [content, setContent] = useState<any>('')
-  const [defaultContent, setDefaultContent] = useState<string>('')
   const [isCreate, setIsCreate] = useState<boolean>(true)
-  // let editorRef = useRef(null)
+  let editorRef = useRef<any>(null)
+  const [cateIpt, setCateIpt] = useState<string>('')
+  const [tagIpt, setTagIpt] = useState<string>('') 
 
   const history = useHistory();
 
@@ -44,6 +46,10 @@ const ArticleCreat: FC<combineProps> = (props) => {
     }).catch(error => {
       console.log(error);
     })
+    // return () => {
+    //   销毁编辑器
+    //   editorRef.current.destroy()
+    // }
   }, []);
   // 监听图片上传操作
   useEffect(() => {
@@ -57,14 +63,19 @@ const ArticleCreat: FC<combineProps> = (props) => {
   useEffect(() => {
     if (articleId && typeof articleId === 'number') {
       setIsCreate(false)
-      articleDetail({ id: articleId }).then(({ code, status, data }: any) => {
-        if (code === 200 && status === 'success') {
-          let arr = []
+      articleDetail({ id: articleId }).then(({ code, status, data }: any) => { 
+        if (code === 200 && status === 'success') { 
           for (const key in data) {
-            arr.push({ name: key, value: data[key] })
+            if(key === 'category'){
+              form.setFieldsValue({ category: data.category.name })
+            } else if(key === 'tags') {
+              const newTags = data.tags.map((t: any) => t.name)
+              form.setFieldsValue({ tags: newTags })
+            } else {
+              form.setFieldsValue({ [key]: data[key] })
+            }
           }
-          form.setFields(arr)
-          setDefaultContent(data.content)
+          editorRef.current.editor.txt.html(data.content);
           setDefaultImg(data.image[0].url)
         }
       }).catch(error => {
@@ -74,8 +85,8 @@ const ArticleCreat: FC<combineProps> = (props) => {
   }, [articleId])
 
   const SelectItem = (cates: Array<OptionTypes>) => {
-    return cates.map(({ name, id }) => {
-      return <Option value={name} key={id}>{name}</Option>
+    return cates.map(({ name }, i) => {
+      return <Option value={name} key={i}>{name}</Option>
     })
   }
 
@@ -106,7 +117,7 @@ const ArticleCreat: FC<combineProps> = (props) => {
   // 七牛上传并插入图片
   const uploadImg = (resultFiles: any, insertImgFn: any) => {
     // resultFiles 是 input 中选中的文件列表
-    // insertImgFn 是获取图片 url 后，插入到编辑器的方法 
+    // insertImgFn 是获取图片 url 后，插入到编辑器的方法  
     const formData = new FormData();
     formData.append('file', resultFiles[0]);
     fileUpload(formData).then((res: any) => {
@@ -118,6 +129,41 @@ const ArticleCreat: FC<combineProps> = (props) => {
       console.log('上传上失败：', error);
       message.error('上传上失败')
     })
+  } 
+  // 添加分类
+  const addCate = () => {
+    if (cateIpt.trim() === '') return
+    const result = cates.some(item => item.name === cateIpt)
+    if (result) {
+      setCateIpt('')
+    } else {
+      cates.push({ name: cateIpt })
+      // 使用扩展运算符更新 state
+      setCates([...cates])
+    }
+  }
+  // 添加标签
+  const addTag = () => {
+    if (tagIpt.trim() === '') return
+    const result = tags.some(item => item.name === tagIpt)
+    if (result) {
+      setTagIpt('')
+    } else {
+      tags.push({ name: tagIpt })
+      // 使用扩展运算符更新 state
+      setTags([...tags])
+    }
+  }
+
+  // 标签选择事件
+  const tagsHandleChange = (e: string[]) => { 
+    // form.setFieldsValue({ tags: e })
+  }
+
+  const itemStyle = {
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    marginLeft: '20px'
   }
 
   return (
@@ -125,7 +171,7 @@ const ArticleCreat: FC<combineProps> = (props) => {
       <h1 className="font-bold pb-2 mb-6 borderb-1">{isCreate ? '创建' : '编辑'}文章</h1>
       <div className="noscrollbar" style={{ height: 'calc(100vh - 170px)', overflowY: 'scroll' }}>
         <Form
-          className="m-auto w-3/4"
+          className="m-auto mr-20"
           form={form}
           name="basic"
           labelCol={{ span: 4 }}
@@ -163,8 +209,17 @@ const ArticleCreat: FC<combineProps> = (props) => {
             name="category"
             rules={[{ required: true, message: '请选择分类！' }]}
           >
-            <Select style={{ width: 200 }}>{SelectItem(cates)}</Select>
+            <Select style={{ width: 250 }}>{SelectItem(cates)}</Select>
           </Form.Item>
+
+          <div className="add-cate">
+            <Input 
+              value={cateIpt} 
+              style={{ width: '150px', ...itemStyle }} 
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCateIpt(e.target.value)} 
+            />
+            <Button style={itemStyle} type="primary" onClick={addCate}>添加</Button>
+          </div>
 
           <Form.Item
             label="文章标签"
@@ -172,13 +227,23 @@ const ArticleCreat: FC<combineProps> = (props) => {
             rules={[{ required: true, message: '请选择标签！' }]}
           >
             <Select
-              style={{ width: 500 }}
+              style={{ width: 250 }}
               mode="multiple"
               allowClear
+              onChange={tagsHandleChange}
             >
               {SelectItem(tags)}
             </Select>
           </Form.Item>
+
+          <div className="add-cate">
+            <Input 
+              value={tagIpt} 
+              style={{ width: '150px', ...itemStyle }} 
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTagIpt(e.target.value)}
+            />
+            <Button style={itemStyle} type="primary" onClick={addTag}>添加</Button>
+          </div>
 
           <Form.Item
             label="予评与否"
@@ -208,7 +273,16 @@ const ArticleCreat: FC<combineProps> = (props) => {
             name="content"
             rules={[{ required: true, message: '请填写文章内容！' }]}
           >
-            <Editor value={defaultContent} uploadImage={uploadImg} valChange={(html: any) => setContent(html)} />
+            <ReactEditor
+              ref={editorRef}
+              config={{
+                uploadImgShowBase64: true,
+                customUploadImg: uploadImg
+              }}
+              onChange={(html: string) => {
+                setContent(html)
+              }}
+            />
           </Form.Item>
           <Form.Item>
             <Button className="m-auto block mt-4" type="primary" htmlType="submit">

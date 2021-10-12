@@ -1,0 +1,141 @@
+@import './style.less';
+@import './variable.less';
+
+body,
+ul,
+ol,
+li,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+form,
+fieldset,
+table,
+td,
+img,
+div {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+ul,
+ol {
+  list-style-type: none;
+}
+select,
+input,
+img,
+select {
+  vertical-align: middle;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  overflow-x: hidden;
+}
+body::-webkit-scrollbar {
+  width: 6px;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: #bbb;
+}
+
+body::-webkit-scrollbar-track {
+  border-radius: 0px;
+  background: transparent;
+}
+
+/* Waveoverlay */
+.preview-overlay {
+  width: 100%;
+  position: relative;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.preview-overlay .preview-waves {
+  position: relative;
+  width: 100%;
+  height: 0vh;
+  margin-bottom: -8px;
+  min-height: 100px;
+  max-height: 150px;
+}
+
+@media (max-width: 768px) {
+  .preview-overlay .preview-waves {
+    height: 40px;
+    min-height: 40px;
+  }
+}
+
+.preview-overlay .preview-parallax > use {
+  animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+}
+
+.preview-overlay .preview-parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+
+.preview-overlay .preview-parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+
+.preview-overlay .preview-parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+
+.preview-overlay .preview-parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+
+@-moz-keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+
+@-webkit-keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+
+@-o-keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+
+@keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}

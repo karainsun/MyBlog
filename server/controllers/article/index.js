@@ -1,11 +1,16 @@
-const Article = require('../../models/article')
+const {
+  tag: Tag, 
+  category: Category, 
+  article: Article, 
+} = require('../../models')
 const { successResult } = require('../../utils/tools')
 const _ = require('lodash')
 const { Op } = require('sequelize')
+const sequelize = require('../../utils/sequelize')
 
 // 创建文章
-const articleCreate = async (ctx) => { 
-  const requestBody = ctx.request.body;
+const articleCreate = async (ctx) => {
+  const requestBody = ctx.request.body; 
   const exc = await Article.findOne({
     where: {
       title: requestBody.title
@@ -14,11 +19,19 @@ const articleCreate = async (ctx) => {
   if (exc) {
     ctx.body = {
       code: 200,
-      msg: '已存在此分类',
+      msg: '已存在同名文章',
       status: 'field'
     }
-  } else {
-    await Article.create(requestBody).then(res => {
+  } else { 
+    const tagList = requestBody.tags.map(t => ({ name: t }))
+    const cate = { name: requestBody.category }
+
+    requestBody.tags = tagList
+    requestBody.category = cate
+
+    await Article.create(requestBody, {
+      include: [Tag, Category]
+    }).then(res => {
       return ctx.body = {
         code: 200,
         msg: '创建成功',
@@ -36,18 +49,35 @@ const articleCreate = async (ctx) => {
 }
 // 文章列表
 const articleList = async (ctx) => {
-  let { pageNo, pageSize, title } = ctx.request.query
-  title = (!title || _.isEmpty(title)) ? '' : title 
-  const { count, rows } = await Article.findAndCountAll({
+  let {
+    pageNo,
+    pageSize,
+    title,
+    category
+  } = ctx.request.query
+  title = (!title || _.isEmpty(title)) ? '' : title
+  category = (!category || _.isEmpty(category)) ? '' : category
+  const categoryFilter = category ? { name: category } : null
+  const {
+    count,
+    rows
+  } = await Article.findAndCountAll({
+    order: [
+      ['created_at', 'DESC']
+    ],
     limit: Number(pageSize),
     offset: (Number(pageNo) - 1) * Number(pageSize),
     where: {
       [Op.and]: [{
         title: {
           [Op.like]: `%${title}%`
-        }
+        } 
       }]
-    }
+    },
+    include: [
+      { model: Tag, attributes: ['name', 'id'] },
+      { model: Category, attributes: ['name', 'id'], where: categoryFilter } 
+    ]
   })
   const resData = {
     list: rows,
@@ -60,34 +90,55 @@ const articleList = async (ctx) => {
 }
 // 批量删除
 const articleDelete = async (ctx) => {
-  const { ids } = ctx.request.body;
-  await Article.destroy({
-    where: { id: { [Op.or]: ids } }
-  }).then(res => {
-    const returnValue = {
+  const { ids } = ctx.request.body; 
+  try { 
+    // sequelize 方法删除
+    for (let i = 0; i < ids.length; i++) { 
+      const article = await Article.findByPk(ids[i]) 
+      const tags = await article.getTags() 
+      const categories = await article.getCategory() 
+      for (let tag of tags) { 
+        await Tag.destroy({ where: { id: tag.id } })
+      }
+      await Category.destroy({ where: { id: categories.id } })
+      await article.destroy()
+    }
+    // sql 语句删除
+    // const list = ids.join(',')
+    // await sequelize.query(
+    //   `delete category, tags, article
+    //   from articles
+    //   left join categories on article.id=category.articleId
+    //   left join tags on article.id=tag.articleId
+    //   where article.id in (${list})`
+    // )
+    return ctx.body = {
       code: 200,
       msg: '删除成功',
       status: 'success'
     }
-    if (res === 0) {
-      returnValue.msg = '不存在删除项'
-      returnValue.status = 'field'
-    }
-    return ctx.body = returnValue
-  }).catch(error => {
+  } catch (error) {
     console.log('删除失败：', error.message);
     return ctx.body = {
       code: 501,
       msg: error.message,
       status: 'field'
     }
-  })
+  } 
 }
 // 文章详情
 const articleDetail = async (ctx) => {
-  let id = ctx.query.id  
-  const project = await Article.findOne({ where: { id: id } });
-  if (project === null) { 
+  let id = ctx.query.id
+  const project = await Article.findOne({
+    where: {
+      id: id
+    },
+    include: [
+      { model: Tag, attributes: ['name'] },
+      { model: Category, attributes: ['name'] } 
+    ]
+  });
+  if (project === null) {
     ctx.body = {
       code: 501,
       msg: 'Not found!',
@@ -104,31 +155,37 @@ const articleDetail = async (ctx) => {
 }
 // 文章更新
 const articleUpdate = async (ctx) => {
-  const articleInfo = ctx.request.body; 
+  try {
+    const articleInfo = ctx.request.body; 
+    const articleId = parseInt(articleInfo.id)
+    const tagList = articleInfo.tags.map(tag => ({ name: tag, articleId }))
+    const categoryList = { name: articleInfo.category, articleId }
+    const articleRes = await Article.update(articleInfo, { where: { id: articleId } })
+    // 将原有关联的删除掉
+    await Tag.destroy({ where: { articleId } })
+    // bulkCreate：批量创建
+    await Tag.bulkCreate(tagList)
+    await Category.destroy({ where: { articleId } })
+    await Category.create(categoryList)
 
-  await Article.update(articleInfo, {
-    where: {
-      id: articleInfo.id
-    }
-  }).then(res => {  
     const returnValue = {
       code: 200,
       msg: '更新成功',
       status: 'success'
     }
-    if (res === 0 ) {
+    if (articleRes === 0) {
       returnValue.msg = '更新失败'
       returnValue.status = 'field'
     }
     return ctx.body = returnValue
-  }).catch(error => {
-    console.log('更新失败：', error.message);
-    return ctx.body = {
+  } catch (error) {
+    console.log('更新失败：', error);
+    ctx.body = {
       code: 501,
       msg: error.message,
       status: 'field'
     }
-  })
+  } 
 }
 
 module.exports = {

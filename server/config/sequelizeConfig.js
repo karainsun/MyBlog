@@ -4,7 +4,7 @@ const config = {
   port: 3306,
   userName: "root",
   password: "root",
-  databaseName: "mysql",
+  databaseName: "blog_sql",
   ssl: false,
   timezone: "+08:00"
 }

@@ -39,6 +39,7 @@ const Editor: FC<EditorProps> = ({ value, valChange, uploadImage }) => {
       'foreColor',
       'backColor',
       'link',
+      'code',
       'list',
       'todo',
       'justify',

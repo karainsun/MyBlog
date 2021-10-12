@@ -13,6 +13,9 @@ import MessageBoard from 'pages/message-board';
 import CommentList from 'pages/comment-list';
 import UserList from 'pages/user-list';
 import Setup from 'pages/setup';
+import Collect from 'pages/collect';
+import CollectCategory from 'pages/collect-category';
+import Banner from 'pages/banner-list';
 
 const routeList = [
   { path: "/home", name: "首页", Component: Home, auth: true },
@@ -23,7 +26,10 @@ const routeList = [
   { path: "/messageboard", name: "留言板", Component: MessageBoard, auth: true },
   { path: "/commentlist", name: "评论列表", Component: CommentList, auth: true },
   { path: "/user/list", name: "用户列表", Component: UserList, auth: true },
-  { path: "/setup", name: "个人设置", Component: Setup, auth: true }
+  { path: "/setup", name: "个人设置", Component: Setup, auth: true },
+  { path: "/collect/list", name: "收藏列表", Component: Collect, auth: true },
+  { path: "/collect/category", name: "收藏分类", Component: CollectCategory, auth: true },
+  { path: "/banner", name: "Banner管理", Component: Banner, auth: true }
 ]
 
 const Routebox: FC = () => {

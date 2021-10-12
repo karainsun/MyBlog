@@ -190,7 +190,7 @@ const Tags: FC = () => {
           <Col span={2}>
             <Form.Item><Button htmlType="submit">搜索</Button></Form.Item>
           </Col>
-          <Col span={2}>
+          {/* <Col span={2}>
             <Form.Item><Button onClick={modalShow}>新建</Button></Form.Item>
           </Col>
           <Col span={2}>
@@ -207,7 +207,7 @@ const Tags: FC = () => {
           </Col>
           <Col span={2}>
             <Form.Item><Button onClick={tagToUpdate} type="primary" ghost>编辑</Button></Form.Item>
-          </Col>
+          </Col> */}
         </Row>
       </Form>
       <Table

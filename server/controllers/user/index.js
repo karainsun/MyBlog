@@ -1,4 +1,6 @@
-const User = require('../../models/user')
+const {
+  user: User, 
+} = require('../../models')
 const { successResult } = require('../../utils/tools')
 const _ = require('lodash')
 const { Op } = require('sequelize')
@@ -95,7 +97,7 @@ const userLogin = async (ctx) => {
         is_admin: userInfo.is_admin
       }, // 加密 Token
       'k_token', {
-        expiresIn: '1h'
+        expiresIn: '12h'
       });
       ctx.body = {
         code: 200,

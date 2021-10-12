@@ -1,0 +1,435 @@
+body {
+  background-color: var(--backgroundColor, #ffffff);
+}
+.w-1200 {
+  width: 1200px;
+}
+.w-min-1200 {
+  min-width: 1200px;
+}
+.w-full {
+  width: 100%;
+}
+.w-100vw {
+  width: 100vw;
+}
+.h-full {
+  height: 100%;
+}
+.h-100vw {
+  height: 100vw;
+}
+.box-sizing {
+  box-sizing: border-box;
+}
+.border-b-f3 {
+  border-bottom: 1px solid #f3f3f3;
+}
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.text-hide {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.pointer {
+  cursor: pointer;
+}
+.shadow-all {
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.3);
+}
+.d-flex {
+  display: flex;
+}
+.flex-1 {
+  flex: 1;
+}
+.flex-grow-1 {
+  flex-grow: 1;
+}
+.nav-tit {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 20px;
+}
+.nav-tit:hover {
+  color: black;
+}
+.tit1 {
+  margin-bottom: 10px;
+}
+.tit2 {
+  margin-left: 10px;
+}
+.tit2::before {
+  content: "•";
+  padding-right: 5px;
+}
+.tit3 {
+  margin-left: 30px;
+}
+.tit3::before {
+  content: "•";
+  padding-right: 5px;
+}
+.text-white {
+  color: white;
+}
+.bg-white {
+  background-color: white;
+}
+.text-black {
+  color: black;
+}
+.bg-black {
+  background-color: black;
+}
+.text-gray {
+  color: gray;
+}
+.bg-gray {
+  background-color: gray;
+}
+.text-red {
+  color: red;
+}
+.bg-red {
+  background-color: red;
+}
+.text-gray-3 {
+  color: #333;
+}
+.bg-gray-3 {
+  background-color: #333;
+}
+.text-gray-40 {
+  color: #404040;
+}
+.bg-gray-40 {
+  background-color: #404040;
+}
+.text-gray-fa {
+  color: #fafafa;
+}
+.bg-gray-fa {
+  background-color: #fafafa;
+}
+.text-gray-f3 {
+  color: #f3f3f3;
+}
+.bg-gray-f3 {
+  background-color: #f3f3f3;
+}
+.text-gray-80 {
+  color: #808080;
+}
+.bg-gray-80 {
+  background-color: #808080;
+}
+.text-gray-a3 {
+  color: #a3a3a3;
+}
+.bg-gray-a3 {
+  background-color: #a3a3a3;
+}
+.text-gray-bf {
+  color: #bfbfbf;
+}
+.bg-gray-bf {
+  background-color: #bfbfbf;
+}
+.text-text-hover {
+  color: #0085a1;
+}
+.bg-text-hover {
+  background-color: #0085a1;
+}
+.text-l {
+  text-align: left;
+}
+.text-c {
+  text-align: center;
+}
+.text-r {
+  text-align: right;
+}
+.fs-14 {
+  font-size: 14px;
+}
+.fs-16 {
+  font-size: 16px;
+}
+.fs-18 {
+  font-size: 18px;
+}
+.fs-22 {
+  font-size: 22px;
+}
+.fs-26 {
+  font-size: 26px;
+}
+.fs-32 {
+  font-size: 32px;
+}
+.fs-48 {
+  font-size: 48px;
+}
+.pos-fix {
+  position: fixed;
+}
+.pos-abs {
+  position: absolute;
+}
+.pos-rel {
+  position: relative;
+}
+.js-start {
+  justify-content: flex-start;
+}
+.js-end {
+  justify-content: flex-end;
+}
+.js-center {
+  justify-content: center;
+}
+.js-between {
+  justify-content: space-between;
+}
+.js-around {
+  justify-content: space-around;
+}
+.ai-start {
+  align-items: flex-start;
+}
+.ai-end {
+  align-items: flex-end;
+}
+.ai-center {
+  align-items: center;
+}
+.ai-stretch {
+  align-items: stretch;
+}
+.mt-10 {
+  margin-top: 10px;
+}
+.mt-15 {
+  margin-top: 15px;
+}
+.mt-20 {
+  margin-top: 20px;
+}
+.mr-10 {
+  margin-right: 10px;
+}
+.mr-15 {
+  margin-right: 15px;
+}
+.mr-20 {
+  margin-right: 20px;
+}
+.mb-10 {
+  margin-bottom: 10px;
+}
+.mb-15 {
+  margin-bottom: 15px;
+}
+.mb-20 {
+  margin-bottom: 20px;
+}
+.ml-10 {
+  margin-left: 10px;
+}
+.ml-15 {
+  margin-left: 15px;
+}
+.ml-20 {
+  margin-left: 20px;
+}
+.m-10 {
+  margin: 10px;
+}
+.m-15 {
+  margin: 15px;
+}
+.m-20 {
+  margin: 20px;
+}
+.pt-10 {
+  padding-top: 10px;
+}
+.pt-15 {
+  padding-top: 15px;
+}
+.pt-20 {
+  padding-top: 20px;
+}
+.pr-10 {
+  padding-right: 10px;
+}
+.pr-15 {
+  padding-right: 15px;
+}
+.pr-20 {
+  padding-right: 20px;
+}
+.pb-10 {
+  padding-bottom: 10px;
+}
+.pb-15 {
+  padding-bottom: 15px;
+}
+.pb-20 {
+  padding-bottom: 20px;
+}
+.pl-10 {
+  padding-left: 10px;
+}
+.pl-15 {
+  padding-left: 15px;
+}
+.pl-20 {
+  padding-left: 20px;
+}
+.p-10 {
+  padding: 10px;
+}
+.p-15 {
+  padding: 15px;
+}
+.p-20 {
+  padding: 20px;
+}
+/** 颜色变量 **/
+:root {
+  --gentle-wave1: rgba(255, 255, 255, 0.7);
+  --gentle-wave2: rgba(255, 255, 255, 0.5);
+  --gentle-wave3: rgba(255, 255, 255, 0.3);
+  --gentle-wave: #fff;
+  --main-color: #0085a1;
+}
+body,
+ul,
+ol,
+li,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+form,
+fieldset,
+table,
+td,
+img,
+div {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+ul,
+ol {
+  list-style-type: none;
+}
+select,
+input,
+img,
+select {
+  vertical-align: middle;
+}
+a {
+  text-decoration: none;
+}
+body {
+  overflow-x: hidden;
+}
+body::-webkit-scrollbar {
+  width: 6px;
+}
+body::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: #bbb;
+}
+body::-webkit-scrollbar-track {
+  border-radius: 0px;
+  background: transparent;
+}
+/* Waveoverlay */
+.preview-overlay {
+  width: 100%;
+  position: relative;
+  left: 0;
+  right: 0;
+  z-index: 2;
+}
+.preview-overlay .preview-waves {
+  position: relative;
+  width: 100%;
+  height: 0vh;
+  margin-bottom: -8px;
+  min-height: 100px;
+  max-height: 150px;
+}
+@media (max-width: 768px) {
+  .preview-overlay .preview-waves {
+    height: 40px;
+    min-height: 40px;
+  }
+}
+.preview-overlay .preview-parallax > use {
+  animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+}
+.preview-overlay .preview-parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.preview-overlay .preview-parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.preview-overlay .preview-parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.preview-overlay .preview-parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+@-moz-keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+@-webkit-keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+@-o-keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}
+@keyframes move-forever {
+  0% {
+    transform: translate3d(-90px, 0, 0);
+  }
+  100% {
+    transform: translate3d(85px, 0, 0);
+  }
+}

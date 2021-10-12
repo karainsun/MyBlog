@@ -1,0 +1,261 @@
+/**
+ * 文章按年份归档分组（可转化数组）
+ * @param array // 被转换数组
+ * @param key // 根据某个属性
+ * @param attr // 根据传入的属性生成新属性
+ * @param len // 截取长度
+ * @returns
+ */
+export const archives = (array, key, attr, len) => {
+  let attrArr = [],
+    newArr = []
+  array.forEach((e) => {
+    let y = len === 0 ? e[key] : e[key].substring(0, len)
+    if (!attrArr.includes(y)) {
+      attrArr.push(y)
+    }
+  })
+  for (let j = 0; j < attrArr.length; j++) {
+    let posts = []
+    for (let i = 0; i < array.length; i++) {
+      let y = len === 0 ? array[i][key] : array[i][key].substring(0, len)
+      if (attrArr[j] === y) {
+        posts.push(array[i])
+      }
+    }
+    newArr.push({
+      [attr]: attrArr[j],
+      posts: posts
+    })
+  }
+  return newArr
+}
+/**
+ * 数字月份转英文月份
+ * @param date // 月份
+ * @returns
+ */
+export const monthToEn = (date) => {
+  const monthEnglish = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "October", "December"]
+  return monthEnglish[new Date(new Date(date)).getMonth()]
+}
+
+/**
+ * 按文章分类分组
+ * @param array // 被转换数组
+ * @returns
+ */
+ export const basisCate = (array) => {
+  let attrArr = [],
+    newArr = [];
+  array.forEach((a) => {
+    attrArr.push(a.category)
+  })
+  attrArr = seqArr(attrArr)
+  for (let j = 0; j < attrArr.length; j++) {
+    let posts = []
+    for (let i = 0; i < array.length; i++) {
+      let y = array[i].category
+      if (y.name === attrArr[j].name) {
+        posts.push(array[i])
+      }
+    }
+    newArr.push({
+      category: attrArr[j],
+      posts: posts
+    })
+  }
+
+  return newArr
+}
+/**
+ * 数组去重
+ * @param array
+*/
+export const seqArr = (arr) => {
+  let obj = {};
+  arr = arr.reduce(function(a, b) {
+    obj[b.name] ? '' : obj[b.name] = true && a.push(b);
+    return a;
+  }, [])
+  return arr;
+}
+
+/**
+ * 按文章标签分组
+ * @param array // 被转换数组
+ * @returns
+ */
+export const basisTag = (array) => {
+  let attrArr = [],
+    newArr = [];
+  array.forEach((a) => {
+    a.tags.forEach((b) => {
+      attrArr.push(b)
+    })
+  })
+  attrArr = seqArr(attrArr)
+  for (let j = 0; j < attrArr.length; j++) {
+    let posts = []
+    for (let i = 0; i < array.length; i++) {
+      let y = array[i].tags
+      if (y.includes(attrArr[j])) {
+        posts.push(array[i])
+      }
+    }
+    newArr.push({
+      tag: attrArr[j],
+      posts: posts
+    })
+  }
+
+  return newArr
+}
+/**
+ * 文章系详情
+ * @param id
+ * @returns
+ */
+export const goPoint = (id) => {
+  document.getElementById(id).scrollIntoView({
+    block: 'start',
+    behavior: 'smooth'
+  })
+}
+/**
+ * 格式化评论
+ * @param comments
+ * @returns
+ */
+export const formatList = (comments, parent, sun) => {
+  const newList = comments.filter(e => {
+    e.secondFloor = [];
+    return Number(e[parent]) === Number(e[sun]);
+  });
+  const second = comments.filter(e => {
+    return Number(e[parent])  !== Number(e[sun]);
+  });
+  for (let i = 0; i < newList.length; i++) {
+    for (let j = 0; j < second.length; j++) {
+      if (Number(second[j][parent])  == Number(newList[i].id)) {
+        newList[i].secondFloor.push(second[j]);
+      }
+    }
+  }
+  return newList;
+}
+// 根据富文本生成目录
+export const navTree = (content) => {
+  const getChildId = (obj, k) => {
+    if(obj[k].childNodes[0].childNodes?.length!=0) {
+      if(obj[k].id) return obj[k].id
+      return obj[k].childNodes[0].id
+    } else {
+      return obj[k].id
+    }
+  }
+  let titleHtml = ''
+  let box = document.getElementById('detailBox');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'detailBox';
+    box.style.display = 'none'
+  }
+  box.innerHTML = content
+  const eles = box.childNodes;
+  for (let i = 0; i < eles.length; i++) {
+    let tagName = eles[i].localName
+    let title = ''
+    switch (tagName) {
+      case 'h1':
+        title = `<div class="nav-tit tit1 pointer" pointid="${getChildId(eles, i)}" title="${eles[i].innerText}"># ${eles[i].innerText}</div>`
+        break;
+      case 'h2':
+        title = `<div class="nav-tit tit2 pointer fs-14" pointid="${getChildId(eles, i)}" title="${eles[i].innerText}">${eles[i].innerText}</div>`
+        break;
+      case 'h3':
+        title = `<div class="nav-tit tit3 pointer fs-14" pointid="${getChildId(eles, i)}" title="${eles[i].innerText}">${eles[i].innerText}</div>`
+        break;
+      default:
+        break;
+    }
+    titleHtml += title
+  }
+
+  return titleHtml
+}
+// 事件委托
+export const getTagsClick = (id) => {
+  const oDiv = document.getElementById(id);
+  var aLi = oDiv.getElementsByClassName('nav-tit');
+  for (var i = 0; i < aLi.length; i++) {
+    aLi[i].onclick = function (e) {
+      goPoint(e.target.attributes.pointid.value)
+    }
+  }
+}
+/**
+ * 切换主题
+ * @param check
+*/
+export const checkTheme = (check) => {
+  localStorage.setItem('theme', check)
+  document.getElementsByTagName("body")[0].style.setProperty("--backgroundColor", check ? "rgba(34, 38, 49)" : "#fff");
+  document.documentElement.style.setProperty("--main-color", check ? "#e91e63" : "#0085a1");
+  document.documentElement.style.setProperty('--gentle-wave', check ? "rgba(34, 38, 49)" : "#fff");
+  document.documentElement.style.setProperty('--gentle-wave1', check ? "rgba(34, 38, 49, 0.7)" : "rgba(255, 255, 255, 0.7)");
+  document.documentElement.style.setProperty('--gentle-wave2', check ? "rgba(34, 38, 49, 0.5)" : "rgba(255, 255, 255, 0.5)");
+  document.documentElement.style.setProperty('--gentle-wave3', check ? "rgba(34, 38, 49, 0.3)" : "rgba(255, 255, 255, 0.3)");
+  document.documentElement.style.setProperty('--h1-color', check ? "rgba(255, 255, 255, 0.8)" : "#333");
+  document.documentElement.style.setProperty('--bd-shadow', check ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.3)");
+  document.documentElement.style.setProperty('--mask-bg', check ? "rgba(0, 0, 0, 0.4)" : "rgba(255, 255, 255, 0.7)");
+  document.documentElement.style.setProperty('--img-light', check ? .7 : 1);
+  document.documentElement.style.setProperty('--textarea-bg', check ? "#dbdbdb" : "#fff");
+  document.documentElement.style.setProperty('--reply-bg', check ? "rgb(39, 44, 56)" : "#fafafa");
+  document.documentElement.style.setProperty('--tag-bg1', check ? "rgb(150, 104, 239)" : "#d6d6d6");
+  document.documentElement.style.setProperty('--tag-bg2', check ? "rgb(212, 103, 140)" : "#d6d6d6");
+  document.documentElement.style.setProperty('--theme-switch', check ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)");
+  document.documentElement.style.setProperty('--collect-border', check ? "#616161" : "#f3f3f3");
+  document.documentElement.style.setProperty('--message-avatar-border', check ? "rgba(45, 52, 71)" : "rgba(0, 0, 0, .06)");
+  document.documentElement.style.setProperty('--message-bg', check ? "rgba(255, 255, 255, .05)" : "rgba(0, 0, 0, .05)");
+  document.documentElement.style.setProperty('--message-clip', check ? "rgba(255, 255, 255, .25)" : "rgba(0, 0, 0, .25)");
+  document.documentElement.style.setProperty('--message-box-bg', check ? "rgb(59, 66, 85)" : "rgba(255, 255, 255, 1)");
+}
+
+// 函数节流
+export const throttle = (fn,delay) => {
+  let canRun = true;
+  return function () {
+      if (!canRun) return;
+      canRun = false;
+      setTimeout(() => {
+          fn.apply(this, arguments);
+          canRun = true;
+      }, delay);
+  };
+}
+// 函数防抖
+export const debounce = (fn,delay) => {
+  var timer = null;
+  return function(){
+      if(timer !== null){
+          clearTimeout(timer);
+      }
+      timer = setTimeout(fn,delay);
+  }
+}
+// 数组转对象
+export const arrToObj = (arr, key) => {
+  const obj = arr.reduce((pre, item) => {
+    return {...pre, [`${key}_${item[key]}`]: item}
+  }, {})
+  return obj
+}
+// 对象转 Map
+export const objToMap = (obj) => {
+  let map = new Map()
+  for (let key in obj) {
+    map.set(key, obj[key])
+  }
+  return map
+}

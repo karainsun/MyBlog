@@ -2,8 +2,8 @@ export type VerifyFn = (rule: Array<{[key: string]: string}>, value: string, cal
 
 // 验证名称长度
 export const checkLength: VerifyFn = (_rule, value, callback) => { 
-  if (value.length > 10) { 
-    callback(new Error("用户名不可超过十位字符！"));
+  if (value.length > 16) { 
+    callback(new Error("不可超过十六位字符！"));
   }
   callback(); 
 }

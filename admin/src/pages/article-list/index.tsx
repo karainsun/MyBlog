@@ -109,16 +109,19 @@ const ArticleList: FC = () => {
 
   useEffect(() => {
     setTableLoading(true)
-    articleList(params).then(({ data: { list, meta: { count } } }) => {
-      if (list.length > 0) {
-        const cateList = list.map((cate: any) => {
-          return Object.assign({}, { key: cate.id }, cate)
-        })
-        setArticles(cateList)
-      } else {
-        setArticles([])
+    articleList(params).then((res) => {
+      if (res.data) {
+        const { data: { list, meta: { count } } } = res
+        if (list.length > 0) {
+          const cateList = list.map((cate: any) => {
+            return Object.assign({}, { key: cate.id }, cate)
+          })
+          setArticles(cateList)
+        } else {
+          setArticles([])
+        }
+        setTotal(count)
       }
-      setTotal(count)
     }).catch((error) => {
       console.log(error);
     }).finally(() => {
@@ -181,7 +184,7 @@ const ArticleList: FC = () => {
         orm={form}
         name="basic"
         labelCol={{ span: 0 }}
-        wrapperCol={{ span: 23 }} 
+        wrapperCol={{ span: 23 }}
         onFinish={searchFinish}
       >
         <Row>

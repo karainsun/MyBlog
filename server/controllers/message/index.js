@@ -1,21 +1,21 @@
-const { comment: Comment } = require('../../models')
+const { message: Message } = require('../../models')
 const { successResult } = require('../../utils/tools')
 const { Op } = require('sequelize')
 const _ = require('lodash')
 
-// 最新几条评论/全部评论
-const newestComment = async (ctx) => {
+// 最新几条留言/全部留言
+const newestMessage = async (ctx) => {
   let { limit } = ctx.request.query
   let options = Object.assign({}, {
     order: [
       ['created_at', 'DESC']
     ] 
   }, !limit || limit === 'undefined' ? null : { limit: Number(limit) })
-  const resData = await Comment.findAll(options) 
+  const resData = await Message.findAll(options) 
   ctx.body = successResult(resData)
 }
-// 评论列表
-const commentList = async (ctx) => {  
+// 留言列表
+const messagetList = async (ctx) => {  
   let {
     pageNo,
     pageSize,
@@ -26,7 +26,7 @@ const commentList = async (ctx) => {
   const {
     count,
     rows
-  } = await Comment.findAndCountAll({
+  } = await Message.findAndCountAll({
     order: [
       ['created_at', 'DESC']
     ],
@@ -49,11 +49,13 @@ const commentList = async (ctx) => {
   } 
   ctx.body = successResult(resData)
 }
-// 回复评论
-const replyComment = async (ctx) => { 
-  const requestBody = ctx.request.body
+// 回复留言
+const replyMessage = async (ctx) => { 
+  const id = new Date().getTime()
+  const requestBody = ctx.request.body 
+  requestBody.id = id.toString()
 
-  await Comment.create(requestBody).then(res => { 
+  await Message.create(requestBody).then(res => { 
     return ctx.body = {
       code: 200,
       msg: '回复成功',
@@ -69,9 +71,9 @@ const replyComment = async (ctx) => {
   })
 }
 // 批量删除
-const commentDelete = async (ctx) => {
+const messageDelete = async (ctx) => {
   const { ids } = ctx.request.body;
-  await Comment.destroy({
+  await Message.destroy({
     where: { id: { [Op.or]: ids } }
   }).then(res => {
     const returnValue = {
@@ -95,8 +97,8 @@ const commentDelete = async (ctx) => {
 }
 
 module.exports = {
-  commentList,
-  replyComment,
-  commentDelete,
-  newestComment
+  messagetList,
+  replyMessage,
+  messageDelete,
+  newestMessage
 }

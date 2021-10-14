@@ -52,13 +52,13 @@ const columns: Columns[] = [
   {
     title: '评论ID',
     dataIndex: 'id',
-    width: 50,
+    width: 60,
     fixed: 'left'
   },
   {
     title: '游客ID',
     dataIndex: 'userId',
-    width: 50,
+    width: 60,
   },
   {
     title: '昵称',

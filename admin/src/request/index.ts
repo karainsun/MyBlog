@@ -95,22 +95,25 @@ export const tagsDelete = (params: { ids: Array<number>}) => ajax({
 export const articleCreate = (params: FormData) => ajax({
   method: 'POST',
   url: '/article/create',
-  data: params,
-  ...params
+  data: params 
 });
 // 文章列表
 export const articleList = (params: any) => ajax({
   method: 'GET',
   url: '/article/list',
-  params,
-  ...params
+  params 
+});
+// 最新几篇文章/全部
+export const articleNewest = (params: any) => ajax({
+  method: 'GET',
+  url: '/article/newest',
+  params 
 });
 // 批量删除文章
 export const articlesDelete = (params: { ids: Array<number>}) => ajax({
   method: 'POST',
   url: '/article/delete',
-  data: params,
-  ...params
+  data: params 
 });
 // 文章详情
 export const articleDetail = ({ id }: { id: number }) => ajax({
@@ -190,6 +193,12 @@ export const commentList = (params: any) => ajax({
   url: '/comment/list',
   params 
 });
+// 最新几条/全部评论
+export const newestComment = (params: any) => ajax({
+  method: 'GET',
+  url: '/newest/comment',
+  params 
+});
 // 回复评论
 export const commentReply = (params: any) => ajax({
   method: 'POST',
@@ -200,6 +209,32 @@ export const commentReply = (params: any) => ajax({
 export const commentsDelete = (params: { ids: Array<number>}) => ajax({
   method: 'POST',
   url: '/comment/delete',
+  data: params 
+});
+
+/**********************************--留言 API--**********************************/
+// 留言列表 
+export const messageList = (params: any) => ajax({
+  method: 'GET',
+  url: '/message/list',
+  params 
+});
+// 最新几条留言 / 全部
+export const messageNewest = (params: any) => ajax({
+  method: 'GET',
+  url: '/newest/message',
+  params 
+});
+// 回复留言
+export const messageReply = (params: any) => ajax({
+  method: 'POST',
+  url: '/reply/message',
+  data: params 
+});
+// 批量删除留言
+export const messagesDelete = (params: { ids: Array<number>}) => ajax({
+  method: 'POST',
+  url: '/message/delete',
   data: params 
 });
 

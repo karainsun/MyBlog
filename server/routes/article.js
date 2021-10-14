@@ -1,6 +1,9 @@
 const router = require('koa-router')()
+const { articleArchives } = require('../controllers/front')
 const { articleCreate, articleList, articleDelete, articleDetail, articleUpdate } = require('../controllers/article')
  
+// 最新几条文章/全部
+router.get('/article/newest', articleArchives) 
 // 创建文章
 router.post('/article/create', articleCreate) 
 // 文章列表

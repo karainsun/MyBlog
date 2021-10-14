@@ -2,33 +2,31 @@ import React, { FC, useState, useEffect } from "react";
 import { Skeleton } from 'antd';
 import CommonCard from "components/commonCard";
 import './style.less'
+import { messageNewest } from 'request'
+import dayjs from 'dayjs'
 
-interface MessageProps { }
+interface CommentProps {
+  id: number;
+  nickname: string;
+  created_at: string;
+  content: string;
+  avatar: string;
+}
 
-const coments = [
-  {
-    id: 1,
-    name: 'Kay',
-    time: '2021-07-14',
-    content: 'This is first message',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-  },
-  {
-    id: 2,
-    name: 'Sun',
-    time: '2021-07-14',
-    content: 'This is second message',
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-  }
-]
-
-const MessageBoard: FC<MessageProps> = () => {
+const MessageBoard: FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(true)
+  const [coments, setComents] = useState<CommentProps[]>([])
 
   useEffect(() => {
-    setTimeout(() => {
+    messageNewest({ limit: 2 }).then(({ data }) => {
+      if(data) {
+        setComents(data)
+      }
+    }).catch((error) => {
+      console.log(error);
+    }).finally(() => {
       setLoading(false)
-    }, 1000)
+    })
   }, [])
 
   return (
@@ -38,14 +36,14 @@ const MessageBoard: FC<MessageProps> = () => {
           {
             coments.map((item) => {
               return (
-                <div className="message-item flex items-center pb-2" key={item.id}>
-                  <div className="rounded-full h-12 w-12 overflow-hidden">
+                <div className="message-item flex items-center pt-2" key={item.id}>
+                  <div className="rounded-full h-11 w-11 overflow-hidden">
                     <img src={item.avatar} alt="" />
                   </div>
-                  <div className="flex-1 ml-2 pt-2">
+                  <div className="flex-1 ml-2 h-11">
                     <div>
-                      <i>{item.name}</i>
-                      <span className="mr-2 float-right" style={{ fontSize: '12px' }}>{item.time}</span>
+                      <i>{item.nickname}</i>
+                      <span className="mr-2 float-right" style={{ fontSize: '12px' }}>{dayjs(item.created_at).format('YYYY-MM-DD HH:mm')}</span>
                     </div>
                     <div className="text-gray-600">{item.content}</div>
                   </div>

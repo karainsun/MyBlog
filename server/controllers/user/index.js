@@ -97,7 +97,7 @@ const userLogin = async (ctx) => {
         is_admin: userInfo.is_admin
       }, // 加密 Token
       'k_token', {
-        expiresIn: '12h'
+        expiresIn: '24h'
       });
       ctx.body = {
         code: 200,

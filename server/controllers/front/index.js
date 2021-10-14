@@ -49,7 +49,7 @@ const articleList = async (ctx) => {
 // 最新五条/全部文章
 const articleArchives = async (ctx) => {
   let { limit } = ctx.request.query
-  const resData = !limit || limit === 'undefined' ? await Article.findAll({
+  let options = Object.assign({}, {
     order: [
       ['created_at', 'DESC']
     ],
@@ -57,16 +57,8 @@ const articleArchives = async (ctx) => {
       { model: Tag, attributes: ['name', 'id'] },
       { model: Category, attributes: ['name', 'id'] } 
     ]
-  }) : await Article.findAll({
-    order: [
-      ['created_at', 'DESC']
-    ],
-    include: [
-      { model: Tag, attributes: ['name', 'id'] },
-      { model: Category, attributes: ['name', 'id'] } 
-    ],
-    limit: Number(limit)
-  })
+  }, !limit || limit === 'undefined' ? null : { limit: Number(limit) })
+  const resData = await Article.findAll(options) 
   ctx.body = successResult(resData)
 }
 // 个人信息

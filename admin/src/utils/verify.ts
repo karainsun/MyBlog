@@ -3,16 +3,16 @@ export type VerifyFn = (rule: Array<{[key: string]: string}>, value: string, cal
 // 验证名称长度
 export const checkLength: VerifyFn = (_rule, value, callback) => { 
   if (value.length > 16) { 
-    callback(new Error("不可超过十六位字符！"));
+    return Promise.reject("不可超过十六位字符！"); 
   }
-  callback(); 
+  return Promise.resolve();
 }
 // 验证邮箱（QQ和163）
 export const checkEmail = (_rule: any, value: any, callback: any) => { 
   // const reg = new RegExp("^\w[-\w.+]*@(qq|163)\.+com");
   const reg = /^\w[-\w.+]*@(qq|163)\.+com$/;
-  if (!reg.test(value)) { 
-    callback(new Error("请输入正确的QQ或163邮箱！"));
+  if (!reg.test(value)) {  
+    return Promise.reject("请输入正确的QQ或163邮箱！"); 
   }
-  callback(); 
+  return Promise.resolve();
 }

@@ -9,24 +9,26 @@
 .ant-menu-inline .ant-menu-item::after {
   border-right: 0px solid #fff !important;
 }
-.ant-menu-item[title="首页"]{
+.ant-menu-item[title='首页'] {
   background-color: #fff;
 }
-.weatherBox .ant-select{
+.weatherBox .ant-select {
   font-size: 12px;
 }
-.weatherBox .ant-select:not(.ant-select-customize-input) .ant-select-selector{
+.weatherBox .ant-select:not(.ant-select-customize-input) .ant-select-selector {
   border: none;
 }
 
 /**添加字体**/
 @font-face {
   font-family: 'Slidefu';
-  src: local('Slidefu'), url(./assets/fonts/font-family/Slidefu-Regular-2.ttf) format('truetype');
+  src: local('Slidefu'),
+    url(./assets/fonts/font-family/Slidefu-Regular-2.ttf) format('truetype');
 }
 @font-face {
-  font-family: "wanghanzong"; 
-  src: local('wanghanzong'),  url(./assets/fonts/font-family/wanghanzongkulihaibao.ttf) format('truetype');
+  font-family: 'wanghanzong';
+  src: local('wanghanzong'),
+    url(./assets/fonts/font-family/wanghanzongkulihaibao.ttf) format('truetype');
 }
 
 .noscrollbar::-webkit-scrollbar {
@@ -35,24 +37,33 @@
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  border-radius: 3px; 
+  border-radius: 3px;
   background: #535353;
 }
 
-.scrollbar::-webkit-scrollbar-track { 
+.scrollbar::-webkit-scrollbar-track {
   border-radius: 3px;
   background: #383838;
 }
-.componentBox{ 
+.componentBox {
   background-color: #fff;
   padding: 16px;
   margin-bottom: 16px;
 }
-.borderb-1{
-  border-bottom: 1px solid #e3e3e3
+.borderb-1 {
+  border-bottom: 1px solid #e3e3e3;
 }
-.componentList{
+.componentList {
   height: calc(100vh - 80px);
   background-color: #fff;
   padding: 16px;
 }
+
+/* 自动填充样式修改 */
+input:-webkit-autofill {
+  box-shadow: 0 0 0px 1000px #c7c6c6 inset !important; 
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  background-color: transparent;
+  background-image: none;
+  transition: background-color 50000s ease-in-out 0s;
+} 

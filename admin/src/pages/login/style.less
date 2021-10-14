@@ -1,12 +1,29 @@
-.login-box {
-  width: 360px; 
-  position: fixed;
-  top: 50%;
-  left: 50%; 
-  border: 1px solid #e3e3e3;
-  padding: 20px;
-  box-sizing: border-box;
-  border-radius: 3px;
-  box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.05);
-  transform: translate(-50%, -50%);
+.login-bg {
+  width: 100%;
+  height: 100vh;
+  background-image: url('../../assets/images/login_bg.jpeg');
+  background-size: cover;
+  .login-box {
+    width: 360px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  .ant-input-affix-wrapper {
+    border: none;
+    border-bottom: 1px solid rgba(101, 101, 101, 0.85);
+    background-color: transparent !important;
+    .ant-input {
+      background-color: transparent !important;
+    }
+    input::-webkit-input-placeholder {
+      color: #666;
+      font-size: 16px;
+    }  
+  }
 }

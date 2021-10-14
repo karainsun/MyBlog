@@ -25,10 +25,10 @@ const Register: FC<RegisterProps> = ({ isRegister }) => {
 
   const checkPass: VerifyFn = (_rule, value, callback) => {
     const firstPass = form.getFieldValue('password')
-    if (value !== firstPass) {
-      callback(new Error("两次密码不一样！"));
+    if (value !== firstPass) { 
+      return Promise.reject("两次密码不一样！"); 
     }
-    callback();
+    return Promise.resolve();
   } 
 
   return (

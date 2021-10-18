@@ -1,1 +1,2 @@
-## This is admin first commit
+# MyBlog
+This is my blog.

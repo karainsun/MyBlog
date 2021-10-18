@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // 映射 tsconfig 路径
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
-const isDev = process.env.NODE_ENV; 
+const isDev = process.env.NODE_ENV === 'development';
 // 抽离公共部分
 const commonCssLoader = [isDev ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'];
 
@@ -20,13 +20,16 @@ const commonRules = [
 ];
 
 const config = {
+  // 设置target，否则热更新无效，target：指定项目运行环境
+  target: "web",
   entry: {
     index: path.join(__dirname, '../src/index.tsx')
   },
   output: {
     filename: 'js/[contenthash:8].js',
     path: path.join(__dirname, '../dist'),
-    assetModuleFilename: 'images/[name].[hash:6].[ext]'
+    assetModuleFilename: 'images/[name].[hash:6].[ext]',
+    publicPath: process.env.NODE_ENV === 'production' ? '/admin/' : '/',
   },
   module: {
     rules: [
@@ -39,7 +42,7 @@ const config = {
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node-modules/,
-        loader: 'babel-loader',
+        loader: 'babel-loader?cacheDirectory=true',
         options: {
           cacheDirectory: true,
           cacheCompression: false

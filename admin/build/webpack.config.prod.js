@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-process.env.NODE_ENV = 'development';
+process.env.NODE_ENV = 'production';
 
 module.exports = merge(base, {
   mode: process.env.NODE_ENV,

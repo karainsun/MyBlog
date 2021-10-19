@@ -21,12 +21,12 @@ const ModalForm: React.FC<CollectionCreateFormProps> = ({
   children,
   bodyStyle
 }) => {
-  const [form] = Form.useForm(); 
+  const [form] = Form.useForm();
   //TODO: 记录usseState更新后视图不变的问题
   // antd有些组件就是这样的，defuatValue不允许被修改, 一旦初始化，就不会变了
-  useEffect(() => {  
+  useEffect(() => {
     for (const key in val) {
-      if (Object.prototype.hasOwnProperty.call(val, key)) { 
+      if (Object.prototype.hasOwnProperty.call(val, key)) {
         form.setFieldsValue({ [key]: val[key] })
       }
     }
@@ -55,12 +55,12 @@ const ModalForm: React.FC<CollectionCreateFormProps> = ({
             console.log('提交失败:', info);
           });
       }}
-    > 
+    >
       <Form
         form={form}
         name="createForm"
         labelCol={{ span: 5 }}
-        wrapperCol={{ span: 19 }} 
+        wrapperCol={{ span: 19 }}
         className="h-40"
       >
         {children}

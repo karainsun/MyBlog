@@ -18,14 +18,14 @@ interface DataType {
   id: number;
   key: string;
   name: string;
-  created_at: string; 
+  created_at: string;
 }
 
 interface TagParams {
   pageNo: number;
   pageSize: number;
   name: string;
-} 
+}
 
 const columns: Columns[] = [
   {
@@ -46,7 +46,7 @@ const columns: Columns[] = [
       return dayjs(text).format('YYYY-MM-DD HH:mm')
     }
   }
-]; 
+];
 
 const Tags: FC = () => {
   const [form] = Form.useForm();
@@ -93,7 +93,7 @@ const Tags: FC = () => {
     try {
       const updateParams = values
       if (subKey === 1) {
-        updateParams.id = selectedRowKeys[0] 
+        updateParams.id = selectedRowKeys[0]
       }
       const res: any = subKey === 0 ? await tagCreate(values) : await tagUpdate(updateParams)
       if ((res.status as string) === 'success') {
@@ -113,12 +113,12 @@ const Tags: FC = () => {
   const tagToUpdate = () => {
     if (selectedRowKeys.length !== 1) {
       message.warning('请选择且只能选择一条数据')
-    } else { 
-      const item = tags.filter(item => item.id === selectedRowKeys[0])  
+    } else {
+      const item = tags.filter(item => item.id === selectedRowKeys[0])
       setFormVal({
-        name: item[0].name 
+        name: item[0].name
       })
-      modalShow(1) 
+      modalShow(1)
     }
   }
   // 批量删除分类
@@ -146,9 +146,9 @@ const Tags: FC = () => {
     setParams({ ...params, name })
   };
 
-  const modalShow = (num: number) => { 
+  const modalShow = (num: number) => {
     setIsVisible(true);
-    setSubKey(typeof num === 'object' ? 0 : 1) 
+    setSubKey(typeof num === 'object' ? 0 : 1)
   };
 
   const modalConfirm = () => {
@@ -159,7 +159,7 @@ const Tags: FC = () => {
     setIsVisible(false);
   };
 
-  const selectChange = (selectedKeys: any) => { 
+  const selectChange = (selectedKeys: any) => {
     setSelectedRowKeys(selectedKeys);
   };
 
@@ -239,7 +239,7 @@ const Tags: FC = () => {
           rules={[{ required: true, message: '请输入分类名称！' }]}
         >
           <Input />
-        </Form.Item> 
+        </Form.Item>
       </ModalForm>
     </div>
   )

@@ -9,7 +9,7 @@ interface UploadProps {
   style: { [key: string]: string };
 }
 
-const FileUpload: FC<UploadProps> = ({ sendFile, initSrc, style }) => { 
+const FileUpload: FC<UploadProps> = ({ sendFile, initSrc, style }) => {
   const [fileList, setFileList] = useState<Array<any>>([initSrc])
   const [uploading, setUploading] = useState<boolean>(false)
   const [imageUrl, setImageUrl] = useState<string>(initSrc)
@@ -31,7 +31,7 @@ const FileUpload: FC<UploadProps> = ({ sendFile, initSrc, style }) => {
     </div>
   )
 
-  useEffect(() => { 
+  useEffect(() => {
     setImageUrl(initSrc)
     return () => {
       setImageUrl('')
@@ -46,8 +46,8 @@ const FileUpload: FC<UploadProps> = ({ sendFile, initSrc, style }) => {
 
     setUploading(true);
 
-    fileUpload(formData).then((res) => {  
-      if (res.status && res.status as unknown as string === "success") { 
+    fileUpload(formData).then((res) => {
+      if (res.status && res.status as unknown as string === "success") {
         const { name, url }: any = res.data
         setFileList([{ name, url }])
         sendFile([{ name, url }])

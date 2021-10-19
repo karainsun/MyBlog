@@ -3,7 +3,7 @@ import { Popover, message } from 'antd';
 import { Link } from 'react-router-dom';
 import style from './style.module.less';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux'; 
+import { useSelector } from 'react-redux';
 import { StoreState } from 'store/state';
 
 interface UserSelectProps { }

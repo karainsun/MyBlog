@@ -31,7 +31,7 @@ const ArticleCreat: FC<combineProps> = (props) => {
   const [isCreate, setIsCreate] = useState<boolean>(true)
   let editorRef = useRef<any>(null)
   const [cateIpt, setCateIpt] = useState<string>('')
-  const [tagIpt, setTagIpt] = useState<string>('') 
+  const [tagIpt, setTagIpt] = useState<string>('')
 
   const history = useHistory();
 
@@ -63,8 +63,8 @@ const ArticleCreat: FC<combineProps> = (props) => {
   useEffect(() => {
     if (articleId && typeof articleId === 'number') {
       setIsCreate(false)
-      articleDetail({ id: articleId }).then(({ code, status, data }: any) => { 
-        if (code === 200 && status === 'success') { 
+      articleDetail({ id: articleId }).then(({ code, status, data }: any) => {
+        if (code === 200 && status === 'success') {
           for (const key in data) {
             if(key === 'category'){
               form.setFieldsValue({ category: data.category.name })
@@ -117,7 +117,7 @@ const ArticleCreat: FC<combineProps> = (props) => {
   // 七牛上传并插入图片
   const uploadImg = (resultFiles: any, insertImgFn: any) => {
     // resultFiles 是 input 中选中的文件列表
-    // insertImgFn 是获取图片 url 后，插入到编辑器的方法  
+    // insertImgFn 是获取图片 url 后，插入到编辑器的方法
     const formData = new FormData();
     formData.append('file', resultFiles[0]);
     fileUpload(formData).then((res: any) => {
@@ -129,7 +129,7 @@ const ArticleCreat: FC<combineProps> = (props) => {
       console.log('上传上失败：', error);
       message.error('上传上失败')
     })
-  } 
+  }
   // 添加分类
   const addCate = () => {
     if (cateIpt.trim() === '') return
@@ -139,6 +139,7 @@ const ArticleCreat: FC<combineProps> = (props) => {
     } else {
       cates.push({ name: cateIpt })
       // 使用扩展运算符更新 state
+      // eslint-disable-line
       setCates([...cates])
     }
   }
@@ -156,7 +157,7 @@ const ArticleCreat: FC<combineProps> = (props) => {
   }
 
   // 标签选择事件
-  const tagsHandleChange = (e: string[]) => { 
+  const tagsHandleChange = (e: string[]) => {
     // form.setFieldsValue({ tags: e })
   }
 
@@ -213,10 +214,10 @@ const ArticleCreat: FC<combineProps> = (props) => {
           </Form.Item>
 
           <div className="add-cate">
-            <Input 
-              value={cateIpt} 
-              style={{ width: '150px', ...itemStyle }} 
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCateIpt(e.target.value)} 
+            <Input
+              value={cateIpt}
+              style={{ width: '150px', ...itemStyle }}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCateIpt(e.target.value)}
             />
             <Button style={itemStyle} type="primary" onClick={addCate}>添加</Button>
           </div>
@@ -237,9 +238,9 @@ const ArticleCreat: FC<combineProps> = (props) => {
           </Form.Item>
 
           <div className="add-cate">
-            <Input 
-              value={tagIpt} 
-              style={{ width: '150px', ...itemStyle }} 
+            <Input
+              value={tagIpt}
+              style={{ width: '150px', ...itemStyle }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTagIpt(e.target.value)}
             />
             <Button style={itemStyle} type="primary" onClick={addTag}>添加</Button>

@@ -26,7 +26,7 @@ const Side = () => {
 
   useEffect(() => {
     // 设置当前展开菜单
-    setOpenkeys(getOpenKes(pathname)) 
+    setOpenkeys(getOpenKes(pathname))
     setDefaultPathname(pathname)
   }, [pathname])
 

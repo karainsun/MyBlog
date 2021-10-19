@@ -1,4 +1,4 @@
-import ajax from './config';  
+import ajax from './config';
 
 export interface WeatherParams {
   location: string;
@@ -32,7 +32,7 @@ export const getTopCity = (params: CityParams) => ajax({
 // 上传
 export const fileUpload = (params: any) => ajax({
   method: 'POST',
-  url: '/upload', 
+  url: '/upload',
   data: params,
   ...params
 });
@@ -70,50 +70,50 @@ export const categoryUpdate = (params: any) => ajax({
 export const tagList = (params: any) => ajax({
   method: 'GET',
   url: '/tag/list',
-  params 
+  params
 });
 // 创建标签
 export const tagCreate = (params: FormData) => ajax({
   method: 'POST',
   url: '/tag/create',
-  data: params 
+  data: params
 });
 // 更新标签
 export const tagUpdate = (params: { ids: number}) => ajax({
   method: 'PUT',
   url: '/tag/update',
-  data: params 
+  data: params
 });
 // 批量删除标签
 export const tagsDelete = (params: { ids: Array<number>}) => ajax({
   method: 'POST',
   url: '/tag/delete',
-  data: params 
+  data: params
 });
 /**********************************--文章 API--**********************************/
 // 创建文章
 export const articleCreate = (params: FormData) => ajax({
   method: 'POST',
   url: '/article/create',
-  data: params 
+  data: params
 });
 // 文章列表
 export const articleList = (params: any) => ajax({
   method: 'GET',
   url: '/article/list',
-  params 
+  params
 });
 // 最新几篇文章/全部
 export const articleNewest = (params: any) => ajax({
   method: 'GET',
   url: '/article/newest',
-  params 
+  params
 });
 // 批量删除文章
 export const articlesDelete = (params: { ids: Array<number>}) => ajax({
   method: 'POST',
   url: '/article/delete',
-  data: params 
+  data: params
 });
 // 文章详情
 export const articleDetail = ({ id }: { id: number }) => ajax({
@@ -125,7 +125,7 @@ export const articleDetail = ({ id }: { id: number }) => ajax({
 export const articleUpdate = (params: any) => ajax({
   method: 'PUT',
   url: '/article/update',
-  data: params 
+  data: params
 });
 // 全部分类
 export const categoryAll = (params: any) => ajax({
@@ -140,38 +140,38 @@ export const tagAll = (params: any) => ajax({
   url: '/tag/all',
   params,
   ...params
-}); 
+});
 
 /**********************************--用户 API--**********************************/
 // 新用户注册
 export const userCreate = (params: FormData) => ajax({
   method: 'POST',
   url: '/user/register',
-  data: params 
+  data: params
 });
 // 用户登录
 export const userLogin = (params: FormData) => ajax({
   method: 'POST',
   url: '/user/login',
-  data: params 
+  data: params
 });
 // 用户列表
 export const userList = (params: any) => ajax({
   method: 'GET',
   url: '/user/list',
-  params 
+  params
 });
 // 批量删除用户
 export const usersDelete = (params: { ids: Array<number>}) => ajax({
   method: 'POST',
   url: '/user/delete',
-  data: params 
+  data: params
 });
 // 更新用户权限和状态
 export const userStatus = (params: any) => ajax({
   method: 'PUT',
   url: '/user/status',
-  data: params 
+  data: params
 });
 // 用户信息详情
 export const userDetail = ({ id }: { id: number }) => ajax({
@@ -183,7 +183,7 @@ export const userDetail = ({ id }: { id: number }) => ajax({
 export const userUpdate = (params: any) => ajax({
   method: 'PUT',
   url: '/user/update',
-  data: params 
+  data: params
 });
 
 /**********************************--评论 API--**********************************/
@@ -191,51 +191,51 @@ export const userUpdate = (params: any) => ajax({
 export const commentList = (params: any) => ajax({
   method: 'GET',
   url: '/comment/list',
-  params 
+  params
 });
 // 最新几条/全部评论
 export const newestComment = (params: any) => ajax({
   method: 'GET',
   url: '/newest/comment',
-  params 
+  params
 });
 // 回复评论
 export const commentReply = (params: any) => ajax({
   method: 'POST',
   url: '/reply/comment',
-  data: params 
+  data: params
 });
 // 批量删除评论
 export const commentsDelete = (params: { ids: Array<number>}) => ajax({
   method: 'POST',
   url: '/comment/delete',
-  data: params 
+  data: params
 });
 
 /**********************************--留言 API--**********************************/
-// 留言列表 
+// 留言列表
 export const messageList = (params: any) => ajax({
   method: 'GET',
   url: '/message/list',
-  params 
+  params
 });
 // 最新几条留言 / 全部
 export const messageNewest = (params: any) => ajax({
   method: 'GET',
   url: '/newest/message',
-  params 
+  params
 });
 // 回复留言
 export const messageReply = (params: any) => ajax({
   method: 'POST',
   url: '/reply/message',
-  data: params 
+  data: params
 });
 // 批量删除留言
 export const messagesDelete = (params: { ids: Array<number>}) => ajax({
   method: 'POST',
   url: '/message/delete',
-  data: params 
+  data: params
 });
 
 /**********************************--收藏分类 API--**********************************/
@@ -243,31 +243,31 @@ export const messagesDelete = (params: { ids: Array<number>}) => ajax({
 export const collectCategoryCreate = (params: { name: string}) => ajax({
   method: 'POST',
   url: '/collect_category/create',
-  data: params 
+  data: params
 });
 // 全部收藏分类
 export const collectCategoryAll = (params: any) => ajax({
   method: 'GET',
   url: '/collect_category/all',
-  params 
+  params
 });
 // 收藏分类列表
 export const collectCategoryList = (params: any) => ajax({
   method: 'GET',
   url: '/collect_category/list',
-  params 
+  params
 });
 // 更新收藏分类
 export const collectCategoryUpdate = (params: any) => ajax({
   method: 'PUT',
   url: '/collect_category/update',
-  data: params 
+  data: params
 });
 // 批量删除收藏分类
 export const collectCategoryDelete = (params: { ids: Array<number>}) => ajax({
   method: 'POST',
   url: '/collect_category/delete',
-  data: params 
+  data: params
 });
 
 /**********************************--收藏 API--**********************************/
@@ -283,25 +283,25 @@ export interface CollectParams {
 export const collectCreate = (params: CollectParams) => ajax({
   method: 'POST',
   url: '/collect/create',
-  data: params 
+  data: params
 });
 // 收藏列表
 export const collectList = (params: any) => ajax({
   method: 'GET',
   url: '/collect/list',
-  params 
+  params
 });
 // 批量删除收藏
 export const collectDelete = (params: { ids: Array<number>}) => ajax({
   method: 'POST',
   url: '/collect/delete',
-  data: params 
+  data: params
 });
 // 更新收藏
 export const collectUpdate = (params: any) => ajax({
   method: 'PUT',
   url: '/collect/update',
-  data: params 
+  data: params
 });
 
 /**********************************--Banner API--**********************************/
@@ -310,28 +310,28 @@ export interface BannerParams {
   title: string;
   desc: string;
   banner: string;
-  order: number; 
+  order: number;
 }
 // 创建 Banner
 export const bannerCreate = (params: CollectParams) => ajax({
   method: 'POST',
   url: '/banner/create',
-  data: params 
+  data: params
 });
 // Banner列表
 export const bannerList = () => ajax({
   method: 'GET',
-  url: '/banner/all' 
+  url: '/banner/all'
 });
 // 批量删除 Banner
 export const bannerDelete = (params: { ids: Array<number>}) => ajax({
   method: 'POST',
   url: '/banner/delete',
-  data: params 
+  data: params
 });
 // 更新 Banner
 export const bannerUpdate = (params: any) => ajax({
   method: 'PUT',
   url: '/banner/update',
-  data: params 
+  data: params
 });

@@ -33,7 +33,7 @@ interface DataType {
   content: string;
   created_at: string;
   at_name: string;
-  parent_message_id: number; 
+  parent_message_id: number;
 }
 
 interface FormProps {
@@ -43,7 +43,7 @@ interface FormProps {
   touristId: number;
   content: string;
   at_name: string;
-  parent_message_id: number; 
+  parent_message_id: number;
 }
 
 const columns: Columns[] = [
@@ -77,12 +77,12 @@ const columns: Columns[] = [
     title: '留言',
     dataIndex: 'content',
     width: 200,
-  }, 
+  },
   {
     title: '@名称',
     dataIndex: 'at_name',
     width: 100,
-  }, 
+  },
   {
     title: '日期',
     dataIndex: 'created_at',
@@ -115,14 +115,14 @@ const MessageBoard: FC = () => {
     touristId: 0,
     content: '',
     at_name: '',
-    parent_message_id: 0 
+    parent_message_id: 0
   })
   // 回复谁
   const [toMessages, setToMessages] = useState({
     nickname: '',
-    content: '' 
+    content: ''
   })
-  // 选框事件 
+  // 选框事件
   const selectChange = (selectedKeys: any) => {
     setSelectedRowKeys(selectedKeys);
   };
@@ -168,15 +168,15 @@ const MessageBoard: FC = () => {
 
     const { nickname, touristId, parent_message_id, content, userId, id } = messages.filter(item => item.id === selectedRowKeys[0])[0]
     formValue.at_name = nickname
-    formValue.touristId = touristId 
+    formValue.touristId = touristId
     formValue.parent_message_id = Number(parent_message_id) === Number(userId) ? id : parent_message_id
     setFormValue(formValue)
- 
+
     setToMessages({
       nickname: nickname,
-      content: content 
-    }) 
-    setIsVisible(true);  
+      content: content
+    })
+    setIsVisible(true);
   };
 
   const modalConfirm = () => {
@@ -187,14 +187,14 @@ const MessageBoard: FC = () => {
     setIsVisible(false);
   };
   // 回复评论
-  const modalFinish = async (values: { reply_content: string }) => { 
+  const modalFinish = async (values: { reply_content: string }) => {
     formValue.avatar = userInfo.avatar as string
     formValue.nickname = userInfo.username as string
     formValue.userId = userInfo.id
     formValue.content = values.reply_content
 
-    setFormValue(formValue)  
-    try { 
+    setFormValue(formValue)
+    try {
       const res: any = await messageReply(formValue)
       if ((res.status as string) === 'success') {
         modalConfirm()
@@ -262,7 +262,7 @@ const MessageBoard: FC = () => {
                 <Button danger>删除</Button>
               </Popconfirm>
             </Form.Item>
-          </Col> 
+          </Col>
         </Row>
       </Form>
       <Table
@@ -295,12 +295,12 @@ const MessageBoard: FC = () => {
         >
           <Input readOnly />
         </Form.Item>
-        <Form.Item 
+        <Form.Item
           label="留言内容"
-          name="content" 
+          name="content"
         >
           <Input.TextArea readOnly rows={2} />
-        </Form.Item> 
+        </Form.Item>
         <Form.Item
           label="回复内容"
           name="reply_content"

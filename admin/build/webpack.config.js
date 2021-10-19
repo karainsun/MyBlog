@@ -42,7 +42,7 @@ const config = {
       {
         test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node-modules/,
-        loader: 'babel-loader?cacheDirectory=true',
+        loader: 'babel-loader',
         options: {
           cacheDirectory: true,
           cacheCompression: false

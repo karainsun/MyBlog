@@ -10,12 +10,12 @@ import './style.less'
 
 const Login: FC<{ userInfoToSet: (info: any) => void }> = ({ userInfoToSet }) => {
   const [isLogin, setIsLogin] = useState<boolean>(true)
-  const history = useHistory() 
+  const history = useHistory()
 
   const onFinish = (values: any) => {
     userLogin(values).then((res: any) => {
       if (res.code === 200 && res.status === 'success') {
-        message.success(res.msg, 1, () => history.push('/home')) 
+        message.success(res.msg, 1, () => history.push('/home'))
         userInfoToSet(res.data.userInfo)
       } else {
         message.warning(res.msg)

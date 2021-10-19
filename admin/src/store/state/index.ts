@@ -1,6 +1,6 @@
 export interface StoreState {
   collapsed: boolean;
-  userInfo: UserInfo; 
+  userInfo: UserInfo;
 }
 
 export interface UserInfo {
@@ -25,6 +25,6 @@ const initState: StoreState = {
     sign: null,
     is_admin: false,
     introduction: null
-  } 
-}; 
+  }
+};
 export default initState;

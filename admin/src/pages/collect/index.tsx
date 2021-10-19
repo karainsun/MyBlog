@@ -41,7 +41,7 @@ interface DataType extends CollectParams {
 interface OptionTypes {
   id?: number;
   name: string;
-} 
+}
 
 const columns: Columns[] = [
   {
@@ -70,9 +70,9 @@ const columns: Columns[] = [
     dataIndex: 'url',
     width: 300,
     render: (url, record, i) => (
-      <div> 
+      <div>
         <Search
-          defaultValue={url} 
+          defaultValue={url}
           readOnly
           enterButton="复制"
           size="small"

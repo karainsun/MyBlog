@@ -86,7 +86,7 @@ app.listen(ServePort, () => {
     .sync({ force: false }) // If force is true, each DAO will do DROP TABLE IF EXISTS ..., before it tries to create its own table
     .then(async () => { 
       console.log('sequelize connect success')
-      console.log(`sever listen on http://127.0.0.1:${ServePort}`)
+      console.log(`sever listen on http://localhost:${ServePort}`)
     })
     .catch(err => {
       console.log(err)

@@ -79,7 +79,7 @@ const columns: Columns[] = [
     title: '评论',
     dataIndex: 'content',
     width: 200,
-  }, 
+  },
   {
     title: '@名称',
     dataIndex: 'at_name',
@@ -131,7 +131,7 @@ const Comments: FC = () => {
     content: '',
     article_title: ''
   })
-  // 选框事件 
+  // 选框事件
   const selectChange = (selectedKeys: any) => {
     setSelectedRowKeys(selectedKeys);
   };
@@ -180,13 +180,13 @@ const Comments: FC = () => {
     formValue.parent_comment_id = parent_comment_id
     formValue.article_title = article_title
     setFormValue(formValue)
- 
+
     setToComment({
       nickname: nickname,
       content: content,
       article_title: article_title
-    }) 
-    setIsVisible(true);  
+    })
+    setIsVisible(true);
   };
 
   const modalConfirm = () => {
@@ -197,14 +197,14 @@ const Comments: FC = () => {
     setIsVisible(false);
   };
   // 回复评论
-  const modalFinish = async (values: { reply_content: string }) => { 
+  const modalFinish = async (values: { reply_content: string }) => {
     formValue.avatar = userInfo.avatar as string
     formValue.nickname = userInfo.username as string
     formValue.userId = userInfo.id
     formValue.content = values.reply_content
 
-    setFormValue(formValue)  
-    try { 
+    setFormValue(formValue)
+    try {
       const res: any = await commentReply(formValue)
       if ((res.status as string) === 'success') {
         modalConfirm()
@@ -272,7 +272,7 @@ const Comments: FC = () => {
                 <Button danger>删除</Button>
               </Popconfirm>
             </Form.Item>
-          </Col> 
+          </Col>
         </Row>
       </Form>
       <Table
@@ -305,9 +305,9 @@ const Comments: FC = () => {
         >
           <Input readOnly />
         </Form.Item>
-        <Form.Item 
+        <Form.Item
           label="评论内容"
-          name="content" 
+          name="content"
         >
           <Input.TextArea readOnly rows={2} />
         </Form.Item>

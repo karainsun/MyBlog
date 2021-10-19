@@ -21,7 +21,7 @@ const CustomBread: FC = () => {
       {
         pathSnippets.map((item, index) => {
           return <Breadcrumb.Item key={index}>{routesFlat[item]}</Breadcrumb.Item>
-        }) 
+        })
       }
     </Breadcrumb>
   </div>)

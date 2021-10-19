@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 const useClickOutside = (elementRef: any | HTMLElement) => {
   const [isClickOutside, setIsClickOutside] = useState<boolean>(false);
-  
+
   const handler = (e: MouseEvent) => {
     console.log(elementRef);
     if (elementRef) {

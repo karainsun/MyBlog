@@ -18,4 +18,4 @@ export const setCollapsed = (collapsed: boolean) =>({
 export const setUserInfo = (info: UserInfo) => ({
   type: 'USER_INFO',
   userInfo: info
-}) 
+})

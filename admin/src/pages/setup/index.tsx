@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect, useState, useRef } from 'react'; 
+import React, { FC, useEffect, useState, useRef } from 'react';
 import { Form, Input, Button, message, Spin } from 'antd';
 import { connect } from 'react-redux'
 import FileUpload from 'components/fileUpload';
@@ -13,7 +13,7 @@ const Setup: FC<{ userInfo: UserInfo, userInfoToSet: (info: any) => void }> = ({
   const [form] = Form.useForm();
   const [imgList, setImgList] = useState<Array<any>>()
   const [defaultImg, setDefaultImg] = useState<string>('')
-  const [content, setContent] = useState<any>('') 
+  const [content, setContent] = useState<any>('')
   let editorRef = useRef<any>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [insert, setInsert] = useState<number>(0)
@@ -26,14 +26,14 @@ const Setup: FC<{ userInfo: UserInfo, userInfoToSet: (info: any) => void }> = ({
         for (const key in data) {
           arr.push({ name: key, value: data[key] })
         }
-        form.setFields(arr) 
+        form.setFields(arr)
         editorRef.current.editor.txt.html(data.introduction);
         setDefaultImg(data.avatar)
       }
     })
     return () => {
       setInsert(0)
-    } 
+    }
   }, [insert])
 
   // 监听图片上传操作
@@ -48,7 +48,7 @@ const Setup: FC<{ userInfo: UserInfo, userInfoToSet: (info: any) => void }> = ({
   // 七牛上传并插入图片
   const uploadImg = (resultFiles: any, insertImgFn: any) => {
     // resultFiles 是 input 中选中的文件列表
-    // insertImgFn 是获取图片 url 后，插入到编辑器的方法 
+    // insertImgFn 是获取图片 url 后，插入到编辑器的方法
     const formData = new FormData();
     formData.append('file', resultFiles[0]);
     fileUpload(formData).then((res: any) => {
@@ -62,17 +62,17 @@ const Setup: FC<{ userInfo: UserInfo, userInfoToSet: (info: any) => void }> = ({
     })
   }
 
-  const onFinish = (values: any) => {   
+  const onFinish = (values: any) => {
     const userCopy = JSON.parse(JSON.stringify(userInfo))
     userCopy.avatar = values.avatar[0].url
     userCopy.introduction = values.introduction
     userCopy.sign = values.sign
     userCopy.username = values.username
 
-    setLoading(true); 
-    userUpdate(userCopy).then(({msg, code, status }: any) => { 
+    setLoading(true);
+    userUpdate(userCopy).then(({msg, code, status }: any) => {
       if (code === 200 && status === 'success') {
-        message.success(msg)  
+        message.success(msg)
         setInsert(insert +1 )
       } else {
         message.warning(msg)
@@ -133,10 +133,10 @@ const Setup: FC<{ userInfo: UserInfo, userInfoToSet: (info: any) => void }> = ({
             >
               <ReactEditor
               ref={editorRef}
-              config={{ 
+              config={{
                 uploadImgShowBase64: true,
                 customUploadImg: uploadImg
-              }} 
+              }}
               onChange={(html: string) => {
                 setContent(html)
               }}

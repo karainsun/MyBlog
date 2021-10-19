@@ -53,7 +53,7 @@ const Weather: FC<WeatherProps> = () => {
     const location = arr[0].split(',')
     setLocation({ latitude: location[0], longitude: location[1] })
     setCityName(arr[1])
-  } 
+  }
 
   return !isshow ? <div style={{ height: '120px' }}><Skeleton active paragraph={{ rows: 2 }} /></div> : (
     <div className={`${style.weatherBox} relative weatherBox`}>

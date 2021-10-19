@@ -1,10 +1,10 @@
 import React, { FC, useState, useEffect } from 'react';
 import dayjs from 'dayjs'
 import { Form, Row, Col, Input, Button, Table, message, Popconfirm } from 'antd';
-import { setHeight } from 'utils' 
+import { setHeight } from 'utils'
 import {
   bannerList,
-  bannerUpdate, 
+  bannerUpdate,
   bannerCreate,
   BannerParams,
   bannerDelete
@@ -12,7 +12,7 @@ import {
 import ModalForm from 'components/modalForm';
 import FileUpload from 'components/fileUpload';
 
-const scrollHeight = setHeight(265) 
+const scrollHeight = setHeight(265)
 const { TextArea } = Input;
 
 interface Columns {
@@ -21,12 +21,12 @@ interface Columns {
   width: number;
   fixed?: string;
   render?: (text: any, record: any, index: any) => void;
-} 
+}
 
 interface DataType extends BannerParams {
   id: number;
   key: string;
-} 
+}
 
 const columns: Columns[] = [
   {
@@ -49,12 +49,12 @@ const columns: Columns[] = [
         <img className="w-full h-full" src={banner} alt="" />
       </div>
     ),
-  }, 
+  },
   {
     title: '标题',
     dataIndex: 'title',
     width: 250,
-  }, 
+  },
   {
     title: '描述',
     dataIndex: 'desc',
@@ -70,20 +70,20 @@ const columns: Columns[] = [
   }
 ];
 
-const Collect: FC = () => { 
+const Collect: FC = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<Array<number>>([])
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [defaultImg, setDefaultImg] = useState<string>('')
   const [banners, setBanners] = useState<DataType[]>([])
-  const [insert, setInsert] = useState<number>(0)  
-  const [tableLoading, setTableLoading] = useState<boolean>(false) 
+  const [insert, setInsert] = useState<number>(0)
+  const [tableLoading, setTableLoading] = useState<boolean>(false)
   const [formVal, setFormVal] = useState<BannerParams>({
     title: '',
     desc: '',
     banner: '',
     order: 1
   })
-  const [subKey, setSubKey] = useState<number>(0) // 新建或修改 新建：0，修改：1 
+  const [subKey, setSubKey] = useState<number>(0) // 新建或修改 新建：0，修改：1
 
   useEffect(() => {
     setTableLoading(true)
@@ -95,7 +95,7 @@ const Collect: FC = () => {
         setBanners(bannerList)
       } else {
         setBanners([])
-      } 
+      }
     }).catch((error) => {
       console.log(error);
     }).finally(() => {
@@ -108,7 +108,7 @@ const Collect: FC = () => {
 
   const selectChange = (selectedKeys: any) => {
     setSelectedRowKeys(selectedKeys);
-  }; 
+  };
 
   const modalShow = (num: number) => {
     setIsVisible(true);
@@ -186,7 +186,7 @@ const Collect: FC = () => {
         message.error('删除失败！')
       }
     }
-  } 
+  }
 
   const getFiles = (val: any) => {
     formVal.banner = val[0].url
@@ -245,7 +245,7 @@ const Collect: FC = () => {
           rules={[{ required: true, message: '请输入顺序！' }]}
         >
           <Input />
-        </Form.Item> 
+        </Form.Item>
         <Form.Item
           label="标题"
           name="title"

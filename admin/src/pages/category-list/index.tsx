@@ -115,9 +115,9 @@ const CategoryList: FC = () => {
     selectedRowKeys
   }
 
-  const modalShow = (num: number) => { 
+  const modalShow = (num: number) => {
     setIsVisible(true);
-    setSubKey(typeof num === 'object' ? 0 : 1) 
+    setSubKey(typeof num === 'object' ? 0 : 1)
   };
 
   const modalConfirm = () => {
@@ -135,8 +135,8 @@ const CategoryList: FC = () => {
   const modalFinish = async (values: any) => {
     try {
       const updateParams = values
-      if (subKey === 1) { 
-        updateParams.id = selectedRowKeys[0] 
+      if (subKey === 1) {
+        updateParams.id = selectedRowKeys[0]
       }
       const res: any = subKey === 0 ? await categoryCreate(values) : await categoryUpdate(updateParams)
       if ((res.status as string) === 'success') {
@@ -176,13 +176,13 @@ const CategoryList: FC = () => {
   const cateUpdate = () => {
     if (selectedRowKeys.length !== 1) {
       message.warning('请选择且只能选择一条数据')
-    } else { 
-      const item = categories.filter(item => item.id === selectedRowKeys[0])  
+    } else {
+      const item = categories.filter(item => item.id === selectedRowKeys[0])
       setFormVal({
         name: item[0].name,
         parent_name: item[0].parent_name
       })
-      modalShow(1) 
+      modalShow(1)
     }
   }
 
@@ -204,7 +204,7 @@ const CategoryList: FC = () => {
             <Form.Item label="" name="name">
               <Input placeholder="分类名称" />
             </Form.Item>
-          </Col> 
+          </Col>
           <Col span={2}>
             <Form.Item><Button htmlType="submit">搜索</Button></Form.Item>
           </Col>

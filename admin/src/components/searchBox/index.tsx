@@ -8,7 +8,7 @@ interface SearchBoxProps { }
 const SearchBox: FC<SearchBoxProps> = () => {
   const [show, setShow] = useState<boolean>(false)
   const inputEle = useRef<null | HTMLInputElement>(null)
-  const boxEle = useRef<HTMLDivElement>(null) 
+  const boxEle = useRef<HTMLDivElement>(null)
 
   // useEffect(() => {
   //   if (show && isClickOutside) {

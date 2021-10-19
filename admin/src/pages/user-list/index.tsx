@@ -266,9 +266,9 @@ const UserList: FC<{ userInfo: UserInfo }> = ({ userInfo }) => {
 };
 
 const mapStateToProps = produce((state: StoreState) => {
-  return { 
-    userInfo: state.userInfo 
+  return {
+    userInfo: state.userInfo
   };
-}); 
+});
 
 export default connect(mapStateToProps)(memo(UserList));

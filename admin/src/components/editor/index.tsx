@@ -9,12 +9,12 @@ interface EditorProps {
 
 let editor: any = null
 
-const Editor: FC<EditorProps> = ({ value, valChange, uploadImage }) => { 
+const Editor: FC<EditorProps> = ({ value, valChange, uploadImage }) => {
 
   useEffect(() => {
     editor = new Edit("#box")
 
-    editor.config.onchange = (newHtml: string) => { 
+    editor.config.onchange = (newHtml: string) => {
       valChange(newHtml);
     }
 
@@ -22,7 +22,7 @@ const Editor: FC<EditorProps> = ({ value, valChange, uploadImage }) => {
       uploadImage(resultFiles, insertImgFn)
   }
 
-    editor.config.uploadImgShowBase64 = true 
+    editor.config.uploadImgShowBase64 = true
     editor.config.uploadImgMaxLength = 5 // 一次最多上传 5 个图片
 
     // 需要展示的菜单
@@ -49,13 +49,13 @@ const Editor: FC<EditorProps> = ({ value, valChange, uploadImage }) => {
       'undo',
       'redo',
       'image'
-    ] 
+    ]
     // 创建
-    editor.create() 
+    editor.create()
     return () => {
       // 组件销毁时销毁编辑器 注：class写法需要在componentWillUnmount中调用
       editor.destroy()
-    } 
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

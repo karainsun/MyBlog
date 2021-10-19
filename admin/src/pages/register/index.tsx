@@ -25,11 +25,11 @@ const Register: FC<RegisterProps> = ({ isRegister }) => {
 
   const checkPass: VerifyFn = (_rule, value, callback) => {
     const firstPass = form.getFieldValue('password')
-    if (value !== firstPass) { 
-      return Promise.reject("两次密码不一样！"); 
+    if (value !== firstPass) {
+      return Promise.reject("两次密码不一样！");
     }
     return Promise.resolve();
-  } 
+  }
 
   return (
     <Form
@@ -72,7 +72,7 @@ const Register: FC<RegisterProps> = ({ isRegister }) => {
       <Form.Item
         name="repassword"
         rules={[
-          { required: true, message: '请再次输入密码!' }, 
+          { required: true, message: '请再次输入密码!' },
           { validator: checkPass }
         ]}
       >

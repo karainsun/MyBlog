@@ -3,7 +3,7 @@ import { Skeleton } from 'antd';
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 import CommonCard from "components/commonCard";
 import './style.less'
-import { articleNewest } from 'request' 
+import { articleNewest } from 'request'
 
 interface ArticleTypes {
   id: number;
@@ -12,7 +12,7 @@ interface ArticleTypes {
   comments: string;
   title: string;
   image: Array<any>;
-}  
+}
 
 const TopArticles: FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(true)

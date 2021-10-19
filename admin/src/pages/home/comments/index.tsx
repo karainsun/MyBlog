@@ -2,14 +2,14 @@ import React, { FC, useState, useEffect } from 'react'
 import { Skeleton } from 'antd';
 import CommonCard from "components/commonCard";
 import './style.less'
-import { newestComment } from 'request' 
+import { newestComment } from 'request'
 
 interface CommentTypes {
   id: number;
   article_title: string;
   content: string;
   nickname: string;
-} 
+}
 
 const Comments: FC<{}> = () => {
   const [loading, setLoading] = useState<boolean>(true)

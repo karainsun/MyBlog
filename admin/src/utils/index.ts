@@ -92,7 +92,7 @@ export const batchDelete = (keys: any[], arr: any[]): any[] => {
       if(keys[j] === arr[i].id) {
         arr.splice(j, 1)
       }
-    } 
+    }
   }
   return arr
 }

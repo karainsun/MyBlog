@@ -17,7 +17,7 @@ interface Columns {
 interface CategoryParams {
   pageNo: number;
   pageSize: number;
-  name: string; 
+  name: string;
 }
 
 interface DataType {
@@ -29,7 +29,7 @@ interface DataType {
 }
 
 interface FormValProps {
-  name: string; 
+  name: string;
 }
 
 const columns: Columns[] = [
@@ -42,7 +42,7 @@ const columns: Columns[] = [
     title: '分类名称',
     dataIndex: 'name',
     width: 150,
-  }, 
+  },
   {
     title: '日期',
     dataIndex: 'created_at',
@@ -62,13 +62,13 @@ const CollectCategory: FC = () => {
   const [params, setParams] = useState<CategoryParams>({
     pageNo: 1,
     pageSize: 10,
-    name: '' 
+    name: ''
   })
   const [tableLoading, setTableLoading] = useState<boolean>(false)
   const [total, setTotal] = useState<number>(0)
   const [formVal, setFormVal] = useState<FormValProps>({
-    name: '' 
-  }) 
+    name: ''
+  })
   const [subKey, setSubKey] = useState<number>(0) // 新建或修改 新建：0，修改：1
 
   useEffect(() => {
@@ -105,9 +105,9 @@ const CollectCategory: FC = () => {
     setParams({ ...params, pageNo: value })
   }
 
-  const modalShow = (num: number) => { 
-    setIsVisible(true); 
-    setSubKey(typeof num === 'object' ? 0 : 1) 
+  const modalShow = (num: number) => {
+    setIsVisible(true);
+    setSubKey(typeof num === 'object' ? 0 : 1)
   };
 
   const modalConfirm = () => {
@@ -120,13 +120,13 @@ const CollectCategory: FC = () => {
 
   // 新建分类提交
   const modalFinish = async (values: any) => {
-    try { 
+    try {
       const updateParams = values
-      if (subKey === 1) { 
-        updateParams.id = selectedRowKeys[0] 
+      if (subKey === 1) {
+        updateParams.id = selectedRowKeys[0]
       }
-      const res: any = subKey === 0 ? await collectCategoryCreate(values) : await collectCategoryUpdate(updateParams) 
-   
+      const res: any = subKey === 0 ? await collectCategoryCreate(values) : await collectCategoryUpdate(updateParams)
+
       if ((res.status as string) === 'success') {
         modalConfirm()
         message.success(res.msg)
@@ -144,19 +144,19 @@ const CollectCategory: FC = () => {
   const cateUpdate = () => {
     if (selectedRowKeys.length !== 1) {
       message.warning('请选择且只能选择一条数据')
-    } else { 
-      const item = categories.filter(item => item.id === selectedRowKeys[0])  
+    } else {
+      const item = categories.filter(item => item.id === selectedRowKeys[0])
       setFormVal({
-        name: item[0].name 
+        name: item[0].name
       })
-      modalShow(1) 
+      modalShow(1)
     }
   }
 
   const rowSelection = {
     onChange: selectChange,
     selectedRowKeys
-  } 
+  }
   // 批量删除分类
   const catesDelete = async () => {
     if (selectedRowKeys.length < 1) {
@@ -176,7 +176,7 @@ const CollectCategory: FC = () => {
         message.error('删除失败！')
       }
     }
-  } 
+  }
 
   return (
     <div className="componentList">
@@ -192,10 +192,10 @@ const CollectCategory: FC = () => {
             <Form.Item label="" name="name">
               <Input placeholder="分类名称" />
             </Form.Item>
-          </Col> 
+          </Col>
           <Col span={2}>
             <Form.Item><Button htmlType="submit">搜索</Button></Form.Item>
-          </Col> 
+          </Col>
           <Col span={2}>
             <Form.Item><Button onClick={modalShow}>新建</Button></Form.Item>
           </Col>
@@ -246,7 +246,7 @@ const CollectCategory: FC = () => {
           rules={[{ required: true, message: '请输入分类名称！' }]}
         >
           <Input />
-        </Form.Item> 
+        </Form.Item>
       </ModalForm>
     </div>
   )

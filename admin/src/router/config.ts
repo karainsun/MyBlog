@@ -105,13 +105,13 @@ const routes: RouteProps[] = [
         path: '/collect/list',
         name: '收藏列表',
         type: 'menuItem',
-        key: '/collect/list' 
-      }, 
+        key: '/collect/list'
+      },
       {
         path: '/collect/category',
         name: '收藏分类',
         type: 'menuItem',
-        key: '/collect/category' 
+        key: '/collect/category'
       }
     ]
   },

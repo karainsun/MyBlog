@@ -13,10 +13,10 @@ import style from './style.module.less';
 import { produce } from 'immer'
 
 const HeaderFc: FC<{ collapsed: boolean, userInfo: UserInfo, collapsedToSet: (c: boolean) => void }> = (props) => {
-  const { collapsed, userInfo, collapsedToSet } = props 
-  const [isFull, setIsFull] = useState(false) 
+  const { collapsed, userInfo, collapsedToSet } = props
+  const [isFull, setIsFull] = useState(false)
 
-  const toggleMenu = (): void => { 
+  const toggleMenu = (): void => {
     collapsedToSet(!collapsed)
   };
 
@@ -48,11 +48,11 @@ const HeaderFc: FC<{ collapsed: boolean, userInfo: UserInfo, collapsedToSet: (c:
               onClick: fullScreen,
               title: isFull ? "复原" : "全屏"
             })}
-            <Avatar 
+            <Avatar
               src={<Image className="object-fill w-full h-full" src={
                 userInfo.avatar ? userInfo.avatar : 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
               } />}
-            /> 
+            />
             <UserSelect></UserSelect>
           </div>
         </Col>

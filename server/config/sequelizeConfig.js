@@ -1,8 +1,8 @@
 const config = {
   dialect: "mysql",
   // host: "localhost",
-  host: "152.32.173.232",
   // databaseName: "blog_sql",
+  host: "152.32.173.232", 
   databaseName: "mysql",
   port: 3306,
   userName: "root",

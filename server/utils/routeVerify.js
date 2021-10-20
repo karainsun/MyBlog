@@ -4,15 +4,8 @@ const apiList = require('./apiList')
 // token 二次验证，其实是为了做权限控制
 const verify = async (ctx, next) => {
   // 所请求 api 是否带参数，若带参数将？和参数去掉，得到请求地址
-  let ctxUrl = ctx.url.indexOf('?') > -1 ? ctx.url.split('?')[0] : ctx.url
-  let apiUrl = ''
+  let apiUrl = ctx.url.indexOf('?') > 0 ? ctx.url.split('?')[0] : ctx.url
 
-  if(ctxUrl.indexOf('/api') > -1) {
-    apiUrl = ctxUrl.replace('/api', '')
-  } else {
-    apiUrl = ctxUrl
-  }
-  console.log('Api===:', apiUrl);
   return new Promise((resolve, reject) => { 
     if (apiList[apiUrl].userType === 0) {
       resolve({});

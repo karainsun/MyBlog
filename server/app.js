@@ -18,7 +18,18 @@ onerror(app)
 
 // 中间件：middlewares
 // 允许跨域
-app.use(cors())
+app.use(cors({
+  origin: function(ctx) { 
+    const whiteList = ['http://www.kayrain.cn']   //可跨域白名单
+    let currentUrl = ctx.request.origin     
+    let changeUrl = currentUrl.substring(0,currentUrl.length - 5)   
+    if(whiteList.includes(changeUrl)){
+        return changeUrl    
+    }
+    return 'http://localhost:3000' // 开发环境用的，默认允许本地端口跨域
+  },
+  credentials: true
+}))
 app.use(bodyparser({
   enableTypes: ['json', 'form', 'text']
 }))

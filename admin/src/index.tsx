@@ -8,6 +8,8 @@ import App from './App';
 import { AppContainer } from 'react-hot-loader'
 import { PersistGate } from 'redux-persist/es/integration/react';
 
+const ThemeContext = React.createContext('light');
+
 const render = (Component: any) => {
   ReactDOM.render(
     <Provider store={store}>

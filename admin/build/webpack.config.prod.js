@@ -10,8 +10,8 @@ process.env.NODE_ENV = 'production';
 module.exports = merge(base, {
   mode: process.env.NODE_ENV,
   externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM'
+    // 'react': 'React',
+    // 'react-dom': 'ReactDOM'
     // react: {
     //   commonjs: 'react',
     //   commonjs2: 'react',

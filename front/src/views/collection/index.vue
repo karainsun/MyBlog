@@ -43,6 +43,7 @@ interface CollectProps {
   name: string
   description: string
   url: string
+  logo: any
 }
 
 type CateType = { name: string; id: number }

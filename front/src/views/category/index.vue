@@ -60,7 +60,7 @@ export default defineComponent({
         })
         .then(() => {
           if (name) {
-            goPoint(name)
+            goPoint(name as any)
           }
         })
         .catch((error) => console.log(error))

@@ -48,7 +48,7 @@ export default defineComponent({
     const banner = computed(() => store.state.banners.order_4)
 
     onMounted(() => {
-      const name = route.query.name
+      const name: any = route.query.name
 
       store
         .dispatch('getAllPosts')

@@ -53,10 +53,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, PropType } from 'vue'
 import dayjs from 'dayjs'
 import Comment from '@/components/Comment.vue'
 import { commentEmitter } from '@/views/detail/index.vue'
+
+interface CommentProps {
+  id: number;
+  avatar: string;
+  nickname: string;
+  created_at: string;
+  content: string;
+  secondFloor?: Array<any>
+}
 
 export default defineComponent({
   emits: ['show-box', 'send-comment'],
@@ -69,7 +78,7 @@ export default defineComponent({
       default: 'http://qxawt89kx.hn-bkt.clouddn.com/defaultavatar.png'
     },
     commentList: {
-      type: Array,
+      type: Array as PropType<CommentProps[]>,
       default: []
     }
   },

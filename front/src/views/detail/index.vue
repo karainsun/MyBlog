@@ -86,6 +86,15 @@ export const emitter = mitt()
 // 评论 bus 事件线程
 export const commentEmitter = mitt()
 
+interface CommentProps {
+  id: number;
+  avatar: string;
+  nickname: string;
+  created_at: string;
+  content: string;
+  secondFloor?: Array<any>
+}
+
 export default defineComponent({
   name: 'detail',
   components: {
@@ -114,10 +123,10 @@ export default defineComponent({
       content: '',
       created_at: ''
     })
-    const commentList = ref([])
+    const commentList = ref<CommentProps[]>([])
     const atName = ref('')
     const parentCommentId = ref()
-    const adjacent = reactive({
+    const adjacent = reactive<{ left: Array<{ id: any}>, right: Array<{ id: any}>}>({
       left: [],
       right: []
     })

@@ -9,7 +9,7 @@ interface ResData extends AxiosResponse {
 
 const ajax = axios.create({
   baseURL:
-    process.env.NODE_ENV === 'production' ? 'http://www.kayrain.cn' : '/api',
+    process.env.NODE_ENV === 'production' ? 'http://www.kayrain.cn/api' : '/api',
   timeout: 3000
 });
 

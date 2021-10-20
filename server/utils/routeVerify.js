@@ -12,7 +12,7 @@ const verify = async (ctx, next) => {
   } else {
     apiUrl = ctxUrl
   }
-
+  console.log('Api===:', apiUrl);
   return new Promise((resolve, reject) => { 
     if (apiList[apiUrl].userType === 0) {
       resolve({});

@@ -7,7 +7,8 @@ const sequelize = require('../../utils/sequelize')
 // 查询全部
 const categoryAll = async (ctx) => {
   const resData = await Category.findAll({
-    attributes: ['name', 'id', [sequelize.fn('COUNT', sequelize.col('name')), 'count']], 
+    attributes: ['name', 'id', [sequelize.fn('COUNT', sequelize.col('name')), 'count']],
+    group: 'name',
     where: {
       articleId: { [Op.not]: null }
     },

@@ -29,7 +29,7 @@ const config = {
     filename: 'js/[contenthash:8].js',
     path: path.join(__dirname, '../dist'),
     assetModuleFilename: 'images/[name].[hash:6].[ext]',
-    publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
+    publicPath: process.env.NODE_ENV === 'production' ? '/admin/' : '/',
   },
   module: {
     rules: [

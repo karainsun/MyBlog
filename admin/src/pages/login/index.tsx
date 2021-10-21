@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom'
@@ -27,6 +27,15 @@ const Login: FC<{ userInfoToSet: (info: any) => void }> = ({ userInfoToSet }) =>
 
   const isLoginTrue = () => setIsLogin(true)
   const isLoginFalse = () => setIsLogin(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem('k_token')
+
+    if (token) {
+      history.push('/')
+      return
+    }
+  }, [history])
 
   const LoginForm: FC = () => {
     return (

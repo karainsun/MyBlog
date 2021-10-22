@@ -119,12 +119,15 @@ export const basisTag = (array: AnyArr) => {
   return newArr
 }
 /**
- * 文章系详情
+ * 文章详情
  * @param id
  * @returns
  */
 export const goPoint = (id: string) => {
-  (document.getElementById(id) as any).scrollIntoView({
+  console.log('元素id：', id)
+  console.log('元素：', document.getElementById(id))
+
+  ;(document.getElementById(id) as any).scrollIntoView({
     block: 'start',
     behavior: 'smooth'
   })

@@ -174,10 +174,10 @@ export default defineComponent({
       try {
         request(params)
         await store.dispatch('getNewPosts', { limit: 5 })
-        await getCategories().then((res) => (category.value = res.data))
-        await getTags().then((res) => (tags.value = res.data))
         const archives = await articleArchives()
         allPosts.value = archives.data
+        await getCategories().then((res) => (category.value = res.data))
+        await getTags().then((res) => (tags.value = res.data))
       } catch (error) {
         console.log('Error：', error)
       }

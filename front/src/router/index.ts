@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw, createWebHistory } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -56,7 +56,8 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  // history: createWebHashHistory(),
+  history: createWebHistory('/'),
   routes,
   // 根据元信息设置页面滚动
   scrollBehavior(to, from, savedPosition): any {

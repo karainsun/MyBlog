@@ -169,7 +169,7 @@ export default defineComponent({
         .then(({ code, data, status }: any) => {
           if (code === 200 && (status as unknown as string) === 'success') {
             ;(document.getElementById('nav-tree') as any).innerHTML = navTree(data.content)
-            getTagsClick('nav-tree')
+
             for (const key in data) {
               if (Object.prototype.hasOwnProperty.call(data, key)) {
                 post[key] = data[key]
@@ -180,6 +180,7 @@ export default defineComponent({
             adjacent.right = right
           }
         })
+        .then(() => getTagsClick('nav-tree'))
         .catch((error) => console.log(error))
     }
 

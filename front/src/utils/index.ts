@@ -119,14 +119,11 @@ export const basisTag = (array: AnyArr) => {
   return newArr
 }
 /**
- * 文章详情
+ * 锚点定位滚动
  * @param id
  * @returns
  */
 export const goPoint = (id: string) => {
-  console.log('元素id：', id)
-  console.log('元素：', document.getElementById(id))
-
   ;(document.getElementById(id) as any).scrollIntoView({
     block: 'start',
     behavior: 'smooth'
@@ -156,7 +153,10 @@ export const formatList = (comments: AnyArr, parent: KeyProps, sun: KeyProps) =>
 }
 // 根据富文本生成目录
 export const navTree = (content: string) => {
+  console.log('富文本：', content)
+
   const getChildId = (obj: {[key: KeyProps]: ValProps}, k: KeyProps) => {
+    console.log('标题元素：', obj)
     if(obj[k].childNodes[0].childNodes?.length!=0) {
       if(obj[k].id) return obj[k].id
       return obj[k].childNodes[0].id

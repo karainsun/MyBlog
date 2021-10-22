@@ -119,7 +119,7 @@ export const basisTag = (array: AnyArr) => {
   return newArr
 }
 /**
- * 文章详情
+ * 锚点定位滚动
  * @param id
  * @returns
  */

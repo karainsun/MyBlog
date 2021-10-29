@@ -1,14 +1,10 @@
 <template>
   <div class="home">
-    <banner
-      :title="banner.title"
-      :image="banner.banner"
-      :desc="banner.desc"
-    />
+    <banner :title="banner.title" :image="banner.banner" :desc="banner.desc" />
     <div class="list d-flex pt-20">
       <div class="articles box-sizing">
         <div v-for="item in list" :key="item.id" class="item mb-20 pb-15">
-          <h2 class="title text-ellipsis fs-26 pb-15 pointer">
+          <h2 class="title fs-26 pb-15 pointer">
             <router-link :to="{ path: `/post/${item.id}` }">{{ item.title }}</router-link>
           </h2>
           <router-link :to="{ path: `/post/${item.id}` }">
@@ -146,7 +142,7 @@ export default defineComponent({
       tag: ''
     })
     const request = (p: ParamsType) => {
-      if(loadTxt.value === '已经到底了~') return
+      if (loadTxt.value === '已经到底了~' || loadTxt.value === '加载中...') return
       loadTxt.value = '加载中...'
       return articleList(p)
         .then((res: any) => {
@@ -208,16 +204,47 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+// 小于768px
+@media screen and (max-width: 767px) {
+  .articles {
+    width: 100%;
+    padding: 0 30px;
+  }
+}
+// 小于1024px
+@media screen and (max-width: 1023px) {
+  .sidebar {
+    display: none;
+  }
+}
+// 小于1024px 大于768px
+@media screen and (max-width: 1023px) and (min-width: 768px) {
+  .articles {
+    width: 750px;
+    margin: 0 auto;
+  }
+}
+// 大于1024px
+@media screen and (min-width: 1024px) {
+  .list {
+    width: 1024px;
+  }
+  .articles {
+    width: 800px;
+    padding-right: 50px;
+    margin-left: 90px;
+  }
+  .sidebar {
+    width: 224px;
+  }
+}
 .list {
-  width: 1000px;
   min-height: 1200px;
   margin: auto;
   .articles {
-    width: 750px;
-    padding-right: 50px;
-    margin-left: 90px;
+    box-sizing: border-box;
     .item {
-      border-bottom: 1px solid #e3e3e3;
+      border-bottom: 1px solid var(--home-border);
       &:hover div.pic {
         opacity: 1;
         transition: 0.7s;
@@ -303,10 +330,9 @@ export default defineComponent({
     }
   }
   .sidebar {
-    width: 300px;
     padding-right: 40px;
     .info {
-      border-bottom: 1px solid #e3e3e3;
+      border-bottom: 1px solid var(--home-border);
       .avatar {
         width: 110px;
         height: 110px;

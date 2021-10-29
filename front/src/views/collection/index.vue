@@ -1,10 +1,6 @@
 <template>
   <div class="collection">
-    <banner
-      :title="banner.title"
-      :image="banner.banner"
-      :desc="banner.desc"
-    />
+    <banner :title="banner.title" :image="banner.banner" :desc="banner.desc" />
     <div class="collection-content d-flex">
       <div class="list" ref="listRef">
         <a v-for="item in list" :key="item.id" class="item" :href="item.url" target="_bank">
@@ -17,8 +13,14 @@
         <div class="catalogue ml-20 pl-20" :class="navFixed ? 'active' : ''">
           <h1 class="nav-title iconfont icon-nav-tag">分类目录</h1>
           <ul class="nav-list pl-20">
-            <li @click="catalogueTap('')">全部</li>
-            <li v-for="cate in cates" :key="cate.name" @click="catalogueTap(cate.name)">
+            <li
+              :class="classIndex === 'all' ? 'active' : ''"
+              @click="catalogueTap('', 'all')">全部</li>
+            <li
+              :class="classIndex === i.toString() ? 'active' : ''"
+              v-for="(cate, i) in cates" :key="cate.name"
+              @click="catalogueTap(cate.name, i.toString())"
+            >
               {{ cate.name }}
             </li>
           </ul>
@@ -67,6 +69,7 @@ export default defineComponent({
     const alldone = ref<boolean>(false)
     const listRef = ref<any>(null)
     const list = ref<CollectProps[]>()
+    const classIndex = ref<string>('all')
     const cates = ref<CateType[]>([])
     const params = reactive<ParamsProps>({
       pageSize: 10,
@@ -118,10 +121,13 @@ export default defineComponent({
         .catch((error) => console.log('error:', error))
     }
 
-    const catalogueTap = (cate: string) => {
+    const catalogueTap = (cate: string, index: string) => {
       params.category = cate
       params.pageNo = 1
       list.value = []
+      classIndex.value = index
+      // 列表距离顶部复位
+      document.documentElement.scrollTop = listRef.value.offsetTop
       getCollects(params)
     }
 
@@ -147,29 +153,108 @@ export default defineComponent({
       cates,
       catalogueTap,
       alldone,
-      banner
+      banner,
+      classIndex
     }
   }
 })
 </script>
 
 <style lang="less" scoped>
+// 大于1024px
+@media screen and (min-width: 1024px) {
+  .collection-content {
+    width: 1000px;
+    .list {
+      width: 800px;
+      -moz-column-count: 4;
+      -webkit-column-count: 4;
+      column-count: 4;
+      .item {
+        width: 180px;
+        img {
+          width: 80px;
+        }
+      }
+    }
+    .nav {
+      width: 200px;
+      .catalogue {
+        width: 150px;
+        &.active {
+          width: 150px;
+        }
+      }
+    }
+  }
+}
+// 小于1024px
+@media screen and (max-width: 1023px) and (min-width: 768px) {
+  .collection-content {
+    width: 100%;
+    padding: 0 30px;
+    .list {
+      width: 75%;
+      -moz-column-count: 4;
+      -webkit-column-count: 4;
+      column-count: 4;
+      .item {
+        width: 100%;
+        img {
+          width: 90%;
+        }
+      }
+    }
+    .nav {
+      width: 25%;
+      .catalogue {
+        width: 100%;
+        &.active {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+// 小于768px
+@media screen and (max-width: 767px) {
+  .collection-content {
+    width: 100%;
+    padding: 0 30px;
+    .list {
+      width: 70%;
+      -moz-column-count: 2;
+      -webkit-column-count: 2;
+      column-count: 2;
+      .item {
+        width: 100%;
+        img {
+          width: 90%;
+        }
+      }
+    }
+    .nav {
+      width: 25%;
+      .catalogue {
+        width: 100%;
+        &.active {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
 .collection-content {
-  width: 1000px;
   margin: auto;
+  box-sizing: border-box;
   .list {
-    width: 800px;
     padding-bottom: 30px;
-    -moz-column-count: 4;
-    -webkit-column-count: 4;
-    column-count: 4;
     -moz-column-gap: 20px;
     -webkit-column-gap: 20px;
     column-gap: 20px;
     display: inline-block;
     .item {
       display: inline-block;
-      width: 180px;
       margin-top: 20px;
       box-sizing: border-box;
       padding: 15px;
@@ -179,7 +264,6 @@ export default defineComponent({
         box-shadow: 0 0 15px 1px var(--bd-shadow);
       }
       img {
-        width: 80px;
         margin: auto;
         display: block;
       }
@@ -196,12 +280,9 @@ export default defineComponent({
     }
   }
   .nav {
-    width: 200px;
     .catalogue {
-      width: 150px;
       border-left: 1px solid var(--collect-border);
       &.active {
-        width: 150px;
         position: -webkit-sticky;
         position: sticky;
         top: 60px;
@@ -233,6 +314,9 @@ export default defineComponent({
           margin-bottom: 10px;
           cursor: pointer;
           opacity: 0.8;
+          &.active {
+            color: var(--main-color);
+          }
           &:hover {
             opacity: 1;
           }

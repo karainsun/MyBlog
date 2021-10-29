@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from '@/store/index'
 
 const ajax = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? 'http://www.kayrain.cn/api' : '/api',
+  baseURL: process.env.NODE_ENV === 'production' ? '正式环境api' : '/api',
   timeout: 3000
 });
 

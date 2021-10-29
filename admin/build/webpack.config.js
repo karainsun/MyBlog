@@ -77,7 +77,8 @@ const config = {
     new HtmlWebpackPlugin({
       title: 'Kay`s admin',
       filename: 'index.html',
-      template: path.join(__dirname, 'template.html')
+      template: path.join(__dirname, 'template.html'),
+      favicon: path.join(__dirname, '../src/assets/images/favicon.ico')
     })
   ]
 };

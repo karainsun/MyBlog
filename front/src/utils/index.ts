@@ -118,17 +118,7 @@ export const basisTag = (array: AnyArr) => {
 
   return newArr
 }
-/**
- * 锚点定位滚动
- * @param id
- * @returns
- */
-export const goPoint = (id: string) => {
-  ;(document.getElementById(id) as any).scrollIntoView({
-    block: 'start',
-    behavior: 'smooth'
-  })
-}
+
 /**
  * 格式化评论
  * @param comments
@@ -151,16 +141,42 @@ export const formatList = (comments: AnyArr, parent: KeyProps, sun: KeyProps) =>
   }
   return newList;
 }
-// 根据富文本生成目录
-export const navTree = (content: string) => {
-  const getChildId = (obj: {[key: KeyProps]: ValProps}, k: KeyProps) => {
-    if(obj[k].childNodes[0].childNodes?.length!=0) {
-      if(obj[k].id) return obj[k].id
-      return obj[k].childNodes[0].id
-    } else {
-      return obj[k].id
-    }
+/**
+ * 锚点定位滚动
+ * @param id
+ * @returns
+ */
+ export const goPoint = (id: string) => {
+  ;(document.getElementById(id) as any).scrollIntoView({
+    block: 'start',
+    behavior: 'smooth'
+  })
+}
+/**
+ * 节点添加id
+ * @param str
+*/
+export const formateHtml = (str: string) => {
+  let box = document.getElementById('htmlBox');
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'htmlBox';
+    box.style.display = 'none'
   }
+  box.innerHTML = str
+  const eles = box.children;
+  for (let i = 0; i < eles.length; i++) {
+    let tagName = (eles[i] as any).localName
+    eles[i].id = tagName + i
+  }
+
+  return box.innerHTML
+}
+/**
+ * 根据富文本生成目录
+ * @param content
+*/
+export const navTree = (content: string) => {
   let titleHtml = ''
   let box = document.getElementById('detailBox');
   if (!box) {
@@ -173,15 +189,16 @@ export const navTree = (content: string) => {
   for (let i = 0; i < eles.length; i++) {
     let tagName = (eles[i] as any).localName
     let title = ''
+    const titleTxt = (eles[i] as any).innerText
     switch (tagName) {
       case 'h1':
-        title = `<div class="nav-tit tit1 pointer" pointid="${getChildId(eles, i)}" title="${(eles[i] as any).innerText}"># ${(eles[i] as any).innerText}</div>`
+        title = `<div class="nav-tit tit1 pointer" pointid="${(eles[i] as any).id}" title="${titleTxt}"># ${titleTxt}</div>`
         break;
       case 'h2':
-        title = `<div class="nav-tit tit2 pointer fs-14" pointid="${getChildId(eles, i)}" title="${(eles[i] as any).innerText}">${(eles[i] as any).innerText}</div>`
+        title = `<div class="nav-tit tit2 pointer fs-14" pointid="${(eles[i] as any).id}" title="${titleTxt}">${titleTxt}</div>`
         break;
       case 'h3':
-        title = `<div class="nav-tit tit3 pointer fs-14" pointid="${getChildId(eles, i)}" title="${(eles[i] as any).innerText}">${(eles[i] as any).innerText}</div>`
+        title = `<div class="nav-tit tit3 pointer fs-14" pointid="${(eles[i] as any).id}" title="${titleTxt}">${titleTxt}</div>`
         break;
       default:
         break;
@@ -227,6 +244,9 @@ export const checkTheme = (check: any) => {
   document.documentElement.style.setProperty('--message-bg', check ? "rgba(255, 255, 255, .05)" : "rgba(0, 0, 0, .05)");
   document.documentElement.style.setProperty('--message-clip', check ? "rgba(255, 255, 255, .25)" : "rgba(0, 0, 0, .25)");
   document.documentElement.style.setProperty('--message-box-bg', check ? "rgb(59, 66, 85)" : "rgba(255, 255, 255, 1)");
+  document.documentElement.style.setProperty('--home-border', check ? "rgba(74, 74, 74, 1)" : "#e3e3e3");
+  document.documentElement.style.setProperty('--tip-color', check ? "#f6f9fc" : "rgba(51, 51, 51, 0.9)");
+  document.documentElement.style.setProperty('--insicon-color', check ? "#fff" : "#333");
 }
 
 // 函数节流
@@ -265,4 +285,16 @@ export const objToMap = (obj: any) => {
     map.set(key, obj[key])
   }
   return map
+}
+/**
+ * 随机数
+ * @param min 最小
+ * @param max 最大
+*/
+export const randNum = (min: number, max: number) => {
+  const range = max - min;
+  const rand = Math.random();
+  const num = min + Math.round(rand * range);
+
+  return num;
 }

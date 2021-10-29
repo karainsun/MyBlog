@@ -9,7 +9,7 @@ interface ResData extends AxiosResponse {
 
 const ajax = axios.create({
   baseURL:
-    process.env.NODE_ENV === 'production' ? 'http://www.kayrain.cn/api' : '/api',
+    process.env.NODE_ENV === 'production' ? '正式环境api地址' : '/api',
   timeout: 3000
 });
 
@@ -53,6 +53,7 @@ ajax.interceptors.response.use(
     if (response) {
       if (response.status === 401) {
         message.success('请重新登陆', 1);
+        localStorage.removeItem('k_token');
         return (window.location.hash = '/login');
       } else {
         return Promise.reject(response.data);

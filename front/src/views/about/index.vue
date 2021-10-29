@@ -39,10 +39,23 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-.about {
+// 小于768px
+@media screen and (max-width: 767px) {
+  .content {
+    width: 100%;
+    padding: 0 30px;
+  }
+}
+// 大于768px
+@media screen and (min-width: 768px) {
   .content {
     width: 700px;
+  }
+}
+.about {
+  .content {
     margin: auto;
+    box-sizing: border-box;
     color: var(--h1-color);
   }
 }

@@ -15,7 +15,7 @@
           <span>{{ a.category.name }}</span>
         </div>
         <ul>
-          <li v-for="p in a.posts" :key="p.id" class="pl-20 pb-20 mb-20 border-b-f3">
+          <li v-for="p in a.posts" :key="p.id" class="pl-20 pb-20 mb-20">
             <router-link :to="{ path: `/post/${p.id}` }">
               <div class="fs-18 pb-15 text-ellipsis">{{ p.title }}</div>
               <div class="fs-14 text-ellipsis">{{ p.description }}</div>
@@ -81,9 +81,22 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+// 小于768px
+@media screen and (max-width: 767px) {
+  .content {
+    width: 100%;
+    padding: 0 60px;
+  }
+}
+// 大于768px
+@media screen and (min-width: 768px) {
+  .content {
+    width: 700px;
+  }
+}
 .content {
-  width: 700px;
   margin: auto;
+  box-sizing: border-box;
   .list {
     li {
       display: inline-block;
@@ -115,6 +128,7 @@ export default defineComponent({
     ul {
       li {
         cursor: pointer;
+        border-bottom: 1px solid var(--home-border);
         a {
           color: var(--h1-color);
         }

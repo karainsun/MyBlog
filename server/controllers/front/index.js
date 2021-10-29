@@ -65,7 +65,7 @@ const articleArchives = async (ctx) => {
 const userInfo = async (ctx) => {
   const user = await User.findOne({
     where: {
-      username: 'kayrain1994'
+      username: '' // 指定要返回的用户到前台主页
     }
   });
   if (user === null) {

@@ -1,39 +1,41 @@
 <template>
-  <div class="top-scroll pos-fix w-full"><div class="top-bar"></div></div>
-  <div
-    class="header w-min-1200 pos-fix"
-    :class="show ? 'active-a' : 'active-b'"
-    :style="isScroll ? { backgroundColor: 'rgba(255, 255, 255, 0.5)' } : ''"
-  >
+  <div>
+    <div class="top-scroll pos-fix w-full"><div class="top-bar"></div></div>
     <div
-      class="head-cont box-sizing w-1200 d-flex js-between box-sizing p-20 ai-center"
-      :class="!isScroll ? 'text-w' : 'text-b'"
+      class="header pos-fix"
+      :class="show ? 'active-a' : 'active-b'"
+      :style="isScroll ? { backgroundColor: 'rgba(255, 255, 255, 0.5)' } : ''"
     >
-      <div class="avatar"><i class="fs-22 text">Kay`s zone.</i></div>
-      <div class="menu">
-        <ul class="d-flex fs-14">
-          <li>
-            <router-link to="/"><i class="nav-txt">主页</i></router-link>
-          </li>
-          <li>
-            <router-link to="/archives"><i class="nav-txt">归档</i></router-link>
-          </li>
-          <li>
-            <router-link to="/category"><i class="nav-txt">分类</i></router-link>
-          </li>
-          <li>
-            <router-link to="/tags"><i class="nav-txt">标签</i></router-link>
-          </li>
-          <li>
-            <router-link to="/collection"><i class="nav-txt">收藏</i></router-link>
-          </li>
-          <li>
-            <router-link to="/about"><i class="nav-txt">关于</i></router-link>
-          </li>
-          <li>
-            <router-link to="/message"><i class="nav-txt">留言</i></router-link>
-          </li>
-        </ul>
+      <div
+        class="head-cont box-sizing d-flex js-between box-sizing p-20 ai-center"
+        :class="!isScroll ? 'text-w' : 'text-b'"
+      >
+        <div class="avatar"><i class="fs-22 text">Kay`s zone.</i></div>
+        <div class="menu">
+          <ul class="d-flex fs-14">
+            <li>
+              <router-link to="/"><i class="nav-txt">主页</i></router-link>
+            </li>
+            <li>
+              <router-link to="/archives"><i class="nav-txt">归档</i></router-link>
+            </li>
+            <li>
+              <router-link to="/category"><i class="nav-txt">分类</i></router-link>
+            </li>
+            <li>
+              <router-link to="/tags"><i class="nav-txt">标签</i></router-link>
+            </li>
+            <li>
+              <router-link to="/collection"><i class="nav-txt">收藏</i></router-link>
+            </li>
+            <li>
+              <router-link to="/about"><i class="nav-txt">关于</i></router-link>
+            </li>
+            <li>
+              <router-link to="/message"><i class="nav-txt">留言</i></router-link>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -78,13 +80,38 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-.top-scroll {
-  height: 3px;
-  z-index: 9999;
-  .top-bar {
-    width: calc(var(--scroll) * 1%);
-    background-color: var(--main-color);
-    height: 3px;
+@media screen and (max-width: 767px) {
+  .header {
+    .head-cont {
+      .avatar {
+        display: none;
+      }
+      .menu {
+        ul {
+          li {
+            margin-left: 18px;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}
+@media screen and (min-width: 768px) {
+  .header {
+    .head-cont {
+      .avatar {
+        display: block;
+      }
+      .menu {
+        ul {
+          li {
+            margin-left: 30px;
+            font-weight: bold;
+          }
+        }
+      }
+    }
   }
 }
 .header {
@@ -109,7 +136,6 @@ export default defineComponent({
     .menu {
       ul {
         li {
-          margin-left: 30px;
           font-weight: bold;
         }
       }
@@ -142,6 +168,15 @@ export default defineComponent({
         }
       }
     }
+  }
+}
+.top-scroll {
+  height: 3px;
+  z-index: 9999;
+  .top-bar {
+    width: calc(var(--scroll) * 1%);
+    background-color: var(--main-color);
+    height: 3px;
   }
 }
 </style>

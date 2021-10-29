@@ -12,10 +12,9 @@ const whiteList = require('./middleware/whiteList')
 
 const loadRouter = require('./routes')
 const db = require('./models')
-
+ 
 // error handler
-onerror(app)
-
+onerror(app) 
 // 中间件：middlewares
 // 允许跨域
 app.use(cors())

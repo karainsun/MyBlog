@@ -37,10 +37,17 @@
         </div>
         <!---一段话---->
         <div class="comment-icon d-flex js-center ai-center">
-          <div class="line"></div>
-          <div class="iconfont icon-write"></div>
-          <div class="line"></div>
+          If you like this blog or find it useful for you, you are welcome to comment on it. You are
+          also welcome to share this blog, so that more people can participate in it. If the images
+          used in the blog infringe your copyright, please contact the author to delete them. Thank
+          you !
         </div>
+        <!-- <div class="comment-ins">
+          <div class="item"><a href="#" class="iconfont icon-info-1"></a></div>
+          <div class="item"><a href="#" class="iconfont icon-info-2"></a></div>
+          <div class="item"><a href="#" class="iconfont icon-info-3"></a></div>
+          <div class="item"><a href="#" class="iconfont icon-info-4"></a></div>
+        </div> -->
         <div class="comment-zone">
           <!----Comment---->
           <comment @show-login="showLogin" @send-emit="sendComment" />
@@ -78,7 +85,7 @@ import CommentList from '@/components/CommentList.vue'
 import useClickOutside from '@/hooks/useClickOutside'
 import { makeComment, getCommentList } from '@/request'
 import createMessage from '@/components/createMessage'
-import { formatList, navTree, getTagsClick } from '@/utils'
+import { formatList, navTree, getTagsClick, formateHtml } from '@/utils'
 import WangEditor from '@/components/WangEditor.vue'
 import mitt from 'mitt'
 // 登录 bus 事件线程
@@ -87,11 +94,11 @@ export const emitter = mitt()
 export const commentEmitter = mitt()
 
 interface CommentProps {
-  id: number;
-  avatar: string;
-  nickname: string;
-  created_at: string;
-  content: string;
+  id: number
+  avatar: string
+  nickname: string
+  created_at: string
+  content: string
   secondFloor?: Array<any>
 }
 
@@ -126,7 +133,7 @@ export default defineComponent({
     const commentList = ref<CommentProps[]>([])
     const atName = ref('')
     const parentCommentId = ref()
-    const adjacent = reactive<{ left: Array<{ id: any}>, right: Array<{ id: any}>}>({
+    const adjacent = reactive<{ left: Array<{ id: any }>; right: Array<{ id: any }> }>({
       left: [],
       right: []
     })
@@ -168,11 +175,15 @@ export default defineComponent({
       articleDetail({ id: postId })
         .then(({ code, data, status }: any) => {
           if (code === 200 && (status as unknown as string) === 'success') {
-            ;(document.getElementById('nav-tree') as any).innerHTML = navTree(data.content)
+            ;(document.getElementById('nav-tree') as any).innerHTML = navTree(formateHtml(data.content))
 
             for (const key in data) {
-              if (Object.prototype.hasOwnProperty.call(data, key)) {
-                post[key] = data[key]
+              if (key !== 'content'){
+                if (Object.prototype.hasOwnProperty.call(data, key)) {
+                  post[key] = data[key]
+                }
+              } else {
+                post.content = formateHtml(data.content)
               }
             }
             const { left, right } = data.adjacent
@@ -196,7 +207,7 @@ export default defineComponent({
     }
     // 监听地址栏
     watch(route, () => {
-      if(route.path.split('/')[1] !== 'post') {
+      if (route.path.split('/')[1] !== 'post') {
         return
       }
       let postId = route.params.id as string
@@ -266,11 +277,60 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+// 小于768
+@media screen and (max-width: 768px) {
+  .content {
+    padding: 0 30px;
+    width: 100%;
+    .content-left {
+      width: 100%;
+      .comment-icon {
+        width: 100%;
+      }
+      .comment-zone {
+        width: 100%;
+      }
+    }
+    .content-right {
+      display: none;
+    }
+  }
+}
+// 大于768px 小于1024px
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .content {
+    padding: 0 30px;
+    width: 100%;
+    .content-left {
+      width: 75%;
+      // .comment-zone {
+      //   width: 600px;
+      // }
+    }
+    .content-right {
+      width: 25%;
+    }
+  }
+}
+// 大于1024px
+@media screen and (min-width: 1024px) {
+  .content {
+    width: 1000px;
+    .content-left {
+      width: 780px;
+      // .comment-zone {
+      //   width: 600px;
+      // }
+    }
+    .content-right {
+      width: 220px;
+    }
+  }
+}
 .content {
-  width: 1000px;
   margin: auto;
+  box-sizing: border-box;
   .content-left {
-    width: 780px;
     .post {
       color: var(--h1-color);
     }
@@ -297,10 +357,10 @@ export default defineComponent({
       }
     }
     .comment-icon {
-      width: 600px;
       margin: auto;
       margin-bottom: 30px;
-      text-indent: 2rem;
+      font-style: italic;
+      color: var(--tip-color);
       .iconfont {
         margin: auto;
         font-size: 40px;
@@ -317,12 +377,10 @@ export default defineComponent({
       }
     }
     .comment-zone {
-      width: 600px;
-      margin: auto;
+      margin: 20px auto auto;
     }
   }
   .content-right {
-    width: 220px;
     .catalogue {
       border-left: rgba(88, 88, 88, 0.1) 1px solid;
       padding: 0 1em 0 1em;

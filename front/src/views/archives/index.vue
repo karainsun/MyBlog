@@ -15,7 +15,7 @@
           <li v-for="post in item.posts" :key="post.id">
             <span>{{dayjs(post.created_at).format('MM-DD')}}</span>
             <i class="iconfont icon-right"></i>
-            <router-link :to="{ path: `/post/${post.id}` }">{{ post.title }}</router-link>
+            <router-link class="p-title" :to="{ path: `/post/${post.id}` }">{{ post.title }}</router-link>
           </li>
         </ul>
       </div>
@@ -62,8 +62,27 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+// 小于768px
+@media screen and (max-width: 767px) {
+  .content {
+    width: 100%;
+    padding: 0 60px;
+  }
+  .p-title {
+    width: 85%;
+  }
+}
+// 大于768px
+@media screen and (min-width: 768px) {
+  .content {
+    width: 750px;
+  }
+  .p-title {
+    width: 600px;
+  }
+}
 .content {
-  width: 750px;
+  box-sizing: border-box;
   margin: auto;
   .item {
     margin-bottom: 40px;
@@ -89,13 +108,15 @@ export default defineComponent({
           position: absolute;
           left: 35px;
         }
+        span {
+          width: 42px;
+        }
         i {
           font-size: 12px;
           margin: auto 5px;
           display: inline-block;
         }
-        a {
-          width: 600px;
+        .p-title {
           display: inline-block;
           color: var(--main-color);
           cursor: pointer;

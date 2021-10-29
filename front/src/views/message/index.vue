@@ -197,9 +197,9 @@ export default defineComponent({
       }
     }
     const handleKeydown = (e: any) => {
-      if(e.keyCode === 27) {
+      if (e.keyCode === 27) {
         showBox.value = false
-      } else if(e.keyCode === 13) {
+      } else if (e.keyCode === 13) {
         publish()
       }
     }
@@ -254,11 +254,59 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+// 小于768px
+@media screen and (max-width: 767px) {
+  .message {
+    .content {
+      .f-list {
+        width: 100%;
+      }
+    }
+    .message-box {
+      width: 90%;
+      .box-ipt {
+        width: 100%;
+      }
+    }
+  }
+}
+// 大于768px
+@media screen and (min-width: 768px) {
+  .message {
+    .content {
+      .f-list {
+        width: 660px;
+      }
+    }
+  }
+}
+// 大于768px 小于1024px
+@media screen and (max-width: 1023px) and (min-width: 768px) {
+  .message {
+    .message-box {
+      width: 660px;
+      .box-ipt {
+        width: 530px;
+      }
+    }
+  }
+}
+// 大于1024px
+@media screen and (min-width: 1024px) {
+  .message {
+    .message-box {
+      width: 760px;
+      .box-ipt {
+        width: 630px;
+      }
+    }
+  }
+}
 .message {
   .content {
     padding-top: 50px;
+    box-sizing: border-box;
     .f-list {
-      width: 660px;
       margin: auto;
       .f-item {
         margin-bottom: 30px;
@@ -399,7 +447,6 @@ export default defineComponent({
     }
   }
   .message-box {
-    width: 760px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -420,7 +467,6 @@ export default defineComponent({
       }
     }
     .box-ipt {
-      width: 630px;
       height: 40px;
       padding: 5px;
       border-bottom: 1px solid #e3e3e3;

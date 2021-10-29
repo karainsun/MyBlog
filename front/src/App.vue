@@ -1,12 +1,13 @@
 <template>
   <div>
     <Header />
+    <!--- exclude里的name要对应组件内的name---->
     <router-view v-slot="{ Component }">
-      <!--- exclude里的name要对应组件内的name---->
       <keep-alive :include="['home']">
         <component :is="Component" />
       </keep-alive>
     </router-view>
+    <Footer />
     <BackToTop transitionName="fade" :visibilityHeight="300" :backPosition="0" />
     <loading v-if="isLoading" />
     <theme-switch />
@@ -17,6 +18,7 @@
 import { defineComponent, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import Header from '@/layouts/Header.vue'
+import Footer from '@/layouts/Footer.vue'
 import BackToTop from '@/components/BackToTop.vue'
 import Loading from '@/components/Loading.vue'
 import ThemeSwitch from '@/components/ThemeSwitch.vue'
@@ -28,6 +30,7 @@ export default defineComponent({
   name: 'App',
   components: {
     Header,
+    Footer,
     BackToTop,
     Loading,
     ThemeSwitch

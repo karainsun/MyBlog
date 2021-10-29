@@ -9,7 +9,7 @@
             </router-link>
           </span>
         </div>
-        <h1 class="title text-white mt-10 mb-10 fs-48">{{ title }}</h1>
+        <h1 class="title text-white mt-10 mb-10">{{ title }}</h1>
         <i class="date text-white fs-22">Posted by Kay on {{ date }}</i>
       </div>
       <div v-else class="slogan text-c text-white w-full">
@@ -83,13 +83,56 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-.banner {
-  width: 100vw;
-  height: 100vh;
+@media screen and (max-width: 1024px) {
+  .banner {
+    height: calc(100vh - 200px);
+  }
+}
+@media screen and (max-width: 768px) {
+  .slogan {
+    height: calc(100vh - 240px);
+  }
+  .postinfo {
+    padding: 0 20px;
+    height: calc(100vh - 240px);
+    .title {
+      font-size: 20px;
+    }
+  }
+}
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .slogan {
+    height: calc(100vh - 300px);
+  }
+  .postinfo {
+    width: 700px;
+    margin: auto;
+    height: calc(100vh - 300px);
+    .title {
+      font-size: 20px;
+    }
+  }
+}
+@media screen and (min-width: 1024px) {
+  .banner {
+    height: 100vh;
+  }
+  .slogan {
+    height: calc(100vh - 100px);
+  }
   .postinfo {
     width: 770px;
     margin: auto;
     height: calc(100vh - 100px);
+    .title {
+      font-size: 42px;
+    }
+  }
+}
+.banner {
+  width: 100vw;
+  overflow: hidden;
+  .postinfo {
     .tags {
       padding-top: 160px;
       span {
@@ -116,7 +159,6 @@ export default defineComponent({
       padding-top: 180px;
       font-size: 60px;
     }
-    height: calc(100vh - 100px);
     text-shadow: 5px 5px 5px var(--bd-shadow);
   }
   .banner-content{

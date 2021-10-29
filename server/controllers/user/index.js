@@ -33,9 +33,10 @@ const userRegister = async (ctx) => {
     }
   } else {
     let isAdmin = false;
-    if (!_.isEmpty(invitationCode) && invitationCode === 'kay1994') {
+    // 这里的'VIP'标识为超级管理员，可自行定义一个字符串
+    if (!_.isEmpty(invitationCode) && invitationCode === 'VIP') {
       isAdmin = true
-    } else if (!_.isEmpty(invitationCode) && invitationCode !== 'kay1994') {
+    } else if (!_.isEmpty(invitationCode) && invitationCode !== 'VIP') {
       return ctx.body = {
         code: 200,
         msg: '邀请码不正确！',

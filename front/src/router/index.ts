@@ -38,20 +38,17 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/collection',
     name: 'collection',
-    component: () => import(/* webpackChunkName: "collection" */ '@/views/collection/index.vue'),
-    meta: { scrollToTop: true }
+    component: () => import(/* webpackChunkName: "collection" */ '@/views/collection/index.vue')
   },
   {
     path: '/about',
     name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '@/views/about/index.vue'),
-    meta: { scrollToTop: true }
+    component: () => import(/* webpackChunkName: "about" */ '@/views/about/index.vue')
   },
   {
     path: '/message',
     name: 'message',
-    component: () => import(/* webpackChunkName: "message" */ '@/views/message/index.vue'),
-    meta: { scrollToTop: true }
+    component: () => import(/* webpackChunkName: "message" */ '@/views/message/index.vue')
   }
 ]
 

@@ -247,6 +247,7 @@ export const checkTheme = (check: any) => {
   document.documentElement.style.setProperty('--home-border', check ? "rgba(74, 74, 74, 1)" : "#e3e3e3");
   document.documentElement.style.setProperty('--tip-color', check ? "#f6f9fc" : "rgba(51, 51, 51, 0.9)");
   document.documentElement.style.setProperty('--insicon-color', check ? "#fff" : "#333");
+  document.documentElement.style.setProperty('--top-color', check ? "#8f77fb" : "#f46267");
 }
 
 // 函数节流

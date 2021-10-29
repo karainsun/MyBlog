@@ -63,7 +63,8 @@ const articleList = async (ctx) => {
     rows
   } = await Article.findAndCountAll({
     order: [
-      ['created_at', 'DESC']
+      ['top', 'DESC'], // 置顶排序
+      ['created_at', 'DESC'] // 创建日期排序
     ],
     limit: Number(pageSize),
     offset: (Number(pageNo) - 1) * Number(pageSize),

@@ -247,6 +247,17 @@ const ArticleCreat: FC<combineProps> = (props) => {
           </div>
 
           <Form.Item
+            label="是否置顶"
+            name="top"
+            valuePropName="checked"
+          >
+            <Switch
+              checkedChildren="是"
+              unCheckedChildren="否"
+            />
+          </Form.Item>
+
+          <Form.Item
             label="予评与否"
             name="isComent"
             valuePropName="checked"

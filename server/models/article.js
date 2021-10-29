@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       comment: '文章描述'
     },
+    top: {
+      type: DataTypes.INTEGER,
+      allowNull: true, 
+      defaultValue: 0, // 0：否，1：是
+      comment: '置顶'
+    },
     image: {
       type: DataTypes.STRING,
       get: function () {

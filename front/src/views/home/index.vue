@@ -4,6 +4,7 @@
     <div class="list d-flex pt-20">
       <div class="articles box-sizing">
         <div v-for="item in list" :key="item.id" class="item mb-20 pb-15">
+          <div v-if="item.top" class="top shake iconfont icon-tuding"></div>
           <h2 class="title fs-26 pb-15 pointer">
             <router-link :to="{ path: `/post/${item.id}` }">{{ item.title }}</router-link>
           </h2>
@@ -245,9 +246,19 @@ export default defineComponent({
     box-sizing: border-box;
     .item {
       border-bottom: 1px solid var(--home-border);
+      position: relative;
       &:hover div.pic {
         opacity: 1;
         transition: 0.7s;
+      }
+      .top {
+        position: absolute;
+        font-size: 40px;
+        top: -20px;
+        left: -23px;
+        z-index: 9;
+        font-weight: bold;
+        color: var(--top-color)
       }
       .title {
         a {

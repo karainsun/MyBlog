@@ -13,7 +13,7 @@
   box-sizing: border-box;
   border-radius: 3px;
   transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 .login-bg .ant-input-affix-wrapper {
   border: none;
@@ -26,4 +26,24 @@
 .login-bg .ant-input-affix-wrapper input::-webkit-input-placeholder {
   color: #666;
   font-size: 16px;
+}
+.login-rotate {
+  animation: rotate 0.8s;
+  -webkit-animation: rotate 0.8s;
+}
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotateY(360deg);
+  }
+  to {
+    -webkit-transform: rotateY(0deg);
+  }
+}
+@keyframes rotate {
+  from {
+    -webkit-transform: rotateY(360deg);
+  }
+  to {
+    -webkit-transform: rotateY(0deg);
+  }
 }

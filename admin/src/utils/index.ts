@@ -83,16 +83,38 @@ export const setHeight = (h: number): number => {
         ? document.body.clientHeight
         : document.documentElement.clientHeight;
   }
-  return (clientHeight - h);
+  return clientHeight - h;
 };
 // 批量删除
 export const batchDelete = (keys: any[], arr: any[]): any[] => {
   for (let i = arr.length - 1; i >= 0; i--) {
     for (let j = 0; j < keys.length; j++) {
-      if(keys[j] === arr[i].id) {
-        arr.splice(j, 1)
+      if (keys[j] === arr[i].id) {
+        arr.splice(j, 1);
       }
     }
   }
-  return arr
+  return arr;
+};
+/**
+ * Emoji
+ */
+export const emojiArr = () => {
+  const emojiList = [];
+
+  for (let i = 1; i < 91; i++) {
+    if (![41, 45, 54].includes(i)) {
+      emojiList.push({
+        img: `http://cdn.kayrain.cn/${i}.gif`,
+        id: i
+      });
+    }
+  }
+  return emojiList;
+};
+// 设置光标位置(方法有问题，插个眼)
+export function keepLastIndex(obj: any) {
+  obj.focus();
+  document.execCommand('selectAll', false);
+  (document as any).getSelection().collapseToEnd()
 }

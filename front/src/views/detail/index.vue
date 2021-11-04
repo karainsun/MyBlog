@@ -50,13 +50,19 @@
         </div> -->
         <div class="comment-zone">
           <!----Comment---->
-          <comment @show-login="showLogin" @send-emit="sendComment" />
+          <comment
+            txtId="txtBox"
+            @show-login="showLogin"
+            @send-emit="sendComment"
+            @hide-box="blurHideIput"
+            @check-query="setCommentQuery" />
           <!----Comment List---->
           <comment-list
             v-if="commentList"
             :commentList="commentList"
             @show-box="showLogin"
             @send-comment="sendComment"
+            :showNum="comListNum"
           />
         </div>
       </div>
@@ -81,6 +87,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { NewPostsProps } from '@/store'
 import dayjs from 'dayjs'
 import Comment from '@/components/Comment.vue'
+import { blurHideMitt } from '@/components/CommentList.vue'
 import CommentList from '@/components/CommentList.vue'
 import useClickOutside from '@/hooks/useClickOutside'
 import { makeComment, getCommentList } from '@/request'
@@ -98,6 +105,7 @@ interface CommentProps {
   avatar: string
   nickname: string
   created_at: string
+  qq_email: string
   content: string
   secondFloor?: Array<any>
 }
@@ -137,6 +145,7 @@ export default defineComponent({
       left: [],
       right: []
     })
+    const comListNum = ref()
 
     // 显示登录框
     const showLogin = () => {
@@ -144,12 +153,18 @@ export default defineComponent({
     }
     // 设置二级评论参数
     const setCommentQuery = (data: any) => {
-      atName.value = data.name
-      parentCommentId.value = data.id
+      if(data.id === null) {
+        const articleId = route.params.id as string
+        atName.value = ''
+        parentCommentId.value = articleId
+      } else {
+        atName.value = data.name
+        parentCommentId.value = data.id
+      }
     }
     // 发表评论
     const sendComment = (c: string) => {
-      const { avatar, nickname, id } = JSON.parse(localStorage.getItem('tourist_info') as string)
+      const { avatar, nickname, id, qq_email } = JSON.parse(localStorage.getItem('tourist_info') as string)
       const articleId = route.params.id as string
       makeComment({
         article_title: post.title,
@@ -157,15 +172,18 @@ export default defineComponent({
         nickname: nickname,
         userId: id,
         articleId,
+        qq_email,
         content: c,
         at_name: atName.value,
-        parent_comment_id: parentCommentId.value
+        parent_comment_id: parentCommentId.value,
+        article_link: `http://www.kayrain.cn/post/${articleId}`
       })
         .then((res: any) => {
           getComments(articleId)
           createMessage(res.msg, res.status)
           atName.value = ''
           parentCommentId.value = articleId
+          comListNum.value = -1;
         })
         .catch((error) => console.log(error))
     }
@@ -233,6 +251,10 @@ export default defineComponent({
     emitter.on('login-finish', showLogin)
     // 设置二级评论的参数
     commentEmitter.on('set-query', setCommentQuery)
+    // 从Comment组件传来的事件触发CommentList组件里的事件
+    const blurHideIput = () => {
+      blurHideMitt.emit('blur-hide')
+    }
 
     onUnmounted(() => {
       emitter.off('login-finish', showLogin)
@@ -270,7 +292,10 @@ export default defineComponent({
       getAdjacent,
       navTreeRef,
       navFixed,
-      contentRef
+      contentRef,
+      setCommentQuery,
+      comListNum,
+      blurHideIput
     }
   }
 })

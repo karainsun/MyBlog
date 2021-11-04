@@ -6,6 +6,7 @@ export interface MessageProps {
   nickname: string;
   userId: number;
   content: string;
+  qq_email: string;
   at_name?: string;
   parent_message_id?: number;
 }
@@ -16,6 +17,8 @@ export interface CommentProps {
   nickname: string;
   userId: number;
   articleId: string;
+  qq_email: string;
+  article_link: string;
   content: string;
   at_name?: string;
   parent_comment_id?: number;

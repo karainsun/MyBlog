@@ -15,7 +15,7 @@
           :rules="emailRules"
           v-model="emailVal"
           type="text"
-          placeholder="QQ邮箱留下吧（仅获取头像）"
+          placeholder="QQ邮箱留下吧"
         ></validate-input>
       </div>
       <div>
@@ -73,7 +73,7 @@ export default defineComponent({
         }
 
         store.dispatch('getTourist', payload).then((data: TouristProps) => {
-          if(route.path.split('/')[1] === 'detail') {
+          if(route.path.split('/')[1] === 'post') {
             emitter.emit('login-finish')
             touristMitt.emit('set-tourist', data)
           } else if (route.path.split('/')[1] === 'message'){

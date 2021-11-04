@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import Message from './Message.vue'
-export type MessageType = 'success' | 'error' | 'default'
+export type MessageType = 'success' | 'field' | 'default'
 // 4、函数式组件，将message封装成函数式组件
 const createMessage = (message: string, type: MessageType, timeout = 2000) => {
   // 4.1、生成组件实例，创建节点并挂载到组件上

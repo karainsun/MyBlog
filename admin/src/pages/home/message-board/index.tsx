@@ -45,7 +45,7 @@ const MessageBoard: FC<{}> = () => {
                       <i>{item.nickname}</i>
                       <span className="mr-2 float-right" style={{ fontSize: '12px' }}>{dayjs(item.created_at).format('YYYY-MM-DD HH:mm')}</span>
                     </div>
-                    <div className="text-gray-600">{item.content}</div>
+                    <div className="text-gray-600 flex flex-wrap" dangerouslySetInnerHTML={{__html: item.content}}></div>
                   </div>
                 </div>
               )

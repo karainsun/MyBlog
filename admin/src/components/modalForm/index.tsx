@@ -12,15 +12,17 @@ interface CollectionCreateFormProps {
   bodyStyle?: any;
 }
 
-const ModalForm: React.FC<CollectionCreateFormProps> = ({
-  title,
-  visible,
-  onCreate,
-  onCancel,
-  val,
-  children,
-  bodyStyle
-}) => {
+const ModalForm: React.FC<CollectionCreateFormProps> = (props) => {
+  const {
+    title,
+    visible,
+    onCreate,
+    onCancel,
+    val,
+    children,
+    bodyStyle
+  } = props
+
   const [form] = Form.useForm();
   //TODO: 记录usseState更新后视图不变的问题
   // antd有些组件就是这样的，defuatValue不允许被修改, 一旦初始化，就不会变了
@@ -30,7 +32,7 @@ const ModalForm: React.FC<CollectionCreateFormProps> = ({
         form.setFieldsValue({ [key]: val[key] })
       }
     }
-  }, [val])
+  }, [props])
 
   return (
     <Modal

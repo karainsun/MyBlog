@@ -81,7 +81,10 @@ const Login: FC<{ userInfoToSet: (info: any) => void }> = ({ userInfoToSet }) =>
     <div className="login-bg">
       <div className="login-box fixed z-10">
         <h1 className="text-center text-xl pb-4">{isLogin ? '登录' : '注册'}</h1>
-        {isLogin ? <LoginForm /> : <RegisterForm isRegister={isLoginTrue} />}
+        {isLogin ?
+          <LoginForm /> :
+          <RegisterForm isRegister={isLoginTrue} />
+        }
       </div>
     </div>
   );

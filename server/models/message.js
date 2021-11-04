@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       comment: '昵称'
     },
+    qq_email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: 'QQ邮箱'
+    },
     content: {
       type: DataTypes.STRING,
       allowNull: true,

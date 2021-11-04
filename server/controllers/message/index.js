@@ -2,6 +2,7 @@ const { message: Message } = require('../../models')
 const { successResult } = require('../../utils/tools')
 const { Op } = require('sequelize')
 const _ = require('lodash')
+const sendEmail = require('../../utils/email')
 
 // 最新几条留言/全部留言
 const newestMessage = async (ctx) => {
@@ -15,7 +16,7 @@ const newestMessage = async (ctx) => {
   ctx.body = successResult(resData)
 }
 // 留言列表
-const messagetList = async (ctx) => {  
+const messageList = async (ctx) => {  
   let {
     pageNo,
     pageSize,
@@ -50,25 +51,34 @@ const messagetList = async (ctx) => {
   ctx.body = successResult(resData)
 }
 // 回复留言
-const replyMessage = async (ctx) => { 
+const replyMessage = async (ctx) => {  
   const id = new Date().getTime()
-  const requestBody = ctx.request.body 
+  const requestBody = ctx.request.body   
   requestBody.id = id.toString()
+  
+  const sendOp = {
+    email: requestBody.qq_email, 
+    content: requestBody.content,
+    m_content: requestBody.m_content,
+    key: 'message'
+  }
 
-  await Message.create(requestBody).then(res => { 
-    return ctx.body = {
-      code: 200,
-      msg: '回复成功',
-      status: 'success'
-    }
-  }).catch(error => {
-    console.log('回复失败：', error.message);
-    return ctx.body = {
-      code: 501,
-      msg: error.message,
-      status: 'field'
-    }
-  })
+  delete requestBody.m_content
+
+  await Promise.all([Message.create(requestBody), sendEmail(sendOp)]).then(res => {  
+      return ctx.body = {
+        code: 200,
+        msg: '回复成功',
+        status: 'success'
+      }
+    }).catch(error => {
+      console.log('回复失败：', error.message);
+      return ctx.body = {
+        code: 501,
+        msg: error.message,
+        status: 'field'
+      }
+    })
 }
 // 批量删除
 const messageDelete = async (ctx) => {
@@ -97,7 +107,7 @@ const messageDelete = async (ctx) => {
 }
 
 module.exports = {
-  messagetList,
+  messageList,
   replyMessage,
   messageDelete,
   newestMessage

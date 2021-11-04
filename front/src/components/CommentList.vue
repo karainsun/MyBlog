@@ -15,9 +15,13 @@
             dayjs(item.created_at).format('YYYY-MM-DD HH:mm')
           }}</span>
         </div>
-        <div class="first-reply-txt pb-10 text-gray">{{ item.content }}</div>
+        <div class="first-reply-txt pb-10 text-gray" v-html="item.content"></div>
         <!----一级评论回复框---->
-        <comment :atName="item.nickname" v-if="isShowId === item.id" @send-emit="sendComment" />
+        <comment
+          :txtId="'c' + item.id"
+          :atName="item.nickname"
+          v-if="isShowId === item.id"
+          @send-emit="sendComment" />
         <!----二级评论列表---->
         <ul class="second-list">
           <li v-for="second in item.secondFloor" :key="second.id" class="pt-10 d-flex">
@@ -38,11 +42,11 @@
               </div>
               <div class="second-reply-txt pb-10">
                 <span class="reply-at">@{{ second.at_name }}：</span>
-                <i class="fs-14">{{ second.content }}</i>
+                <i class="fs-14" v-html="second.content"></i>
               </div>
               <!----二级评论回复框---->
               <div class="pr-10 pb-10">
-                <comment :atName="second.nickname" v-if="isShowId === second.id" @send-emit="sendComment" />
+                <comment :txtId="'c' + second.id" :atName="second.nickname" v-if="isShowId === second.id" @send-emit="sendComment" />
               </div>
             </div>
           </li>
@@ -53,10 +57,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType } from 'vue'
+import { defineComponent, ref, PropType, watch, onUnmounted  } from 'vue'
 import dayjs from 'dayjs'
 import Comment from '@/components/Comment.vue'
 import { commentEmitter } from '@/views/detail/index.vue'
+import mitt from 'mitt'
+
+export const blurHideMitt = mitt()
 
 interface CommentProps {
   id: number;
@@ -80,6 +87,9 @@ export default defineComponent({
     commentList: {
       type: Array as PropType<CommentProps[]>,
       default: []
+    },
+    showNum: {
+      type: Number
     }
   },
   setup(props, { emit }) {
@@ -94,11 +104,24 @@ export default defineComponent({
         emit('show-box')
       }
     }
-
+    // 发送评论内容并隐藏掉一二级评论框
     const sendComment = (val: string) => {
       emit('send-comment', val)
       isShowId.value = -1
     }
+    // 主评论框聚焦隐藏一二级评论
+    const hideCommentBox = () => isShowId.value = -1
+
+    blurHideMitt.on('blur-hide', hideCommentBox);
+
+    onUnmounted(() => {
+      blurHideMitt.off('blur-hide', hideCommentBox);
+    });
+
+    watch(props, () => {
+      // 隐藏掉一二级评论框
+      isShowId.value = props.showNum as any
+    })
 
     return {
       dayjs,

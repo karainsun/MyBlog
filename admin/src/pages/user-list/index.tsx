@@ -240,9 +240,9 @@ const UserList: FC<{ userInfo: UserInfo }> = ({ userInfo }) => {
               </Popconfirm>
             </Form.Item>
           </Col>
-          <Col span={2}>
+          {/* <Col span={2}>
             <Form.Item><Button onClick={toArticleCreate} type="primary" ghost>编辑</Button></Form.Item>
-          </Col>
+          </Col> */}
         </Row>
       </Form>
       <Table

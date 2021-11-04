@@ -7,6 +7,7 @@ import { newestComment } from 'request'
 interface CommentTypes {
   id: number;
   article_title: string;
+  article_link: string;
   content: string;
   nickname: string;
 }
@@ -35,10 +36,12 @@ const Comments: FC<{}> = () => {
             comments.map((item) => {
               return (
                 <div className="comment-item p-2" key={item.id}>
-                  <div className="comment-title text-gray-500">{item.article_title}</div>
-                  <div className="flex">
+                  <div className="comment-title text-gray-500">
+                    <a href={item.article_link} target="_bank">{item.article_title}</a>
+                  </div>
+                  <div className="comment-content flex">
                     <span>{item.nickname}：</span>
-                    <i className="comment-txt block">{item.content}</i>
+                    <i className="comment-txt block" dangerouslySetInnerHTML={{__html: item.content}}></i>
                   </div>
                 </div>
               )

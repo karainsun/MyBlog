@@ -1,8 +1,8 @@
 const router = require('koa-router')()
-const { messagetList, replyMessage, messageDelete, newestMessage } = require('../controllers/message')
+const { messageList, replyMessage, messageDelete, newestMessage } = require('../controllers/message')
 
 // 留言列表
-router.get('/message/list', messagetList)
+router.get('/message/list', messageList)
 // 最新几条留言
 router.get('/newest/message', newestMessage)
 // 回复留言

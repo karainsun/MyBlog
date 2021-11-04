@@ -23,6 +23,7 @@ import BackToTop from '@/components/BackToTop.vue'
 import Loading from '@/components/Loading.vue'
 import ThemeSwitch from '@/components/ThemeSwitch.vue'
 import { checkTheme, arrToObj } from '@/utils'
+import { setCookie, getCookie } from '@/utils/cookie'
 import { getClientUser, bannerList } from '@/request'
 import { GlobalDataProps } from '@/store'
 
@@ -44,12 +45,12 @@ export default defineComponent({
         const themeSwitch = localStorage.getItem('theme') === 'false' ? false : true
         checkTheme(themeSwitch)
 
-        const bannerStore = localStorage.getItem('banner')
+        const bannerStore = getCookie('banner')
         const userStore = localStorage.getItem('client_user')
 
         if (!bannerStore || bannerStore === undefined || null) {
           const { data } = await bannerList()
-          localStorage.setItem('banner', data.length === 0 ? '{}' : JSON.stringify(arrToObj(data, 'order')))
+          setCookie('banner', data.length === 0 ? '{}' : JSON.stringify(arrToObj(data, 'order')), 1)
           store.commit('setBanner', arrToObj(data, 'order'))
         } else {
           store.commit('setBanner', JSON.parse(bannerStore))

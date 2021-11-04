@@ -15,10 +15,20 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       comment: '昵称'
     },
+    qq_email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: 'QQ邮箱'
+    },
     article_title: {
       type: DataTypes.STRING,
       allowNull: false,
       comment: '评论文章'
+    },
+    article_link: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: '文章链接'
     },
     content: {
       type: DataTypes.STRING,

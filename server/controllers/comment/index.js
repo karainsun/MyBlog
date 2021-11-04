@@ -2,6 +2,7 @@ const { comment: Comment } = require('../../models')
 const { successResult } = require('../../utils/tools')
 const { Op } = require('sequelize')
 const _ = require('lodash')
+const sendEmail = require('../../utils/email')
 
 // 最新几条评论/全部评论
 const newestComment = async (ctx) => {
@@ -51,9 +52,20 @@ const commentList = async (ctx) => {
 }
 // 回复评论
 const replyComment = async (ctx) => { 
-  const requestBody = ctx.request.body
+  const requestBody = ctx.request.body 
+  
+  const sendOp = {
+    email: requestBody.qq_email, 
+    content: requestBody.content,
+    m_content: requestBody.m_content,
+    post: requestBody.article_title,
+    link: requestBody.article_link,
+    key: 'article'
+  }
 
-  await Comment.create(requestBody).then(res => { 
+  delete requestBody.m_content
+
+  await Promise.all([Comment.create(requestBody), sendEmail(sendOp)]).then(res => {
     return ctx.body = {
       code: 200,
       msg: '回复成功',

@@ -1,11 +1,13 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
 import dayjs from 'dayjs'
 import { Form, Row, Col, Input, Button, Table, message, Popconfirm } from 'antd';
+import { SmileOutlined } from '@ant-design/icons'
 import { setHeight } from 'utils'
 import { commentList, commentReply, commentsDelete } from 'request'
 import ModalForm from 'components/modalForm';
 import { useSelector } from 'react-redux';
 import { StoreState } from 'store/state';
+import Emoji from 'components/emojiBox'
 
 const scrollHeight = setHeight(265)
 
@@ -35,6 +37,8 @@ interface DataType {
   at_name: string;
   parent_comment_id: number;
   article_title: string;
+  article_link: string;
+  qq_email: string;
 }
 
 interface FormProps {
@@ -46,6 +50,9 @@ interface FormProps {
   at_name: string;
   parent_comment_id: number;
   article_title: string;
+  article_link: string;
+  qq_email: string;
+  m_content: string;
 }
 
 const columns: Columns[] = [
@@ -79,6 +86,9 @@ const columns: Columns[] = [
     title: '评论',
     dataIndex: 'content',
     width: 200,
+    render: (text: any) => {
+      return <div className="flex flex-wrap" dangerouslySetInnerHTML={{__html: text}}></div>
+    }
   },
   {
     title: '@名称',
@@ -89,6 +99,16 @@ const columns: Columns[] = [
     title: '文章名称',
     dataIndex: 'article_title',
     width: 200,
+  },
+  {
+    title: '邮箱',
+    dataIndex: 'qq_email',
+    width: 200,
+  },
+  {
+    title: '文章链接',
+    dataIndex: 'article_link',
+    width: 220,
   },
   {
     title: '日期',
@@ -123,14 +143,22 @@ const Comments: FC = () => {
     content: '',
     at_name: '',
     parent_comment_id: 0,
-    article_title: ''
+    article_title: '',
+    article_link: '',
+    qq_email: '',
+    m_content: ''
   })
   // 回复谁
   const [toComment, setToComment] = useState({
     nickname: '',
     content: '',
-    article_title: ''
+    article_title: '',
+    reply_content: ''
   })
+  // Emoji 显示隐藏
+  const [isEmojiShow, setIsEmojiShow] = useState<boolean>(false)
+  // 输入框 dom
+  const replyRef = useRef(null)
   // 选框事件
   const selectChange = (selectedKeys: any) => {
     setSelectedRowKeys(selectedKeys);
@@ -174,34 +202,49 @@ const Comments: FC = () => {
     } else if (selectedRowKeys.length > 1) {
       return message.warning('只能选择一条')
     }
-    const { nickname, articleId, parent_comment_id, content, article_title} = comments.filter(item => item.id === selectedRowKeys[0])[0]
+    const {
+      id,
+      nickname,
+      articleId,
+      parent_comment_id,
+      content,
+      article_title,
+      qq_email,
+      article_link } = comments.filter(item => item.id === selectedRowKeys[0])[0]
+
     formValue.at_name = nickname
     formValue.articleId = articleId
-    formValue.parent_comment_id = parent_comment_id
+    formValue.parent_comment_id = Number(parent_comment_id) === Number(articleId) ? id : parent_comment_id
     formValue.article_title = article_title
+    formValue.article_link = article_link
+    formValue.qq_email = qq_email
     setFormValue(formValue)
 
     setToComment({
       nickname: nickname,
       content: content,
-      article_title: article_title
+      article_title: article_title,
+      reply_content: ''
     })
     setIsVisible(true);
   };
 
   const modalConfirm = () => {
     setIsVisible(false);
+    setIsEmojiShow(false);
   };
 
   const modalCancel = () => {
     setIsVisible(false);
+    setIsEmojiShow(false);
   };
   // 回复评论
-  const modalFinish = async (values: { reply_content: string }) => {
+  const modalFinish = async (values: { reply_content: string, content: string }) => {
     formValue.avatar = userInfo.avatar as string
     formValue.nickname = userInfo.username as string
     formValue.userId = userInfo.id
     formValue.content = values.reply_content
+    formValue.m_content = values.content
 
     setFormValue(formValue)
     try {
@@ -238,6 +281,31 @@ const Comments: FC = () => {
         message.error('删除失败！')
       }
     }
+  }
+  // Emoji 显示隐藏
+  const emojiShow = () => {
+    setIsEmojiShow(!isEmojiShow)
+  }
+  // 替换输入框 div 内容
+  let [divTx, setDivTx] = useState<string>('')
+  // 输入事件使父组件改变props并不会触发子组件内部的监听事件，
+  // 但是dom内部变化会触发，所以添加一个隐藏dom，输入事件致使
+  // dom内部发生变化
+
+  // 回复输入
+  const replyInput = (e: any) => {
+    toComment.reply_content = e.target.innerHTML
+    setToComment(toComment)
+    setDivTx(e.target.innerHTML)
+  }
+  // Emoji事件回调
+  const checkEmoji = (url: string) => {
+    let htmlStr = `<img style="width: 20px;height: 20px" src="${url}" />`
+    toComment.reply_content += htmlStr
+    setToComment(toComment);
+    divTx += htmlStr;
+    ;(replyRef as any).current.innerHTML = divTx
+    setDivTx(divTx)
   }
 
   return (
@@ -296,7 +364,7 @@ const Comments: FC = () => {
         onCreate={modalFinish}
         onCancel={modalCancel}
         title="回复评论"
-        bodyStyle={{ height: '280px' }}
+        bodyStyle={{ height: '320px' }}
         val={toComment}
       >
         <Form.Item
@@ -309,7 +377,12 @@ const Comments: FC = () => {
           label="评论内容"
           name="content"
         >
-          <Input.TextArea readOnly rows={2} />
+          {/* <Input.TextArea readOnly rows={2} /> */}
+          <div
+            dangerouslySetInnerHTML={{__html: toComment.content}}
+            className="h-16 p-1 flex flex-wrap"
+            style={{ border: '1px solid #e3e3e3'}}
+          ></div>
         </Form.Item>
         <Form.Item
           label="文章标题"
@@ -317,13 +390,31 @@ const Comments: FC = () => {
         >
           <Input readOnly />
         </Form.Item>
+        <div style={{ display: 'none' }}>{JSON.stringify(toComment)}</div>
         <Form.Item
           label="回复内容"
           name="reply_content"
           rules={[{ required: true, message: '请输入回复内容！' }]}
         >
-          <Input.TextArea rows={2} />
+          {/* <Input.TextArea rows={2} /> */}
+          <div
+            ref={replyRef}
+            contentEditable={true}
+            className="h-20 p-1 flex flex-wrap"
+            style={{ border: '1px solid #e3e3e3'}}
+            onInput={replyInput}
+          ></div>
         </Form.Item>
+        <SmileOutlined
+          className="hover:text-gray-500 absolute"
+          style={{ fontSize: '20px', margin: '-68px auto auto 68px' }}
+          onClick={emojiShow}
+        />
+        {
+          isEmojiShow ? (<div className="absolute" style={{ fontSize: '20px', margin: '-238px auto auto 0px' }}>
+          <Emoji emojiCheck={checkEmoji} />
+        </div>) : null
+        }
       </ModalForm>
     </div>
   )

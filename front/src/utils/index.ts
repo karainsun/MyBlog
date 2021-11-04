@@ -299,3 +299,19 @@ export const randNum = (min: number, max: number) => {
 
   return num;
 }
+/**
+ * Emoji
+*/
+export const emojiArr = () => {
+  const emojiList = []
+
+  for (let i = 1; i < 91; i++) {
+    if(![41, 45, 54].includes(i)) {
+      emojiList.push({
+        img: `http://cdn.kayrain.cn/${i}.gif`,
+        id: i
+      })
+    }
+  }
+  return emojiList
+}

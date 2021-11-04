@@ -1,2 +1,2 @@
-# MyBlog
+# KBlog
 This is my blog.

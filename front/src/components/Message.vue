@@ -11,7 +11,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref } from 'vue'
 import useDOMCreate from '@/hooks/useDOMCreate'
-export type MessageType = 'success' | 'error' | 'default'
+export type MessageType = 'success' | 'field' | 'default'
 export default defineComponent({
   props: {
     message: String,
@@ -26,8 +26,8 @@ export default defineComponent({
     const isVisible = ref(true)
     const classObject = {
       'alert-success': props.type === 'success',
-      'alert-danger': props.type === 'error',
-      'alert-primary': props.type === 'default'
+      'alert-field': props.type === 'field',
+      'alert-default': props.type === 'default'
     }
     const hide = () => {
       isVisible.value = false
@@ -62,11 +62,11 @@ export default defineComponent({
   background-color: #f6ffed;
   border: 1px solid #b7eb8f;
 }
-.alert-danger {
+.alert-field {
   background-color: #fffbe6;
   border: 1px solid #ffe58f;
 }
-.alert-primary {
+.alert-default {
   background-color: #e6f7ff;
   border: 1px solid #91d5ff;
 }

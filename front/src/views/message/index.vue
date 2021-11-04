@@ -13,7 +13,7 @@
             <div class="clip iconfont icon-clip"></div>
             <div class="delta"></div>
             <div class="f-name">{{ first.nickname }}</div>
-            <i class="f-content">{{ first.content }}</i>
+            <i class="f-content" v-html="first.content"></i>
             <div class="f-tool">
               <span class="time iconfont icon-time">{{
                 dayjs(first.created_at).format('YYYY-MM-DD HH:mm')
@@ -42,7 +42,7 @@
                   </div>
                   <div class="s-reply">
                     <span>@{{ second.at_name }}：</span>
-                    <i class="s-content">{{ second.content }}</i>
+                    <i class="s-content" v-html="second.content"></i>
                   </div>
                 </div>
               </li>
@@ -54,22 +54,27 @@
     <!---留言笔---->
     <div @click="openBoard('1', 0, '')" class="iconfont icon-pen write-message" title="留言"></div>
     <!---留言框---->
-    <div v-if="showBox" ref="messageRef" class="message-box d-flex js-between ai-center p-15">
-      <div class="box-avatar">
-        <img :src="tourist?.avatar || defaultAvatar" alt="" />
-      </div>
-      <div class="box-ipt">
-        <input
-          @keyup="handleWrite"
-          v-model="message"
-          type="text"
-          :placeholder="atName ? `@${atName}:` : 'Write something..'"
-        />
-        <!-- <div contenteditable="true"></div> -->
-      </div>
-      <div class="box-btn d-flex js-between">
-        <span class="iconfont icon-emoji" title="表情"></span>
-        <span class="iconfont icon-send" title="发表" @click="publish"></span>
+    <div v-show="showBox" ref="messageRef" class="message-box p-15">
+      <div class="d-flex js-between ai-center message-box-div">
+        <div class="box-avatar">
+          <img :src="tourist?.avatar || defaultAvatar" alt="" />
+        </div>
+        <div class="box-ipt">
+          <!-- <input
+            @keyup="handleWrite"
+            v-model="message"
+            type="text"
+            :placeholder="atName ? `@${atName}:` : 'Write something..'"
+          /> -->
+          <div id="msgId" class="box-ipt-div" contenteditable="true" @keyup="handleWrite" :placeholder="atName ? `@${atName}:` : 'Write something..'"></div>
+        </div>
+        <div class="box-btn d-flex js-between">
+          <span class="check-emoji iconfont icon-emoji" title="表情" @click="showEmoji"></span>
+          <span class="iconfont icon-send" title="发表" @click="publish"></span>
+        </div>
+        <div class="emoji-box" v-show="emojiShow" id="emoji-box">
+          <img v-for="e in emojiList" :key="e.id" :src="e.img" @click="addEmoji(e.id)">
+        </div>
       </div>
     </div>
     <!----Login Modal---->
@@ -88,6 +93,9 @@ import { publicMessage, MessageProps, getMessageList } from '@/request'
 import createMessage from '@/components/createMessage'
 import { formatList, throttle } from '@/utils'
 import dayjs from 'dayjs'
+import { emojiArr } from '@/utils'
+
+const emojiList = emojiArr()
 
 export const messageMitt = mitt()
 
@@ -100,19 +108,20 @@ export default defineComponent({
     const store = useStore<GlobalDataProps>()
     const user = computed(() => store.state.user)
     const banner = computed(() => store.state.banners.order_7)
-    const showBox = ref<boolean>(false)
+    const showBox = ref()
     const visible = ref<boolean>(false)
     const messageRef = ref<null | HTMLElement>(null)
     const loginRef = ref<null | HTMLElement>(null)
     let touristInfo = JSON.parse(localStorage.getItem('tourist_info') as string)
     const tourist = ref(touristInfo)
-    const defaultAvatar = 'http://qxawt89kx.hn-bkt.clouddn.com/defaultavatar.png'
+    const defaultAvatar = 'http://cdn.kayrain.cn/defaultavatar.jpeg'
     const floorNum = ref<string>('1') // 1：一级， 2：二级
     const message = ref<string>('')
     const parentMessageId = ref<number>(0)
     const atName = ref<string>('')
     const messageList = ref<Array<any>>([])
     const listRef = ref<null | HTMLElement>(null)
+    const emojiShow = ref(false)
 
     const openBoard = (num: string, id: number, name: string) => {
       if (touristInfo) {
@@ -134,9 +143,10 @@ export default defineComponent({
     // 发表留言
     const publish = () => {
       if (message.value.trim() === '') return
-      const { nickname, avatar, id: touristId } = touristInfo
+      const { nickname, avatar, id: touristId, qq_email } = touristInfo
       const { username: clientName, id: userId } = user.value
       const params: MessageProps = {
+        qq_email,
         nickname,
         avatar,
         content: message.value,
@@ -159,7 +169,8 @@ export default defineComponent({
           parentMessageId.value = 0
           atName.value = ''
           message.value = ''
-          showBox.value = false
+          showBox.value = false;
+          ;(document.getElementById('msgId') as any).innerHTML = ''
           getMessages(userId as any)
         })
         .catch((error) => console.log('留言失败：', error))
@@ -167,7 +178,19 @@ export default defineComponent({
     // 留言写入事件
     const handleWrite = (e: Event) => {
       const target = e.target as HTMLInputElement
-      message.value = target.value
+      message.value = target.innerHTML
+    }
+    // 表情框
+    const showEmoji = () => {
+      emojiShow.value = !emojiShow.value
+    }
+    // 添加表情
+    const addEmoji = (i: number) => {
+      const txtBox = document.getElementById('msgId')
+      const img = document.createElement('img')
+      img.src = `http://cdn.kayrain.cn/${i}.gif`;
+      ;(txtBox as any).appendChild(img)
+      message.value = (txtBox as any).innerHTML
     }
     // 获取留言列表
     let list: any
@@ -208,28 +231,46 @@ export default defineComponent({
 
     const { num: num1, isClickOutside: messageOutSide } = useClickOutside(messageRef)
     const { num: num2, isClickOutside: loginOutSide } = useClickOutside(loginRef)
-
+    // 隐藏留言框
     watch(num1, () => {
       if (showBox.value && messageOutSide.value) {
         showBox.value = false
       }
     })
-
+    // 隐藏登录框
     watch(num2, () => {
       if (visible.value && loginOutSide.value) {
         visible.value = false
       }
     })
+    // 点击空白处隐藏表情框
+    const handler = (e: MouseEvent) => {
+      const txtBox = document.getElementById('emoji-box')
+      const attrValue = (e as any).target.attributes[0]
+      if (!attrValue) return
+      const eleClass = attrValue.value.split(' ')[0]
+
+      if (eleClass === 'check-emoji') {
+        return
+      }
+      if ((txtBox as any).contains(e.target as HTMLElement)) {
+        emojiShow.value = true
+      } else {
+        emojiShow.value = false
+      }
+    }
 
     onMounted(() => {
       getMessages(user.value.id as any as string)
       window.addEventListener('scroll', throttle(handleScroll, 200))
       document.addEventListener('keydown', handleKeydown)
+      document.addEventListener('click', handler);
     })
 
     onUnmounted(() => {
       window.removeEventListener('scroll', handleScroll)
       document.removeEventListener('keydown', handleKeydown)
+      document.removeEventListener('click', handler);
     })
 
     return {
@@ -247,7 +288,11 @@ export default defineComponent({
       messageList,
       dayjs,
       atName,
-      listRef
+      listRef,
+      emojiList,
+      emojiShow,
+      addEmoji,
+      showEmoji
     }
   }
 })
@@ -455,39 +500,70 @@ export default defineComponent({
     box-shadow: 9px 9px 15px 1px rgba(0, 0, 0, 0.2);
     background-color: var(--message-box-bg);
     border-radius: 5px;
-    .box-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 5px;
-      overflow: hidden;
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+    .message-box-div{
+      position: relative;
+      .box-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 5px;
+        overflow: hidden;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
       }
-    }
-    .box-ipt {
-      height: 40px;
-      padding: 5px;
-      border-bottom: 1px solid #e3e3e3;
-      input {
-        width: 100%;
-        border: none;
+      .box-ipt {
         height: 40px;
-        outline: none;
-        font-size: 16px;
-        background-color: var(--message-box-bg);
-        color: var(--h1-color);
+        padding: 5px;
+        border-bottom: 1px solid #e3e3e3;
+        .box-ipt-div {
+          width: 100%;
+          border: none;
+          height: 40px;
+          line-height: 40px;
+          outline: none;
+          font-size: 16px;
+          background-color: var(--message-box-bg);
+          color: var(--h1-color);
+          &:empty:before{
+            content: attr(placeholder);
+            color:#bbb;
+          }
+          &:focus:before{
+            content:none;
+          }
+        }
       }
-    }
-    .box-btn {
-      width: 52px;
-      .iconfont {
-        font-size: 22px;
-        cursor: pointer;
-        color: var(--h1-color);
-        &:hover {
-          color: var(--main-color);
+      .box-btn {
+        width: 52px;
+        .iconfont {
+          font-size: 22px;
+          cursor: pointer;
+          color: var(--h1-color);
+          &:hover {
+            color: var(--main-color);
+          }
+        }
+      }
+      .emoji-box {
+        width: 200px;
+        height: 160px;
+        border: 1px solid #e3e3e3;
+        padding: 10px;
+        box-sizing: border-box;
+        overflow-y: scroll;
+        display: flex;
+        flex-wrap: wrap;
+        position: absolute;
+        right: 0;
+        top: 40px;
+        background-color: #fff;
+        img {
+          width: 24px;
+          height: 24px;
+          margin: 1px;
+          cursor: pointer;
         }
       }
     }

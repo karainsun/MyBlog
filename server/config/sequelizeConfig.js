@@ -1,12 +1,10 @@
 const config = {
   dialect: "mysql",
-  // host: "localhost",
-  // databaseName: "blog_sql",
-  host: "152.32.173.232",
+  host: "",
   databaseName: "mysql",    
-  port: 3306,
-  userName: "root",
-  password: "root", 
+  port: 0000,
+  userName: "",
+  password: "", 
   ssl: false,
   timezone: "+08:00"
 }

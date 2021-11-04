@@ -3,7 +3,7 @@
     <Header />
     <!--- exclude里的name要对应组件内的name---->
     <router-view v-slot="{ Component }">
-      <keep-alive :include="['home']">
+      <keep-alive :include="['home', 'about']">
         <component :is="Component" />
       </keep-alive>
     </router-view>

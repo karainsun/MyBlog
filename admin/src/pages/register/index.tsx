@@ -85,7 +85,7 @@ const Register: FC<RegisterProps> = ({ isRegister }) => {
       <Form.Item name="invitationCode">
         <Input
           prefix={<LinkOutlined className="site-form-item-icon" />}
-          placeholder="邀请码"
+          placeholder="邀请码(不填也能注册)"
         />
       </Form.Item>
 

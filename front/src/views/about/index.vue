@@ -15,10 +15,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed } from 'vue'
+import { defineComponent, onMounted, computed, ref } from 'vue'
 import Banner from '@/components/Banner.vue'
 import { useStore } from 'vuex'
-import { GlobalDataProps } from '@/store'
+import { GlobalDataProps, UserProps } from '@/store'
+import { getClientUser } from '@/request'
 
 export default defineComponent({
   name: 'about',
@@ -27,8 +28,26 @@ export default defineComponent({
   },
   setup() {
     const store = useStore<GlobalDataProps>()
-    const user = computed(() => store.state.user)
+    const user = ref<UserProps>({
+      username: '',
+      id: 0,
+      email: '',
+      avatar: '',
+      introduction: '',
+      description: '',
+      created_at: '',
+      sign: '',
+    })
     const banner = computed(() => store.state.banners.order_6)
+
+    onMounted(async () => {
+      try {
+        const { data: userData } = await getClientUser()
+        user.value = userData
+      } catch (error) {
+        console.log('Error：', error)
+      }
+    })
 
     return {
       user,

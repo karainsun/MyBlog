@@ -106,10 +106,10 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, reactive, watch, computed } from 'vue'
 import Banner from '@/components/Banner.vue'
-import { articleList, getCategories, getTags, articleArchives } from '@/request'
+import { getClientUser, articleList, getCategories, getTags, articleArchives } from '@/request'
 import dayjs from 'dayjs'
 import { useStore } from 'vuex'
-import { GlobalDataProps } from '@/store'
+import { GlobalDataProps, UserProps } from '@/store'
 import { archives, monthToEn } from '@/utils'
 
 interface ParamsType {
@@ -129,7 +129,16 @@ export default defineComponent({
   setup() {
     const store = useStore<GlobalDataProps>()
     const banner = computed(() => store.state.banners.order_1)
-    const user = computed(() => store.state.user)
+    const user = ref<UserProps>({
+      username: '',
+      id: 0,
+      email: '',
+      avatar: '',
+      introduction: '',
+      description: '',
+      created_at: '',
+      sign: '',
+    })
     const tags = ref<Array<TagCategory>>([])
     const newPosts = computed(() => store.state.newPosts)
     const allPosts = ref<Array<any>>([])
@@ -175,6 +184,16 @@ export default defineComponent({
         allPosts.value = archives.data
         await getCategories().then((res) => (category.value = res.data))
         await getTags().then((res) => (tags.value = res.data))
+
+        const userStore = localStorage.getItem('client_user')
+        const { data: userData } = await getClientUser()
+        user.value = userData
+        if (!userStore || userStore === undefined || null) {
+          localStorage.setItem('client_user', JSON.stringify(userData))
+          store.commit('setUserInfo', userData)
+        } else {
+          store.commit('setUserInfo', JSON.parse(userStore))
+        }
       } catch (error) {
         console.log('Error：', error)
       }

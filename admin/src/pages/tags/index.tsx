@@ -1,18 +1,11 @@
 import React, { FC, useState, useEffect } from 'react';
 import dayjs from 'dayjs'
-import { Form, Row, Col, Input, Button, Table, message, Popconfirm } from 'antd';
+import { Form, Row, Col, Input, Button, Table, message } from 'antd';
 import { setHeight } from 'utils'
 import { tagList, tagCreate, tagUpdate, tagsDelete } from 'request'
 import ModalForm from 'components/modalForm';
 
 const scrollHeight = setHeight(265)
-
-interface Columns {
-  title: string;
-  dataIndex: string;
-  width: number;
-  render?: (text: any, record: any, index: any) => void;
-}
 
 interface DataType {
   id: number;

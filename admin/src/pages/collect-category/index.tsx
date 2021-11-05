@@ -5,14 +5,7 @@ import { setHeight } from 'utils'
 import { collectCategoryCreate, collectCategoryList, collectCategoryDelete, collectCategoryUpdate } from 'request'
 import ModalForm from 'components/modalForm';
 
-const scrollHeight = setHeight(265)
-
-interface Columns {
-  title: string;
-  dataIndex: string;
-  width: number;
-  render?: (text: any, record: any, index: any) => void;
-}
+const scrollHeight = setHeight(265) 
 
 interface CategoryParams {
   pageNo: number;

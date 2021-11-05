@@ -16,15 +16,7 @@ import FileUpload from 'components/fileUpload';
 
 const scrollHeight = setHeight(265)
 const { Option } = Select;
-const { TextArea, Search } = Input;
-
-interface Columns {
-  title: string;
-  dataIndex: string;
-  width: number;
-  fixed?: string;
-  render?: (text: any, record: any, index: any) => void;
-}
+const { TextArea, Search } = Input; 
 
 interface CollectQuery {
   pageNo: number;

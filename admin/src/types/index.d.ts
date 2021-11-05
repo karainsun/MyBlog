@@ -27,3 +27,12 @@ interface ReduxProps {
 }
 
 type CommonObjectType<T = any> = Record<string, T>;
+
+// table 类型
+interface Columns {
+  title: string;
+  dataIndex: string;
+  width: number;
+  render?: (text: any, record: any, index: any) => void;
+  fixed?: string;
+}

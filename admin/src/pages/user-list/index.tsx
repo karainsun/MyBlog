@@ -11,14 +11,6 @@ import { connect } from 'react-redux'
 
 const scrollHeight = setHeight(265)
 
-interface Columns {
-  title: string;
-  dataIndex: string;
-  width: number;
-  fixed?: string;
-  render?: (text: any, record: any, index: any) => void;
-}
-
 interface DataType extends UserInfo {
   key: string;
 }

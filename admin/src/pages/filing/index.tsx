@@ -4,12 +4,6 @@ import { setHeight } from 'utils'
 
 const scrollHeight = setHeight(265)
 
-interface Columns {
-  title: string;
-  dataIndex: string;
-  width: number;
-}
-
 interface DataType {
   id: number;
   key: string;

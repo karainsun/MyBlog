@@ -15,14 +15,6 @@ import FileUpload from 'components/fileUpload';
 const scrollHeight = setHeight(265)
 const { TextArea } = Input;
 
-interface Columns {
-  title: string;
-  dataIndex: string;
-  width: number;
-  fixed?: string;
-  render?: (text: any, record: any, index: any) => void;
-}
-
 interface DataType extends BannerParams {
   id: number;
   key: string;

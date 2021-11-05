@@ -7,14 +7,6 @@ import { articleList, articlesDelete } from 'request'
 
 const scrollHeight = setHeight(265)
 
-interface Columns {
-  title: string;
-  dataIndex: string;
-  width: number;
-  fixed?: string;
-  render?: (text: any, record: any, index: any) => void;
-}
-
 interface DataType {
   id: number;
   key: string;

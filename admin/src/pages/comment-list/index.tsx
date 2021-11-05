@@ -9,15 +9,7 @@ import { useSelector } from 'react-redux';
 import { StoreState } from 'store/state';
 import Emoji from 'components/emojiBox'
 
-const scrollHeight = setHeight(265)
-
-interface Columns {
-  title: string;
-  dataIndex: string;
-  width: number;
-  render?: (text: any, record: any, index: any) => void;
-  fixed?: string;
-}
+const scrollHeight = setHeight(265) 
 
 interface CommentParams {
   pageNo: number;

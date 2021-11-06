@@ -3,9 +3,8 @@
   background: #fff;
   line-height: 50px;
   text-align: center;
-  font-family: 'wanghanzong';
-  font-size: 28px;
-  color: #a5a5a5;
+  display: flex;
+  align-items: center;
 }
 .menu {
   box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.05);

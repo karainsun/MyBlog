@@ -17,8 +17,8 @@ const Login: FC<{ userInfoToSet: (info: any) => void }> = ({ userInfoToSet }) =>
     setLoading(true)
     userLogin(values).then((res: any) => {
       if (res.code === 200 && res.status === 'success') {
-        message.success(res.msg, 1, () => history.push('/home'))
         userInfoToSet(res.data.userInfo)
+        message.success(res.msg, 1, () => history.push('/home'))
       } else {
         message.warning(res.msg)
       }

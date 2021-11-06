@@ -60,7 +60,9 @@ const Side = () => {
 
   return (
     <Layout.Sider trigger={null} collapsible collapsed={collapsed}>
-      <div className={style.logo}>Kay`s Blog</div>
+      <div className={style.logo}>
+        <img src="http://cdn.kayrain.cn/titlefont.png" alt="" />
+      </div>
       <div className="shadow-lg">
         <Menu
           className={style.menu}

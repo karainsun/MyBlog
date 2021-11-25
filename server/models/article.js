@@ -33,22 +33,22 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       comment: '封面图'
     },
-    // category: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    //   comment: '所属分类'
-    // },
-    // tags: {
-    //   type: DataTypes.STRING,
-    //   get: function () {
-    //     return JSON.parse(this.getDataValue('tags'));
-    //   },
-    //   set: function (val) {
-    //     return this.setDataValue('tags', JSON.stringify(val));
-    //   },
-    //   allowNull: false,
-    //   comment: '标签'
-    // },
+    category: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: '所属分类'
+    },
+    tags: {
+      type: DataTypes.JSON,
+      get: function () {
+        return this.getDataValue('tags');
+      },
+      set: function (val) {
+        return this.setDataValue('tags', val);
+      },
+      allowNull: false,
+      comment: '标签'
+    },
     isComent: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -70,12 +70,13 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW
     }
   }, {
-    timestamps: false
+    timestamps: false,
+    initialAutoIncrement: 1000 // 设置id初始值
   })
 
-  Article.associate = (models) => {
-    Article.hasMany(models.tag)
-    Article.hasOne(models.category)
-  }
+  // Article.associate = (models) => {
+  //   Article.hasMany(models.tag)
+  //   Article.hasOne(models.category)
+  // }
   return Article
 }

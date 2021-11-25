@@ -51,8 +51,8 @@ export const categoryList = (params: any) => ajax({
   params,
   ...params
 });
-// 批量删除分类
-export const categoriesDelete = (params: { ids: Array<number>}) => ajax({
+// 删除分类
+export const categoriesDelete = (params: { id: number}) => ajax({
   method: 'POST',
   url: '/category/delete',
   data: params,

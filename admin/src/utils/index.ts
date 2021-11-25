@@ -105,7 +105,7 @@ export const emojiArr = () => {
   for (let i = 1; i < 91; i++) {
     if (![41, 45, 54].includes(i)) {
       emojiList.push({
-        img: `http://cdn.kayrain.cn/${i}.gif`,
+        img: `https://cdn.kayrain.cn/${i}.gif`,
         id: i
       });
     }

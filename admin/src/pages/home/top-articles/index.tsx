@@ -19,7 +19,7 @@ const TopArticles: FC<{}> = () => {
   const [posts, setPosts] = useState<ArticleTypes[]>([])
 
   useEffect(() => {
-    articleNewest({ limit: 3 }).then(({ data }) => {
+    articleNewest({ limit: 3, category: '', tags: '' }).then(({ data }) => {
       if(data) {
         setPosts(data)
       }

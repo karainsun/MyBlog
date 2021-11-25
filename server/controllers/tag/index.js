@@ -8,14 +8,15 @@ const sequelize = require('../../utils/sequelize')
 
 // 查询全部
 const tagAll = async (ctx) => {
-  const resData = await Tag.findAll({
-    attributes: ['name', 'id', [sequelize.fn('COUNT', sequelize.col('name')), 'count']],
-    group: 'name',
-    where: {
-      articleId: { [Op.not]: null }
-    },
-    order: [[sequelize.fn('COUNT', sequelize.col('name')), 'desc']]
-  })
+  const resData = await Tag.findAll()
+  // const resData = await Tag.findAll({
+  //   attributes: ['name', 'id', [sequelize.fn('COUNT', sequelize.col('name')), 'count']],
+  //   group: 'name',
+  //   where: {
+  //     articleId: { [Op.not]: null }
+  //   },
+  //   order: [[sequelize.fn('COUNT', sequelize.col('name')), 'desc']]
+  // })
   ctx.body = successResult(resData)
 }
 // 条件查询

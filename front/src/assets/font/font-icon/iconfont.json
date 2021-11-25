@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1727420",
+      "name": "206搜索-线性",
+      "font_class": "search",
+      "unicode": "e8b8",
+      "unicode_decimal": 59576
+    },
+    {
       "icon_id": "2769242",
       "name": "pen",
       "font_class": "pen",

@@ -8,8 +8,8 @@ const transport = nodemailer.createTransport(smtpTransport({
   secureConnection: true, // 使用 SSL
   port: 465, // SMTP 端口
   auth: {
-    user: "", // 账号   你自定义的域名邮箱账号
-    pass: "" // 密码   你自己开启SMPT获取的密码
+    user: "kayrain.sun@foxmail.com", // 账号   你自定义的域名邮箱账号
+    pass: "tmrdjxnrcvzliedc" // 密码   你自己开启SMPT获取的密码
   }
 }));
 
@@ -17,7 +17,7 @@ const transport = nodemailer.createTransport(smtpTransport({
 const sendEmail = ({email, content, key, post = '', link = '', m_content}) => { 
   // 设置邮件内容
   const htmlStr = `<div style="width: 1000px;margin: auto;"><h2>
-        来自<a href="http://www.kayrain.cn" target="_blank"> KBlog </a>
+        来自<a href="https://www.kayrain.cn" target="_blank"> KBlog </a>
         的${key === 'message' ? '留言' : '评论'}回复：
       </h2>
       <div style="margin-left: 51px;">
@@ -27,13 +27,13 @@ const sendEmail = ({email, content, key, post = '', link = '', m_content}) => {
         </p>
         <p>
           <span style="font-weight: bold">你的${key === 'message' ? '留言' : '评论'}：</span>
-          <a href="${key === 'message' ? 'http://www.kayrain.cn/message' : link}" target="_blank">
+          <a href="${key === 'message' ? 'https://www.kayrain.cn/message' : link}" target="_blank">
             <i>${m_content}</i>
           </a>
         </p>
         <p>
           <span style="font-weight: bold">Kay的回复：</span>
-          <a href="${key === 'message' ? 'http://www.kayrain.cn/message' : link}" target="_blank">
+          <a href="${key === 'message' ? 'https://www.kayrain.cn/message' : link}" target="_blank">
             <i>${content}</i>
           </a>
         </p>
@@ -41,7 +41,7 @@ const sendEmail = ({email, content, key, post = '', link = '', m_content}) => {
     </div>`;
 
   const mailOptions = {
-    from: "", // 发件地址
+    from: "kayrain.sun@foxmail.com", // 发件地址
     to: email, // 收件列表
     subject: "来自KBlog的回复", // 标题
     text: "",

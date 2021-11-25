@@ -37,7 +37,7 @@ import Banner from '@/components/Banner.vue'
 import { collectCategoryAll, collectList } from '@/request'
 import { throttle } from '@/utils'
 import { useStore } from 'vuex'
-import { GlobalDataProps } from '@/store'
+import { GlobalDataProps, key, BannerProps } from '@/store'
 
 interface CollectProps {
   id: number
@@ -62,9 +62,19 @@ export default defineComponent({
   components: {
     Banner
   },
+  asyncData({ store, route }: AsyncDataParam) {
+    return store.dispatch("setBanners");
+  },
   setup() {
-    const store = useStore<GlobalDataProps>()
-    const banner = computed(() => store.state.banners.order_5)
+    const store = useStore<GlobalDataProps>(key)
+    const banner = reactive<BannerProps>({
+      title: '',
+      banner: '',
+      desc:''
+    })
+    banner.title = computed(() => store.state.banners.order_5.title)
+    banner.banner = computed(() => store.state.banners.order_5.banner)
+    banner.desc = computed(() => store.state.banners.order_5.desc)
     const navFixed = ref<boolean>(false)
     const alldone = ref<boolean>(false)
     const listRef = ref<any>(null)
@@ -141,7 +151,7 @@ export default defineComponent({
         if (res.code === 200) {
           cates.value = res.data
         }
-      })
+      }).catch(error => console.log(error))
 
       getCollects(params)
     })

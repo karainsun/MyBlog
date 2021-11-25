@@ -23,6 +23,11 @@ export interface CommentProps {
   at_name?: string;
   parent_comment_id?: number;
 }
+export interface TouristParam {
+  qq_email: string;
+  nickname: string;
+  blog: string;
+}
 
 // 获取前台用户
 export const getClientUser = () => ajax({
@@ -35,10 +40,22 @@ export const articleList = (params: any) => ajax({
   url: '/post/list',
   params
 });
+// 最新几条文章
+export const newPostsList = (params: any) => ajax({
+  method: 'GET',
+  url: '/new/posts',
+  params
+});
 // 文章归档
-export const articleArchives = (params?: { limit: number }) => ajax({
+export const articleArchives = (params?: { limit: number, category: string, tags: string }) => ajax({
   method: 'GET',
   url: '/post/archives',
+  params
+});
+// 文章搜索
+export const searchPost = (params?: { title: string }) => ajax({
+  method: 'GET',
+  url: '/post/search',
   params
 });
 // 文章详情
@@ -96,4 +113,10 @@ export const getMessageList = (params: { userId: string }) => ajax({
   method: 'GET',
   url: '/get/messages',
   params
+});
+// 游客登录
+export const touristLogin = (params: TouristParam) => ajax({
+  method: 'POST',
+  url: '/tourist/login',
+  data: params
 });

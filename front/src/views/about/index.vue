@@ -15,10 +15,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed, ref } from 'vue'
+import { defineComponent, onMounted, computed, ref, reactive } from 'vue'
 import Banner from '@/components/Banner.vue'
 import { useStore } from 'vuex'
-import { GlobalDataProps, UserProps } from '@/store'
+import { GlobalDataProps, UserProps, key, BannerProps } from '@/store'
 import { getClientUser } from '@/request'
 
 export default defineComponent({
@@ -26,28 +26,20 @@ export default defineComponent({
   components: {
     Banner
   },
+  asyncData({ store, route }: AsyncDataParam) {
+    return store.dispatch("setBanners") && store.dispatch("setUser");
+  },
   setup() {
-    const store = useStore<GlobalDataProps>()
-    const user = ref<UserProps>({
-      username: '',
-      id: 0,
-      email: '',
-      avatar: '',
-      introduction: '',
-      description: '',
-      created_at: '',
-      sign: '',
+    const store = useStore<GlobalDataProps>(key)
+    const user = computed(() => store.state.user)
+    const banner = reactive<BannerProps>({
+      title: '',
+      banner: '',
+      desc:''
     })
-    const banner = computed(() => store.state.banners.order_6)
-
-    onMounted(async () => {
-      try {
-        const { data: userData } = await getClientUser()
-        user.value = userData
-      } catch (error) {
-        console.log('Error：', error)
-      }
-    })
+    banner.title = computed(() => store.state.banners.order_6.title)
+    banner.banner = computed(() => store.state.banners.order_6.banner)
+    banner.desc = computed(() => store.state.banners.order_6.desc)
 
     return {
       user,

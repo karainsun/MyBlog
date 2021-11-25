@@ -4,7 +4,6 @@ type KeyProps = string | number | symbol
 type ValProps = string | number | symbol | any
 
 type NotAnyArr = Array<{ [key: KeyProps]: ValProps }>
-
 /**
  * 文章按年份归档分组（可转化数组）
  * @param array // 被转换数组
@@ -43,7 +42,20 @@ export const archives = (array: AnyArr, key: string, attr: KeyProps, len: number
  * @returns
  */
 export const monthToEn = (date: string) => {
-  const monthEnglish = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "October", "December"]
+  const monthEnglish = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ]
   return monthEnglish[new Date(new Date(date)).getMonth()]
 }
 
@@ -52,9 +64,9 @@ export const monthToEn = (date: string) => {
  * @param array // 被转换数组
  * @returns
  */
- export const basisCate = (array: AnyArr) => {
+export const basisCate = (array: AnyArr) => {
   let attrArr: AnyArr = [],
-    newArr = [];
+    newArr = []
   array.forEach((a) => {
     attrArr.push(a.category)
   })
@@ -78,14 +90,14 @@ export const monthToEn = (date: string) => {
 /**
  * 数组去重
  * @param array
-*/
+ */
 export const seqArr = (arr: AnyArr) => {
-  let obj: {[key: KeyProps]: ValProps} = {};
-  arr = arr.reduce(function(a, b) {
-    obj[b.name] ? '' : obj[b.name] = true && a.push(b);
-    return a;
+  let obj: { [key: KeyProps]: ValProps } = {}
+  arr = arr.reduce(function (a, b) {
+    obj[b.name] ? '' : (obj[b.name] = true && a.push(b))
+    return a
   }, [])
-  return arr;
+  return arr
 }
 
 /**
@@ -95,7 +107,7 @@ export const seqArr = (arr: AnyArr) => {
  */
 export const basisTag = (array: AnyArr) => {
   let attrArr: AnyArr = [],
-    newArr = [];
+    newArr = []
   array.forEach((a) => {
     a.tags.forEach((b: any) => {
       attrArr.push(b)
@@ -125,28 +137,28 @@ export const basisTag = (array: AnyArr) => {
  * @returns
  */
 export const formatList = (comments: AnyArr, parent: KeyProps, sun: KeyProps) => {
-  const newList = comments.filter(e => {
-    e.secondFloor = [];
-    return Number(e[parent]) === Number(e[sun]);
-  });
-  const second = comments.filter(e => {
-    return Number(e[parent])  !== Number(e[sun]);
-  });
+  const newList = comments.filter((e) => {
+    e.secondFloor = []
+    return Number(e[parent]) === Number(e[sun])
+  })
+  const second = comments.filter((e) => {
+    return Number(e[parent]) !== Number(e[sun])
+  })
   for (let i = 0; i < newList.length; i++) {
     for (let j = 0; j < second.length; j++) {
-      if (Number(second[j][parent])  == Number(newList[i].id)) {
-        newList[i].secondFloor.push(second[j]);
+      if (Number(second[j][parent]) == Number(newList[i].id)) {
+        newList[i].secondFloor.push(second[j])
       }
     }
   }
-  return newList;
+  return newList
 }
 /**
  * 锚点定位滚动
  * @param id
  * @returns
  */
- export const goPoint = (id: string) => {
+export const goPoint = (id: string) => {
   ;(document.getElementById(id) as any).scrollIntoView({
     block: 'start',
     behavior: 'smooth'
@@ -155,16 +167,16 @@ export const formatList = (comments: AnyArr, parent: KeyProps, sun: KeyProps) =>
 /**
  * 节点添加id
  * @param str
-*/
+ */
 export const formateHtml = (str: string) => {
-  let box = document.getElementById('htmlBox');
+  let box = document.getElementById('htmlBox')
   if (!box) {
-    box = document.createElement('div');
-    box.id = 'htmlBox';
+    box = document.createElement('div')
+    box.id = 'htmlBox'
     box.style.display = 'none'
   }
   box.innerHTML = str
-  const eles = box.children;
+  const eles = box.children
   for (let i = 0; i < eles.length; i++) {
     let tagName = (eles[i] as any).localName
     eles[i].id = tagName + i
@@ -175,33 +187,52 @@ export const formateHtml = (str: string) => {
 /**
  * 根据富文本生成目录
  * @param content
-*/
+ */
 export const navTree = (content: string) => {
+  // 获取子元素id
+  const getChildId = (obj: { [key: KeyProps]: ValProps }, k: KeyProps) => {
+    if (obj[k].childNodes[0].childNodes?.length != 0) {
+      if (obj[k].id) return obj[k].id
+      return obj[k].childNodes[0].id
+    } else {
+      return obj[k].id
+    }
+  }
+
   let titleHtml = ''
-  let box = document.getElementById('detailBox');
+  let box = document.getElementById('detailBox')
   if (!box) {
-    box = document.createElement('div');
-    box.id = 'detailBox';
+    box = document.createElement('div')
+    box.id = 'detailBox'
     box.style.display = 'none'
   }
   box.innerHTML = content
-  const eles = box.childNodes;
+  const eles = box.childNodes
   for (let i = 0; i < eles.length; i++) {
     let tagName = (eles[i] as any).localName
     let title = ''
     const titleTxt = (eles[i] as any).innerText
     switch (tagName) {
       case 'h1':
-        title = `<div class="nav-tit tit1 pointer" pointid="${(eles[i] as any).id}" title="${titleTxt}"># ${titleTxt}</div>`
-        break;
+        title = `<div class="nav-tit tit1 pointer" pointid="${getChildId(
+          eles,
+          i
+        )}" title="${titleTxt}"># ${titleTxt}</div>`
+        break
       case 'h2':
-        title = `<div class="nav-tit tit2 pointer fs-14" pointid="${(eles[i] as any).id}" title="${titleTxt}">${titleTxt}</div>`
-        break;
+        title = `<div class="nav-tit tit2 pointer fs-14" pointid="${getChildId(
+          eles,
+          i
+        )}" title="${titleTxt}">${titleTxt}</div>`
+        break
       case 'h3':
-        title = `<div class="nav-tit tit3 pointer fs-14" pointid="${(eles[i] as any).id}" title="${titleTxt}">${titleTxt}</div>`
-        break;
+        title = `<div class="nav-tit tit3 pointer fs-14" pointid="${getChildId(
+          eles,
+          i
+        )}" title="${titleTxt}">${titleTxt}</div>`
+        break
       default:
-        break;
+        break
     }
     titleHtml += title
   }
@@ -210,8 +241,8 @@ export const navTree = (content: string) => {
 }
 // 事件委托
 export const getTagsClick = (id: string) => {
-  const oDiv = document.getElementById(id);
-  var aLi = (oDiv as any).getElementsByClassName('nav-tit');
+  const oDiv = document.getElementById(id)
+  var aLi = (oDiv as any).getElementsByClassName('nav-tit')
   for (var i = 0; i < aLi.length; i++) {
     aLi[i].onclick = function (e: any) {
       goPoint(e.target.attributes.pointid.value)
@@ -221,61 +252,103 @@ export const getTagsClick = (id: string) => {
 /**
  * 切换主题
  * @param check
-*/
+ */
 export const checkTheme = (check: any) => {
-  localStorage.setItem('theme', (check as any))
-  document.getElementsByTagName("body")[0].style.setProperty("--backgroundColor", check ? "rgba(34, 38, 49)" : "#fff");
-  document.documentElement.style.setProperty("--main-color", check ? "#e91e63" : "#0085a1");
-  document.documentElement.style.setProperty('--gentle-wave', check ? "rgba(34, 38, 49)" : "#fff");
-  document.documentElement.style.setProperty('--gentle-wave1', check ? "rgba(34, 38, 49, 0.7)" : "rgba(255, 255, 255, 0.7)");
-  document.documentElement.style.setProperty('--gentle-wave2', check ? "rgba(34, 38, 49, 0.5)" : "rgba(255, 255, 255, 0.5)");
-  document.documentElement.style.setProperty('--gentle-wave3', check ? "rgba(34, 38, 49, 0.3)" : "rgba(255, 255, 255, 0.3)");
-  document.documentElement.style.setProperty('--h1-color', check ? "rgba(255, 255, 255, 0.8)" : "#333");
-  document.documentElement.style.setProperty('--bd-shadow', check ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.3)");
-  document.documentElement.style.setProperty('--mask-bg', check ? "rgba(0, 0, 0, 0.4)" : "rgba(255, 255, 255, 0.7)");
-  document.documentElement.style.setProperty('--img-light', (check ? .7 : 1) as any);
-  document.documentElement.style.setProperty('--textarea-bg', check ? "#dbdbdb" : "#fff");
-  document.documentElement.style.setProperty('--reply-bg', check ? "rgb(39, 44, 56)" : "#fafafa");
-  document.documentElement.style.setProperty('--tag-bg1', check ? "rgb(150, 104, 239)" : "#d6d6d6");
-  document.documentElement.style.setProperty('--tag-bg2', check ? "rgb(212, 103, 140)" : "#d6d6d6");
-  document.documentElement.style.setProperty('--theme-switch', check ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)");
-  document.documentElement.style.setProperty('--collect-border', check ? "#616161" : "#f3f3f3");
-  document.documentElement.style.setProperty('--message-avatar-border', check ? "rgba(45, 52, 71)" : "rgba(0, 0, 0, .06)");
-  document.documentElement.style.setProperty('--message-bg', check ? "rgba(255, 255, 255, .05)" : "rgba(0, 0, 0, .05)");
-  document.documentElement.style.setProperty('--message-clip', check ? "rgba(255, 255, 255, .25)" : "rgba(0, 0, 0, .25)");
-  document.documentElement.style.setProperty('--message-box-bg', check ? "rgb(59, 66, 85)" : "rgba(255, 255, 255, 1)");
-  document.documentElement.style.setProperty('--home-border', check ? "rgba(74, 74, 74, 1)" : "#e3e3e3");
-  document.documentElement.style.setProperty('--tip-color', check ? "#f6f9fc" : "rgba(51, 51, 51, 0.9)");
-  document.documentElement.style.setProperty('--insicon-color', check ? "#fff" : "#333");
-  document.documentElement.style.setProperty('--top-color', check ? "#8f77fb" : "#f46267");
+  localStorage.setItem('theme', check as any)
+  document
+    .getElementsByTagName('body')[0]
+    .style.setProperty('--backgroundColor', check ? 'rgba(34, 38, 49)' : '#fff')
+  document.documentElement.style.setProperty('--main-color', check ? '#e91e63' : '#0085a1')
+  document.documentElement.style.setProperty('--gentle-wave', check ? 'rgba(34, 38, 49)' : '#fff')
+  document.documentElement.style.setProperty(
+    '--gentle-wave1',
+    check ? 'rgba(34, 38, 49, 0.7)' : 'rgba(255, 255, 255, 0.7)'
+  )
+  document.documentElement.style.setProperty(
+    '--gentle-wave2',
+    check ? 'rgba(34, 38, 49, 0.5)' : 'rgba(255, 255, 255, 0.5)'
+  )
+  document.documentElement.style.setProperty(
+    '--gentle-wave3',
+    check ? 'rgba(34, 38, 49, 0.3)' : 'rgba(255, 255, 255, 0.3)'
+  )
+  document.documentElement.style.setProperty(
+    '--h1-color',
+    check ? 'rgba(255, 255, 255, 0.8)' : '#333'
+  )
+  document.documentElement.style.setProperty(
+    '--bd-shadow',
+    check ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'
+  )
+  document.documentElement.style.setProperty(
+    '--mask-bg',
+    check ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.7)'
+  )
+  document.documentElement.style.setProperty('--img-light', (check ? 0.7 : 1) as any)
+  document.documentElement.style.setProperty('--textarea-bg', check ? '#dbdbdb' : '#fff')
+  document.documentElement.style.setProperty('--reply-bg', check ? 'rgb(39, 44, 56)' : '#fafafa')
+  document.documentElement.style.setProperty('--tag-bg1', check ? 'rgb(150, 104, 239)' : '#d6d6d6')
+  document.documentElement.style.setProperty('--tag-bg2', check ? 'rgb(212, 103, 140)' : '#d6d6d6')
+  document.documentElement.style.setProperty(
+    '--theme-switch',
+    check ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+  )
+  document.documentElement.style.setProperty('--collect-border', check ? '#616161' : '#f3f3f3')
+  document.documentElement.style.setProperty(
+    '--message-avatar-border',
+    check ? 'rgba(45, 52, 71)' : 'rgba(0, 0, 0, .06)'
+  )
+  document.documentElement.style.setProperty(
+    '--message-bg',
+    check ? 'rgba(255, 255, 255, .05)' : 'rgba(0, 0, 0, .05)'
+  )
+  document.documentElement.style.setProperty(
+    '--message-clip',
+    check ? 'rgba(255, 255, 255, .25)' : 'rgba(0, 0, 0, .25)'
+  )
+  document.documentElement.style.setProperty(
+    '--message-box-bg',
+    check ? 'rgb(59, 66, 85)' : 'rgba(255, 255, 255, 1)'
+  )
+  document.documentElement.style.setProperty(
+    '--home-border',
+    check ? 'rgba(74, 74, 74, 1)' : '#e3e3e3'
+  )
+  document.documentElement.style.setProperty(
+    '--tip-color',
+    check ? '#f6f9fc' : 'rgba(51, 51, 51, 0.9)'
+  )
+  document.documentElement.style.setProperty('--insicon-color', check ? '#fff' : '#333')
+  document.documentElement.style.setProperty('--top-color', check ? '#8f77fb' : '#f46267')
+  document.documentElement.style.setProperty('--post-modal-bg', check ? "rgb(59, 66, 85)" : "#fff");
 }
 
 // 函数节流
 export const throttle = (fn: any, delay: number) => {
-  let canRun = true;
+  let canRun = true
   return function () {
-      if (!canRun) return;
-      canRun = false;
-      setTimeout(() => {
-          fn();
-          canRun = true;
-      }, delay);
-  };
+    if (!canRun) return
+    canRun = false
+    setTimeout(() => {
+      fn()
+      canRun = true
+    }, delay)
+  }
 }
 // 函数防抖
 export const debounce = (fn: Function, delay: number) => {
-  let timer: any = null;
-  return function(){
-      if(timer !== null){
-          clearTimeout(timer);
-      }
-      timer = setTimeout(fn,delay);
+  let timer: any = null
+  return function () {
+    if (timer !== null) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(fn, delay)
   }
 }
 // 数组转对象
 export const arrToObj = (arr: AnyArr, key: any) => {
   const obj = arr.reduce((pre, item) => {
-    return {...pre, [`${key}_${item[key]}`]: item}
+    return { ...pre, [`${key}_${item[key]}`]: item }
   }, {})
   return obj
 }
@@ -291,27 +364,58 @@ export const objToMap = (obj: any) => {
  * 随机数
  * @param min 最小
  * @param max 最大
-*/
+ */
 export const randNum = (min: number, max: number) => {
-  const range = max - min;
-  const rand = Math.random();
-  const num = min + Math.round(rand * range);
+  const range = max - min
+  const rand = Math.random()
+  const num = min + Math.round(rand * range)
 
-  return num;
+  return num
 }
 /**
  * Emoji
-*/
+ */
 export const emojiArr = () => {
   const emojiList = []
 
   for (let i = 1; i < 91; i++) {
-    if(![41, 45, 54].includes(i)) {
+    if (![41, 45, 54].includes(i)) {
       emojiList.push({
-        img: `http://cdn.kayrain.cn/${i}.gif`,
+        img: `https://cdn.kayrain.cn/${i}.gif`,
         id: i
       })
     }
   }
   return emojiList
+}
+
+// Promise.allSettled兼容处理
+export const allSettledTest = () => {
+  if (!Promise.allSettled) {
+    ;(Promise as any).allSettled = function (promises: any) {
+      return new Promise((resolve) => {
+        const data: any = [],
+          len = promises.length
+        let count = len
+        for (let i = 0; i < len; i += 1) {
+          const promise = promises[i]
+          promise
+            .then(
+              (res: any) => {
+                data[i] = { status: 'fulfilled', value: res }
+              },
+              (error: any) => {
+                data[i] = { status: 'rejected', reason: error }
+              }
+            )
+            .finally(() => {
+              // promise has been settled
+              if (!--count) {
+                resolve(data)
+              }
+            })
+        }
+      })
+    }
+  }
 }

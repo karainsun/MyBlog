@@ -11,7 +11,8 @@ const {
   collectCategoryAll,
   bannerList,
   makeMessage,
-  getMessage
+  getMessage,
+  searchPost
 } = require('../controllers/front')
 const { categoryAll } = require('../controllers/category')
 const { tagAll } = require('../controllers/tag')
@@ -19,6 +20,8 @@ const { tagAll } = require('../controllers/tag')
 router.get('/post/list', articleList)
 // 文章归档
 router.get('/post/archives', articleArchives)
+// 搜索文章
+router.get('/post/search', searchPost)
 // 个人信息
 router.get('/user/info', userInfo)
 // 全部标签

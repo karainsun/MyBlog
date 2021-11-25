@@ -10,6 +10,7 @@ app.use(koajwt({
     /\/user\/login/, 
     /\/post\/list/, 
     /\/post\/archives/, 
+    /\/post\/search/, 
     /\/user\/info/,
     /\/post\/tags/,
     /\/new\/posts/,

@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import dayjs from 'dayjs'
-import { Form, Row, Col, Input, Button, Table, Select, message } from 'antd';
+import { Form, Row, Col, Input, Button, Table, Select, message, Popconfirm } from 'antd';
 import { setHeight } from 'utils'
 import { categoryCreate, categoryList, categoriesDelete, categoryUpdate } from 'request'
 import ModalForm from 'components/modalForm';
@@ -27,33 +27,48 @@ interface FormValProps {
   parent_name: string;
 }
 
-const columns: Columns[] = [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    width: 50,
-  },
-  {
-    title: '分类名称',
-    dataIndex: 'name',
-    width: 150,
-  },
-  {
-    title: '父级分类',
-    dataIndex: 'parent_name',
-    width: 150,
-  },
-  {
-    title: '日期',
-    dataIndex: 'created_at',
-    width: 150,
-    render: (text: any, record: any, index: any) => {
-      return dayjs(text).format('YYYY-MM-DD HH:mm')
-    }
-  }
-];
-
 const CategoryList: FC = () => {
+  const columns: Columns[] = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      width: 50,
+    },
+    {
+      title: '分类名称',
+      dataIndex: 'name',
+      width: 150,
+    },
+    {
+      title: '父级分类',
+      dataIndex: 'parent_name',
+      width: 150,
+    },
+    {
+      title: '日期',
+      dataIndex: 'created_at',
+      width: 150,
+      render: (text: any, record: any, index: any) => {
+        return dayjs(text).format('YYYY-MM-DD HH:mm')
+      }
+    },
+    {
+      title: '删除',
+      dataIndex: 'del',
+      width: 100,
+      render: (text: any, record: any, index: any) => {
+        return (<Popconfirm
+          title="确认删除？"
+          onConfirm={() => catesDelete({ id: record.id })}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button size="small" danger>删除</Button>
+        </Popconfirm>)
+      }
+    }
+  ];
+
   const [form] = Form.useForm();
   const [selectedRowKeys, setSelectedRowKeys] = useState<Array<number>>([])
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -146,23 +161,19 @@ const CategoryList: FC = () => {
     }
   };
   // 批量删除分类
-  const catesDelete = async () => {
-    if (selectedRowKeys.length < 1) {
-      message.warning('至少选一条删除')
-    } else {
-      try {
-        const { msg, status }: any = await categoriesDelete({ ids: selectedRowKeys })
-        if (status === 'success') {
-          message.success(msg)
-          setSelectedRowKeys([]);
-          setInsert(insert + 1)
-        } else {
-          message.warning(msg)
-        }
-      } catch (error) {
-        console.log(error);
-        message.error('删除失败！')
+  const catesDelete = async (params: { id: number }) => {
+    try {
+      const { msg, status }: any = await categoriesDelete(params)
+      if (status === 'success') {
+        message.success(msg)
+        setSelectedRowKeys([]);
+        setInsert(insert + 1)
+      } else {
+        message.warning(msg)
       }
+    } catch (error) {
+      console.log(error);
+      message.error('删除失败！')
     }
   }
   // 更新分类
@@ -201,10 +212,10 @@ const CategoryList: FC = () => {
           <Col span={2}>
             <Form.Item><Button htmlType="submit">搜索</Button></Form.Item>
           </Col>
-          {/* <Col span={2}>
+          <Col span={2}>
             <Form.Item><Button onClick={modalShow}>新建</Button></Form.Item>
           </Col>
-          <Col span={2}>
+          {/* <Col span={2}>
             <Form.Item>
               <Popconfirm
                 title="Are you sure you want to delete?"
@@ -215,8 +226,8 @@ const CategoryList: FC = () => {
                 <Button danger>删除</Button>
               </Popconfirm>
             </Form.Item>
-          </Col>
-          <Col span={2}>
+          </Col> */}
+          {/* <Col span={2}>
             <Form.Item><Button onClick={cateUpdate} type="primary" ghost>编辑</Button></Form.Item>
           </Col> */}
         </Row>
@@ -233,7 +244,7 @@ const CategoryList: FC = () => {
           total: total,
           onChange: pageChange
         }}
-        rowSelection={rowSelection}
+
         scroll={{ y: scrollHeight }}
         loading={tableLoading}
       />
@@ -255,7 +266,7 @@ const CategoryList: FC = () => {
           label="父级分类"
           name="parent_name"
         >
-          <Select style={{ width: 240 }} onChange={modalSelect}>
+          <Select style={{ width: 240 }}>
             <Select.Option value="--">无</Select.Option>
             {
               categories.map(({ id, name }) => {

@@ -54,8 +54,8 @@ const columns: Columns[] = [
     dataIndex: 'category',
     width: 120,
     render: cate => (
-      <span>{cate.name}</span>
-    ),
+      <span>{JSON.parse(cate).name}</span>
+    )
   },
   {
     title: '标签',
@@ -63,7 +63,7 @@ const columns: Columns[] = [
     width: 200,
     render: tags => (
       <span>
-        {tags.map((tag: { name: string }) => {
+        {JSON.parse(tags).map((tag: { name: string }) => {
           let color = tag.name.length > 5 ? 'geekblue' : 'green';
           return (
             <Tag color={color} key={tag.name}>

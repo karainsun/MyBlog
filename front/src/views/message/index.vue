@@ -1,6 +1,10 @@
 <template>
   <div class="message">
-    <banner :title="banner.title" :image="banner.banner" :desc="banner.desc" />
+    <banner
+      :title="banner && banner.title ? banner.title : ''"
+      :image="banner && banner.banner ? banner.banner : ''"
+      :desc="banner && banner.desc ? banner.desc : ''"
+    />
     <div class="content p-20">
       <div class="f-list" ref="listRef">
         <div v-for="first in messageList" :key="first.id" class="f-item d-flex">
@@ -57,7 +61,7 @@
     <div v-show="showBox" ref="messageRef" class="message-box p-15">
       <div class="d-flex js-between ai-center message-box-div">
         <div class="box-avatar">
-          <img :src="tourist?.avatar || defaultAvatar" alt="" />
+          <img :src="(tourist && tourist.avatar) ? tourist.avatar : defaultAvatar" alt="" />
         </div>
         <div class="box-ipt">
           <!-- <input
@@ -83,10 +87,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, onUnmounted, computed, ref, watch } from 'vue'
+import { defineComponent, onMounted, onUnmounted, computed, ref, watch, reactive } from 'vue'
 import Banner from '@/components/Banner.vue'
 import { useStore } from 'vuex'
-import { GlobalDataProps } from '@/store'
+import { GlobalDataProps, key, BannerProps } from '@/store'
 import useClickOutside from '@/hooks/useClickOutside'
 import mitt from 'mitt'
 import { publicMessage, MessageProps, getMessageList } from '@/request'
@@ -104,17 +108,27 @@ export default defineComponent({
   components: {
     Banner
   },
+  asyncData({ store, route }: AsyncDataParam) {
+    return store.dispatch("setBanners") && store.dispatch("setUser");
+  },
   setup() {
-    const store = useStore<GlobalDataProps>()
+    const store = useStore<GlobalDataProps>(key)
     const user = computed(() => store.state.user)
-    const banner = computed(() => store.state.banners.order_7)
+    const banner = reactive<BannerProps>({
+      title: '',
+      banner: '',
+      desc:''
+    })
+    banner.title = computed(() => store.state.banners.order_7.title)
+    banner.banner = computed(() => store.state.banners.order_7.banner)
+    banner.desc = computed(() => store.state.banners.order_7.desc)
     const showBox = ref()
     const visible = ref<boolean>(false)
     const messageRef = ref<null | HTMLElement>(null)
     const loginRef = ref<null | HTMLElement>(null)
     let touristInfo = JSON.parse(localStorage.getItem('tourist_info') as string)
     const tourist = ref(touristInfo)
-    const defaultAvatar = 'http://cdn.kayrain.cn/defaultavatar.jpeg'
+    const defaultAvatar = 'https://cdn.kayrain.cn/defaultavatar.jpeg'
     const floorNum = ref<string>('1') // 1：一级， 2：二级
     const message = ref<string>('')
     const parentMessageId = ref<number>(0)
@@ -188,12 +202,12 @@ export default defineComponent({
     const addEmoji = (i: number) => {
       const txtBox = document.getElementById('msgId')
       const img = document.createElement('img')
-      img.src = `http://cdn.kayrain.cn/${i}.gif`;
+      img.src = `https://cdn.kayrain.cn/${i}.gif`;
       ;(txtBox as any).appendChild(img)
       message.value = (txtBox as any).innerHTML
     }
     // 获取留言列表
-    let list: any
+    let list: any[] = [];
     const getMessages = (id: string) => {
       getMessageList({ userId: id })
         .then((res: any) => {
@@ -202,7 +216,7 @@ export default defineComponent({
           }
         })
         .then(() => {
-          list = listRef.value?.children as any
+          list = (listRef.value as any).children
         })
         .catch((error) => console.log('留言列表：', error))
     }
@@ -483,7 +497,7 @@ export default defineComponent({
     cursor: pointer;
     transition: 1s;
     z-index: 999;
-    bottom: 100px;
+    bottom: 120px;
     right: 30px;
     color: gray;
     font-size: 36px;

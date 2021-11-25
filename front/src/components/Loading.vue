@@ -1,20 +1,18 @@
 <template>
-  <teleport to="#back">
-    <div class="loading w-full h-full pos-fix">
-      <div class="loading-box d-flex pos-fix fs-18">
-        <div class="act">L</div>
-        <div class="act">o</div>
-        <div class="act">a</div>
-        <div class="act">d</div>
-        <div class="act">i</div>
-        <div class="act">n</div>
-        <div class="act">g</div>
-        <div class="act">.</div>
-        <div class="act">.</div>
-        <div class="act">.</div>
-      </div>
+  <div class="loading w-full h-full pos-fix">
+    <div class="loading-box d-flex pos-fix fs-18">
+      <div class="act">L</div>
+      <div class="act">o</div>
+      <div class="act">a</div>
+      <div class="act">d</div>
+      <div class="act">i</div>
+      <div class="act">n</div>
+      <div class="act">g</div>
+      <div class="act">.</div>
+      <div class="act">.</div>
+      <div class="act">.</div>
     </div>
-  </teleport>
+  </div>
 </template>
 
 <script lang="ts">

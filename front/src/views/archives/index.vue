@@ -24,26 +24,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, computed } from 'vue'
+import { defineComponent, onMounted, ref, computed, reactive } from 'vue'
 import Banner from '@/components/Banner.vue'
 import { articleArchives } from '@/request'
 import { archives } from '@/utils'
 import dayjs from 'dayjs'
 import { useStore } from 'vuex'
-import { GlobalDataProps } from '@/store'
+import { GlobalDataProps, key, BannerProps } from '@/store'
 
 export default defineComponent({
   name: 'archives',
   components: {
     Banner
   },
+  asyncData({ store, route }: AsyncDataParam) {
+    return store.dispatch("setBanners");
+  },
   setup(){
     const list = ref<Array<any>>([]);
-    const store = useStore<GlobalDataProps>()
-    const banner = computed(() => store.state.banners.order_2)
+    const store = useStore<GlobalDataProps>(key)
+    const banner = reactive<BannerProps>({
+      title: '',
+      banner: '',
+      desc:''
+    })
+    banner.title = computed(() => store.state.banners.order_2.title)
+    banner.banner = computed(() => store.state.banners.order_2.banner)
+    banner.desc = computed(() => store.state.banners.order_2.desc)
 
     onMounted(() => {
-      articleArchives().then((res: any) => {
+      articleArchives({ category: "", tags: "" }).then((res: any) => {
         if (res.code === 200) {
           list.value = archives(res.data, 'created_at', 'year', 4)
         }

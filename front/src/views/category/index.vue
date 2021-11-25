@@ -7,15 +7,26 @@
     />
     <div class="content pt-20">
       <ul class="list">
-        <li v-for="cate in category" :key="cate.category.id" @click="anchorPoint(`cate_${cate.category.name}`)">{{ cate.category.name }}</li>
+        <li
+          v-for="p in posts"
+          :key="p.id"
+          v-show="p.list && p.list.length !== 0"
+          @click="anchorPoint(p.id)"
+           >{{ p.name }}</li>
       </ul>
-      <div v-for="a in posts" :key="a.category.id" :id="`cate_${a.category.name}`" class="posts box-sizing">
+      <div
+        v-for="a in posts"
+        :key="a.id"
+        :id="a.id"
+        class="posts box-sizing"
+        v-show="a.list && a.list.length !== 0"
+      >
         <div class="cate fs-24 pt-10 pb-20">
           <i class="iconfont icon-tag"></i>
-          <span>{{ a.category.name }}</span>
+          <span>{{ a.name }}</span>
         </div>
         <ul>
-          <li v-for="p in a.posts" :key="p.id" class="pl-20 pb-20 mb-20">
+          <li v-for="p in a.list" :key="p.id" class="pl-20 pb-20 mb-20">
             <router-link :to="{ path: `/post/${p.id}` }">
               <div class="fs-18 pb-15 text-ellipsis">{{ p.title }}</div>
               <div class="fs-14 text-ellipsis">{{ p.description }}</div>
@@ -28,42 +39,51 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, computed } from 'vue'
+import { defineComponent, onMounted, ref, computed, reactive } from 'vue'
 import Banner from '@/components/Banner.vue'
-import { GlobalDataProps } from '@/store'
+import { GlobalDataProps, key, BannerProps } from '@/store'
 import { useStore } from 'vuex'
 import { basisCate, goPoint } from '@/utils'
 import { useRoute } from 'vue-router'
+import { articleArchives } from '@/request'
 
 export default defineComponent({
   name: 'category',
   components: {
     Banner
   },
+  asyncData({ store, route }: AsyncDataParam) {
+    return store.dispatch("setBanners");
+  },
   setup() {
     const route = useRoute()
-    const category = ref<Array<any>>([])
     const posts = ref<Array<any>>([])
-    const store = useStore<GlobalDataProps>()
-    const banner = computed(() => store.state.banners.order_3)
+    const store = useStore<GlobalDataProps>(key)
+    const category = computed(() => store.state.category)
 
-    onMounted(() => {
-      const name = route.query.name
+    const banner = reactive<BannerProps>({
+      title: '',
+      banner: '',
+      desc:''
+    })
+    banner.title = computed(() => store.state.banners.order_3.title)
+    banner.banner = computed(() => store.state.banners.order_3.banner)
+    banner.desc = computed(() => store.state.banners.order_3.desc)
 
-      store
-        .dispatch('getAllPosts')
-        .then((res) => {
-          posts.value = basisCate(res)
-          basisCate(res).forEach((e: any) => {
-            category.value.push(e)
-          })
-        })
-        .then(() => {
-          if (name) {
-            goPoint(name as any)
-          }
-        })
-        .catch((error) => console.log(error))
+    onMounted(async () => {
+      const id = route.query.id
+
+      await store.dispatch('setCategory')
+      const newList = category.value.map((c) => {
+        articleArchives({ category: c.name, tags: "" }).then((posts) => {
+          c.list = posts.data
+        }).catch(error => console.log(error))
+        return c
+      })
+      posts.value = newList
+      if (id) {
+        setTimeout(() => goPoint(id), 1000)
+      }
     })
 
     const anchorPoint = (selector: string) => {
@@ -71,7 +91,6 @@ export default defineComponent({
     }
 
     return {
-      category,
       posts,
       anchorPoint,
       banner

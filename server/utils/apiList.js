@@ -47,6 +47,7 @@ module.exports = {
   // 前台接口
   '/post/list': {is_admin: false, userType: 0},
   '/post/archives': {is_admin: false, userType: 0},
+  '/post/search': {is_admin: false, userType: 0},
   '/user/info': {is_admin: false, userType: 0},
   '/post/tags': {is_admin: false, userType: 0},
   '/new/posts': {is_admin: false, userType: 0},

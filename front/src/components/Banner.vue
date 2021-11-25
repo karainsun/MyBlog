@@ -3,8 +3,8 @@
     <div class="banner-content pos-abs w-full h-full">
       <div v-if="info" class="postinfo">
         <div class="tags">
-          <span v-for="(tag, i) in tags" :key="i">
-            <router-link :to="{ path: '/tags', query: { name: `tag_${tag.name}` } }">
+          <span v-for="tag in JSON.parse(tags)" :key="tag.id">
+            <router-link :to="{ path: '/tags', query: { id: tag.id } }">
             {{tag.name}}
             </router-link>
           </span>
@@ -58,8 +58,8 @@ export default defineComponent({
       default: false
     },
     tags: {
-      type: Array as PropType<Array<{ name: string }>>,
-      default: []
+      type: String,
+      default: '[]'
     },
     title: {
       type: String,

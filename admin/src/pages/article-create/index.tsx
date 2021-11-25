@@ -30,8 +30,8 @@ const ArticleCreat: FC<combineProps> = (props) => {
   const [content, setContent] = useState<any>('')
   const [isCreate, setIsCreate] = useState<boolean>(true)
   let editorRef = useRef<any>(null)
-  const [cateIpt, setCateIpt] = useState<string>('')
-  const [tagIpt, setTagIpt] = useState<string>('')
+  // const [cateIpt, setCateIpt] = useState<string>('')
+  // const [tagIpt, setTagIpt] = useState<string>('')
 
   const history = useHistory();
 
@@ -67,9 +67,9 @@ const ArticleCreat: FC<combineProps> = (props) => {
         if (code === 200 && status === 'success') {
           for (const key in data) {
             if(key === 'category'){
-              form.setFieldsValue({ category: data.category.name })
+              form.setFieldsValue({ category: JSON.parse(data.category).name })
             } else if(key === 'tags') {
-              const newTags = data.tags.map((t: any) => t.name)
+              const newTags = JSON.parse(data.tags).map((t: any) => t.name)
               form.setFieldsValue({ tags: newTags })
             } else {
               form.setFieldsValue({ [key]: data[key] })
@@ -91,6 +91,11 @@ const ArticleCreat: FC<combineProps> = (props) => {
   }
 
   const onFinish = (values: any) => {
+    let cateObj = cates.filter(e => e.name.indexOf(values.category) != -1)[0]
+    let tagArr: any[] = tags.filter(e => values.tags.find((i: string) => e.name === i))
+
+    values.category = JSON.stringify({ id: cateObj.id, name: cateObj.name })
+    values.tags = JSON.stringify(tagArr)
     if (!isCreate) values.id = articleId;
     const subFnc = isCreate ? articleCreate(values) : articleUpdate(values)
     subFnc.then((res: any) => {
@@ -131,41 +136,41 @@ const ArticleCreat: FC<combineProps> = (props) => {
     })
   }
   // 添加分类
-  const addCate = () => {
-    if (cateIpt.trim() === '') return
-    const result = cates.some(item => item.name === cateIpt)
-    if (result) {
-      setCateIpt('')
-    } else {
-      cates.push({ name: cateIpt })
-      // 使用扩展运算符更新 state
-      // eslint-disable-line
-      setCates([...cates])
-    }
-  }
+  // const addCate = () => {
+  //   if (cateIpt.trim() === '') return
+  //   const result = cates.some(item => item.name === cateIpt)
+  //   if (result) {
+  //     setCateIpt('')
+  //   } else {
+  //     cates.push({ name: cateIpt })
+  //     // 使用扩展运算符更新 state
+  //     // eslint-disable-line
+  //     setCates([...cates])
+  //   }
+  // }
   // 添加标签
-  const addTag = () => {
-    if (tagIpt.trim() === '') return
-    const result = tags.some(item => item.name === tagIpt)
-    if (result) {
-      setTagIpt('')
-    } else {
-      tags.push({ name: tagIpt })
-      // 使用扩展运算符更新 state
-      setTags([...tags])
-    }
-  }
+  // const addTag = () => {
+  //   if (tagIpt.trim() === '') return
+  //   const result = tags.some(item => item.name === tagIpt)
+  //   if (result) {
+  //     setTagIpt('')
+  //   } else {
+  //     tags.push({ name: tagIpt })
+  //     // 使用扩展运算符更新 state
+  //     setTags([...tags])
+  //   }
+  // }
 
   // 标签选择事件
   const tagsHandleChange = (e: string[]) => {
     // form.setFieldsValue({ tags: e })
   }
 
-  const itemStyle = {
-    display: 'inline-block',
-    verticalAlign: 'middle',
-    marginLeft: '20px'
-  }
+  // const itemStyle = {
+  //   display: 'inline-block',
+  //   verticalAlign: 'middle',
+  //   marginLeft: '20px'
+  // }
 
   return (
     <div className="componentBox noscrollbar" style={{ overflowY: 'scroll' }}>
@@ -213,14 +218,14 @@ const ArticleCreat: FC<combineProps> = (props) => {
             <Select style={{ width: 250 }}>{SelectItem(cates)}</Select>
           </Form.Item>
 
-          <div className="add-cate">
+          {/* <div className="add-cate">
             <Input
               value={cateIpt}
               style={{ width: '150px', ...itemStyle }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCateIpt(e.target.value)}
             />
             <Button style={itemStyle} type="primary" onClick={addCate}>添加</Button>
-          </div>
+          </div> */}
 
           <Form.Item
             label="文章标签"
@@ -237,14 +242,14 @@ const ArticleCreat: FC<combineProps> = (props) => {
             </Select>
           </Form.Item>
 
-          <div className="add-cate">
+          {/* <div className="add-cate">
             <Input
               value={tagIpt}
               style={{ width: '150px', ...itemStyle }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTagIpt(e.target.value)}
             />
             <Button style={itemStyle} type="primary" onClick={addTag}>添加</Button>
-          </div>
+          </div> */}
 
           <Form.Item
             label="是否置顶"

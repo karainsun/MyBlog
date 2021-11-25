@@ -22,16 +22,8 @@ const articleCreate = async (ctx) => {
       msg: '已存在同名文章',
       status: 'field'
     }
-  } else { 
-    const tagList = requestBody.tags.map(t => ({ name: t }))
-    const cate = { name: requestBody.category }
-
-    requestBody.tags = tagList
-    requestBody.category = cate
-
-    await Article.create(requestBody, {
-      include: [Tag, Category]
-    }).then(res => {
+  } else {   
+    await Article.create(requestBody).then(() => {
       return ctx.body = {
         code: 200,
         msg: '创建成功',
@@ -57,11 +49,12 @@ const articleList = async (ctx) => {
   } = ctx.request.query
   title = (!title || _.isEmpty(title)) ? '' : title
   category = (!category || _.isEmpty(category)) ? '' : category
-  const categoryFilter = category ? { name: category } : null
-  const {
-    count,
-    rows
-  } = await Article.findAndCountAll({
+  // const categoryFilter = category ? { name: category } : null
+  // const result = await sequelize.query(`SELECT count(DISTINCT article.id) as count FROM articles 
+  //   AS article LEFT OUTER JOIN tags AS tags ON article.id = tags.articleId LEFT JOIN categories AS 
+  //   category ON article.id = category.articleId WHERE (article.title LIKE '%%') `)
+  // const count = result[0][0].count
+  const { rows, count } = await Article.findAndCountAll({
     order: [
       ['top', 'DESC'], // 置顶排序
       ['created_at', 'DESC'] // 创建日期排序
@@ -72,13 +65,16 @@ const articleList = async (ctx) => {
       [Op.and]: [{
         title: {
           [Op.like]: `%${title}%`
-        } 
+        },
+        category: {
+          [Op.like]: `%${category}%`
+        }
       }]
     },
-    include: [
-      { model: Tag, attributes: ['name', 'id'] },
-      { model: Category, attributes: ['name', 'id'], where: categoryFilter } 
-    ]
+    // include: [
+    //   { model: Tag, attributes: ['name', 'id'] },
+    //   { model: Category, attributes: ['name', 'id'], where: categoryFilter } 
+    // ]
   })
   const resData = {
     list: rows,
@@ -134,10 +130,10 @@ const articleDetail = async (ctx) => {
     where: {
       id: id
     },
-    include: [
-      { model: Tag, attributes: ['name'] },
-      { model: Category, attributes: ['name'] } 
-    ]
+    // include: [
+    //   { model: Tag, attributes: ['name'] },
+    //   { model: Category, attributes: ['name'] } 
+    // ]
   });
   if (project === null) {
     ctx.body = {
@@ -159,15 +155,14 @@ const articleUpdate = async (ctx) => {
   try {
     const articleInfo = ctx.request.body; 
     const articleId = parseInt(articleInfo.id)
-    const tagList = articleInfo.tags.map(tag => ({ name: tag, articleId }))
-    const categoryList = { name: articleInfo.category, articleId }
+    // const tagList = articleInfo.tags.map(tag => ({ name: tag, articleId }))
+    // const categoryList = { name: articleInfo.category, articleId }
     const articleRes = await Article.update(articleInfo, { where: { id: articleId } })
-    // 将原有关联的删除掉
-    await Tag.destroy({ where: { articleId } })
-    // bulkCreate：批量创建
-    await Tag.bulkCreate(tagList)
-    await Category.destroy({ where: { articleId } })
-    await Category.create(categoryList)
+    // bulkCreate：批量创建，将原有关联的删除掉
+    // await Tag.destroy({ where: { articleId } }) 
+    // await Tag.bulkCreate(tagList)
+    // await Category.destroy({ where: { articleId } })
+    // await Category.create(categoryList)
 
     const returnValue = {
       code: 200,

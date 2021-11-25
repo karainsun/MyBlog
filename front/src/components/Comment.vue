@@ -2,7 +2,7 @@
   <div>
     <div class="comment w-full d-flex">
       <div class="avatar shadow-all">
-        <img class="w-full h-full" :src="tourist?.avatar || defaultAvatar" alt="" />
+        <img class="w-full h-full" :src="tourist && tourist.avatar ? tourist.avatar : defaultAvatar" alt="" />
       </div>
       <div class="context w-full box-sizing pl-20">
         <div class="text">
@@ -17,7 +17,9 @@
           </div>
         </div>
         <div class="tool d-flex js-between">
-          <i class="name fs-14 text-gray">{{ tourist?.nickname }}</i>
+          <i class="name fs-14 text-gray">
+            {{ tourist && tourist.nickname ? tourist.nickname : '' }}
+          </i>
           <div class="bar">
             <span class="check-emoji iconfont icon-emoji" title="表情" @click="showEmoji"></span>
             <span class="iconfont icon-send" title="发表" @click="send"></span>
@@ -57,7 +59,7 @@ export default defineComponent({
     const emojiShow = ref(false)
     let touristInfo = JSON.parse(localStorage.getItem('tourist_info') as string)
     const tourist = ref(touristInfo)
-    const defaultAvatar = 'http://cdn.kayrain.cn/defaultavatar.jpeg'
+    const defaultAvatar = 'https://cdn.kayrain.cn/defaultavatar.jpeg'
     // 发送bus组件线程事件
     const send = () => {
       if(touristInfo){
@@ -100,7 +102,7 @@ export default defineComponent({
     const addEmoji = (i: number) => {
       const txtBox = document.getElementById(props.txtId)
       const img = document.createElement('img')
-      img.src = `http://cdn.kayrain.cn/${i}.gif`;
+      img.src = `https://cdn.kayrain.cn/${i}.gif`;
       ;(txtBox as any).appendChild(img)
       comment.value = (txtBox as any).innerHTML
     }

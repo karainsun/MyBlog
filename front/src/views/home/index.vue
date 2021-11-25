@@ -18,16 +18,16 @@
               </p>
             </div>
           </router-link>
-          <div class="time-tags d-flex mb-10">
+          <div class="time-tags d-flex mb-10 js-between">
             <div class="tags">
-              <span class="iconfont icon-tag" v-for="tag in item.tags" :key="tag.id">
-                <router-link :to="{ path: '/tags', query: { name: `tag_${tag.name}` } }">{{
+              <span class="iconfont icon-tag" v-for="tag in JSON.parse(item.tags)" :key="tag.id">
+                <router-link :to="{ path: '/tags', query: { id: tag.id } }">{{
                   tag.name
                 }}</router-link>
               </span>
             </div>
             <i class="createtime pl-10 fs-14 text-gray-a3"
-              >Posted by Kay on {{ dayjs(item.created_at).format('YYYY-MM-DD') }}</i
+              >Posted on {{ dayjs(item.created_at).format('YYYY-MM-DD') }}</i
             >
           </div>
         </div>
@@ -52,8 +52,8 @@
         <div class="info pb-15 mb-15">
           <h3 class="text-gray fs-14 mt-15 mb-15">FEATURED TAGS</h3>
           <ul class="tags">
-            <li v-for="tag in tags" :key="tag.id">
-              <router-link :to="{ path: '/tags', query: { name: `tag_${tag.name}` } }">{{
+            <li v-for="tag in postTags" :key="tag.id" v-show="tag.list && tag.list.length !== 0">
+              <router-link :to="{ path: '/tags', query: { id: tag.id } }">{{
                 tag.name
               }}</router-link>
             </li>
@@ -91,9 +91,13 @@
         <div class="info pb-15 mb-15">
           <h3 class="text-gray fs-14 mt-15 mb-15">CATEGORIES</h3>
           <ul class="posts pos-rel">
-            <li class="text-hide" v-for="cate in category" :key="cate.id">
-              <router-link :to="{ path: '/category', query: { name: `cate_${cate.name}` } }">
-                {{ `${cate.name} (${cate.count})` }}
+            <li
+              class="text-hide"
+              v-for="cate in postCategory"
+              v-show="cate.list && cate.list.length !== 0"
+              :key="cate.id">
+              <router-link :to="{ path: '/category', query: { id: cate.id } }">
+                {{ `${cate.name} (${cate.list && cate.list.length})` }}
               </router-link>
             </li>
           </ul>
@@ -106,10 +110,10 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, reactive, watch, computed } from 'vue'
 import Banner from '@/components/Banner.vue'
-import { getClientUser, articleList, getCategories, getTags, articleArchives } from '@/request'
+import { getClientUser, articleList, articleArchives, newPostsList } from '@/request'
 import dayjs from 'dayjs'
 import { useStore } from 'vuex'
-import { GlobalDataProps, UserProps } from '@/store'
+import { GlobalDataProps, UserProps, NewPostsProps, key, BannerProps, AsyncDataParam } from '@/store'
 import { archives, monthToEn } from '@/utils'
 
 interface ParamsType {
@@ -126,9 +130,20 @@ export default defineComponent({
   components: {
     Banner
   },
+  asyncData({ store, route }: AsyncDataParam) {
+    return store.dispatch("setBanners") && store.dispatch("getAllPosts");
+  },
   setup() {
-    const store = useStore<GlobalDataProps>()
-    const banner = computed(() => store.state.banners.order_1)
+    const banner = reactive<BannerProps>({
+      title: '',
+      banner: '',
+      desc:''
+    })
+    const store = useStore<GlobalDataProps>(key)
+    banner.title = computed(() => store.state.banners.order_1.title)
+    banner.banner = computed(() => store.state.banners.order_1.banner)
+    banner.desc = computed(() => store.state.banners.order_1.desc)
+
     const user = ref<UserProps>({
       username: '',
       id: 0,
@@ -139,11 +154,13 @@ export default defineComponent({
       created_at: '',
       sign: '',
     })
-    const tags = ref<Array<TagCategory>>([])
-    const newPosts = computed(() => store.state.newPosts)
-    const allPosts = ref<Array<any>>([])
-    const category = ref<Array<TagCategory>>([])
-    const list = ref<Array<any>>([])
+    const storeTags = computed(() => store.state.tags)
+    const storeCategory = computed(() => store.state.category)
+    const postTags = ref<Array<TagCategory>>([])
+    const postCategory = ref<Array<TagCategory>>([])
+    const newPosts = ref<Array<NewPostsProps>>([])
+    const allPosts = ref<Array<NewPostsProps>>([])
+    const list = ref<Array<NewPostsProps>>([])
     const loadTxt = ref('加载更多')
     const params = reactive<ParamsType>({
       pageNo: 1,
@@ -167,9 +184,7 @@ export default defineComponent({
             }
           }
         })
-        .catch((error) => {
-          console.log(error)
-        })
+        .catch((error) => console.log(error))
     }
 
     const loadMore = () => {
@@ -177,26 +192,45 @@ export default defineComponent({
     }
 
     onMounted(async () => {
-      try {
-        request(params)
-        await store.dispatch('getNewPosts', { limit: 5 })
-        const archives = await articleArchives()
-        allPosts.value = archives.data
-        await getCategories().then((res) => (category.value = res.data))
-        await getTags().then((res) => (tags.value = res.data))
+      request(params)
 
-        const userStore = localStorage.getItem('client_user')
-        const { data: userData } = await getClientUser()
-        user.value = userData
+      await store.dispatch("setCategory");
+      await store.dispatch("setTags");
+
+      postCategory.value = storeCategory.value.map((c) => {
+        articleArchives({ category: c.name, tags: "" })
+          .then((posts) => {
+            c.list = posts.data;
+          });
+        return c;
+      });
+
+      postTags.value = storeTags.value.map((c) => {
+        articleArchives({ category: "", tags: c.name })
+          .then((posts) => {
+            c.list = posts.data;
+          });
+        return c;
+      });
+
+      const requestList = [
+        newPostsList({ limit: 5, category: '', tags: '' }), // 最新几条
+        articleArchives({ category: "", tags: "" }), // 归档
+        getClientUser(), // 前台用户
+      ]
+      Promise.all(requestList).then((result) => {
+        newPosts.value = result[0].data;
+        allPosts.value = result[1].data;
+        user.value = result[2].data;
+
+        const userStore = localStorage.getItem('client_user');
         if (!userStore || userStore === undefined || null) {
-          localStorage.setItem('client_user', JSON.stringify(userData))
-          store.commit('setUserInfo', userData)
+          localStorage.setItem('client_user', JSON.stringify(result[2].data))
+          store.commit('setUserInfo', result[2].data)
         } else {
           store.commit('setUserInfo', JSON.parse(userStore))
         }
-      } catch (error) {
-        console.log('Error：', error)
-      }
+      }).catch((error) => console.log(error));
     })
 
     watch(
@@ -211,12 +245,12 @@ export default defineComponent({
       loadMore,
       loadTxt,
       user,
-      tags,
+      postTags,
       newPosts,
       allPosts,
       archives,
       monthToEn,
-      category,
+      postCategory,
       banner
     }
   }
@@ -410,7 +444,7 @@ export default defineComponent({
       }
       .posts {
         li {
-          padding: 0 0 5px 30px;
+          padding: 0 0 5px 23px;
           font-size: 12px;
           cursor: pointer;
           line-height: 20px;

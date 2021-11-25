@@ -1,20 +1,29 @@
 <template>
   <div class="tags">
-    <banner
-      :title="banner.title"
-      :image="banner.banner"
-      :desc="banner.desc"
-    />
+    <banner :title="banner.title" :image="banner.banner" :desc="banner.desc" />
     <div class="content pt-20">
       <ul class="list">
-        <li v-for="tag in tags" :key="tag.id" @click="anchorPoint(`tag_${tag.name}`)">{{ tag.name }}</li>
+        <li
+          v-for="p in posts"
+          :key="p.id"
+          v-show="p.list && p.list.length !== 0"
+          @click="anchorPoint(p.id)"
+        >
+          {{ p.name }}
+        </li>
       </ul>
-      <div v-for="a in posts" :key="a.tag.id" :id="`tag_${a.tag.name}`" class="posts box-sizing">
+      <div
+        v-for="a in posts"
+        :key="a.id"
+        :id="a.id"
+        class="posts box-sizing"
+        v-show="a.list && a.list.length !== 0"
+      >
         <div class="cate fs-24 pt-10 pb-20">
           <i class="iconfont icon-tag"></i>
-          <span>{{ a.tag.name }}</span>
+          <span>{{ a.name }}</span>
         </div>
-        <ul v-for="p in a.posts" :key="p.id">
+        <ul v-for="p in a.list" :key="p.id">
           <li class="pl-20 pb-20 mb-20">
             <router-link :to="{ path: `/post/${p.id}` }">
               <div class="fs-18 pb-15 text-ellipsis">{{ p.title }}</div>
@@ -28,42 +37,51 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, computed } from 'vue'
+import { defineComponent, onMounted, ref, computed, reactive, toRaw, nextTick } from 'vue'
 import Banner from '@/components/Banner.vue'
-import { GlobalDataProps } from '@/store'
+import { GlobalDataProps, key, BannerProps } from '@/store'
 import { useStore } from 'vuex'
 import { basisTag, goPoint } from '@/utils'
 import { useRoute } from 'vue-router'
+import { articleArchives } from '@/request'
 
 export default defineComponent({
   name: 'tags',
   components: {
     Banner
   },
+  asyncData({ store, route }: AsyncDataParam) {
+    return store.dispatch('setBanners')
+  },
   setup() {
     const route = useRoute()
-    const tags = ref<Array<any>>([])
     const posts = ref<Array<any>>([])
-    const store = useStore<GlobalDataProps>()
-    const banner = computed(() => store.state.banners.order_4)
+    const store = useStore<GlobalDataProps>(key)
+    const tags = computed(() => store.state.tags)
 
-    onMounted(() => {
-      const name: any = route.query.name
+    const banner = reactive<BannerProps>({
+      title: '',
+      banner: '',
+      desc: ''
+    })
+    banner.title = computed(() => store.state.banners.order_4.title)
+    banner.banner = computed(() => store.state.banners.order_4.banner)
+    banner.desc = computed(() => store.state.banners.order_4.desc)
 
-      store
-        .dispatch('getAllPosts')
-        .then((res) => {
-          posts.value = basisTag(res)
-          basisTag(res).forEach((e: any) => {
-            tags.value.push(e.tag)
-          })
-        })
-        .then(() => {
-          if (name) {
-            goPoint(name)
-          }
-        })
-        .catch((error) => console.log(error))
+    onMounted(async () => {
+      const id: number = route.query.id
+      await store.dispatch('setTags')
+      const newList = tags.value.map((c) => {
+        articleArchives({ category: '', tags: c.name }).then((posts) => {
+          c.list = posts.data
+        }).catch(error => console.log(error))
+        return c
+      })
+      posts.value = newList
+      if (id) {
+        // nextTick(() => goPoint(id))
+        setTimeout(() => goPoint(id), 1000)
+      }
     })
 
     const anchorPoint = (selector: string) => {
@@ -71,7 +89,6 @@ export default defineComponent({
     }
 
     return {
-      tags,
       posts,
       anchorPoint,
       banner
@@ -108,8 +125,8 @@ export default defineComponent({
       color: #fff;
       cursor: pointer;
       background-color: var(--tag-bg1);
-      background-image: linear-gradient(to bottom, var(--tag-bg1)0, var(--tag-bg2));
-      opacity: .9;
+      background-image: linear-gradient(to bottom, var(--tag-bg1) 0, var(--tag-bg2));
+      opacity: 0.9;
       &:hover {
         opacity: 1;
       }

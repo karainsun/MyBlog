@@ -38,6 +38,7 @@ import ValidateForm from '@/components/ValidateForm.vue'
 import ValidateInput, { RulesProp } from '@/components/ValidateInput.vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps, TouristProps } from '@/store'
+import { touristLogin, TouristParam } from '@/request'
 import createMessage from '@/components/createMessage'
 import { emitter } from '@/views/detail/index.vue'
 import { touristMitt } from './Comment.vue'
@@ -66,18 +67,18 @@ export default defineComponent({
 
     const onFormSubmit = (result: boolean) => {
       if (result) {
-        const payload = {
+        const params: TouristParam = {
           qq_email: emailVal.value,
           nickname: nicknameVal.value,
           blog: blogVal.value
         }
 
-        store.dispatch('getTourist', payload).then((data: TouristProps) => {
+        touristLogin(params).then((res) => {
           if(route.path.split('/')[1] === 'post') {
             emitter.emit('login-finish')
-            touristMitt.emit('set-tourist', data)
+            touristMitt.emit('set-tourist', res.data)
           } else if (route.path.split('/')[1] === 'message'){
-            messageMitt.emit('login-finish', data)
+            messageMitt.emit('login-finish', res.data)
           }
           createMessage('登录成功', 'success')
         }).catch(error => console.log(error))

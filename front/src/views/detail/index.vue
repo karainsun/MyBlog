@@ -2,34 +2,34 @@
   <div class="detail">
     <banner
       :info="true"
-      :title="post.title"
-      :image="post.image"
-      :date="dayjs(post.created_at).format('YYYY-MM-DD')"
-      :tags="post.tags"
+      :title="post && post.title"
+      :image="post && post.image"
+      :date="post && dayjs(post.created_at).format('YYYY-MM-DD')"
+      :tags="post && post.tags"
     />
     <div class="content pt-20 d-flex" ref="contentRef">
       <!----左边为内容区域---->
       <div class="content-left box-sizing">
         <div class="post">
           <v-md-preview
-            v-if="post.content"
-            :text="post.content.replace(/<xmp>|<\/xmp>/g, '')"
+            v-if="post && post.content"
+            :text="post && post.content.replace(/<xmp>|<\/xmp>/g, '')"
           ></v-md-preview>
           <!-- <wangEditor v-if="post.content" :mdContent="post.content" /> -->
         </div>
         <div class="turnpage pt-20 d-flex js-between">
           <div
-            :class="adjacent.left.length > 0 ? '' : 'act'"
+            :class="adjacent && adjacent.left.length > 0 ? '' : 'act'"
             class="btn"
-            @click="getAdjacent(adjacent.left[0].id)"
+            @click="getAdjacent(adjacent && adjacent.left[0].id)"
           >
             <i class="iconfont icon-previous fs-12"></i>
             <span class="ml-10">PREVIOUS</span>
           </div>
           <div
-            :class="adjacent.right.length > 0 ? '' : 'act'"
+            :class="adjacent && adjacent.right.length > 0 ? '' : 'act'"
             class="btn"
-            @click="getAdjacent(adjacent.right[0].id)"
+            @click="getAdjacent(adjacent && adjacent.right[0].id)"
           >
             <span class="mr-10">NEXT</span>
             <i class="iconfont icon-next fs-12"></i>
@@ -80,19 +80,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref, watch, onUnmounted } from 'vue'
+import { defineComponent, onMounted, reactive, ref, watch, onUnmounted, computed } from 'vue'
+import { useStore } from 'vuex'
 import Banner from '@/components/Banner.vue'
-import { articleDetail } from '@/request'
 import { useRoute, useRouter } from 'vue-router'
-import { NewPostsProps } from '@/store'
+import { NewPostsProps, GlobalDataProps, key } from '@/store'
 import dayjs from 'dayjs'
 import Comment from '@/components/Comment.vue'
 import { blurHideMitt } from '@/components/CommentList.vue'
 import CommentList from '@/components/CommentList.vue'
 import useClickOutside from '@/hooks/useClickOutside'
 import { makeComment, getCommentList } from '@/request'
+import { baseHost } from '@/request/config'
 import createMessage from '@/components/createMessage'
-import { formatList, navTree, getTagsClick, formateHtml } from '@/utils'
+import { formatList, navTree, getTagsClick } from '@/utils'
 import WangEditor from '@/components/WangEditor.vue'
 import mitt from 'mitt'
 // 登录 bus 事件线程
@@ -118,7 +119,11 @@ export default defineComponent({
     CommentList,
     WangEditor
   },
+  asyncData({ store, route }: AsyncDataParam) {
+    return store.dispatch("getDetail", route.params.id as string);
+  },
   setup() {
+    const store = useStore<GlobalDataProps>(key)
     let navTreeRef = ''
     const contentRef = ref<any>(null)
     const visible = ref<boolean>(false)
@@ -126,18 +131,7 @@ export default defineComponent({
     const loginRef = ref<null | HTMLElement>(null)
     const route = useRoute()
     const router = useRouter()
-    const post = reactive<NewPostsProps | any>({
-      title: '',
-      tags: [],
-      description: '',
-      category: '',
-      isComent: true,
-      image: '',
-      id: 0,
-      isReprint: true,
-      content: '',
-      created_at: ''
-    })
+    const post = computed(() => store.state.postDetail)
     const commentList = ref<CommentProps[]>([])
     const atName = ref('')
     const parentCommentId = ref()
@@ -176,7 +170,7 @@ export default defineComponent({
         content: c,
         at_name: atName.value,
         parent_comment_id: parentCommentId.value,
-        article_link: `http://www.kayrain.cn/post/${articleId}`
+        article_link: `${baseHost}/post/${articleId}`
       })
         .then((res: any) => {
           getComments(articleId)
@@ -190,10 +184,10 @@ export default defineComponent({
 
     // 详情
     const getDetail = (postId: string) => {
-      articleDetail({ id: postId })
+      store.dispatch("getDetail", route.params.id as string)
         .then(({ code, data, status }: any) => {
           if (code === 200 && (status as unknown as string) === 'success') {
-            ;(document.getElementById('nav-tree') as any).innerHTML = navTree(formateHtml(data.content))
+            ;(document.getElementById('nav-tree') as any).innerHTML = navTree(data.content)
 
             for (const key in data) {
               if (key !== 'content'){
@@ -201,7 +195,7 @@ export default defineComponent({
                   post[key] = data[key]
                 }
               } else {
-                post.content = formateHtml(data.content)
+                post.content = data.content
               }
             }
             const { left, right } = data.adjacent
@@ -282,7 +276,6 @@ export default defineComponent({
 
     return {
       post,
-      dayjs,
       showLogin,
       visible,
       loginRef,
@@ -295,7 +288,8 @@ export default defineComponent({
       contentRef,
       setCommentQuery,
       comListNum,
-      blurHideIput
+      blurHideIput,
+      dayjs
     }
   }
 })

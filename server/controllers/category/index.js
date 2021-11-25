@@ -6,14 +6,15 @@ const sequelize = require('../../utils/sequelize')
 
 // 查询全部
 const categoryAll = async (ctx) => {
-  const resData = await Category.findAll({
-    attributes: ['name', 'id', [sequelize.fn('COUNT', sequelize.col('name')), 'count']],
-    group: 'name',
-    where: {
-      articleId: { [Op.not]: null }
-    },
-    order: [[sequelize.fn('COUNT', sequelize.col('name')), 'desc']]
-  })
+  const resData = await Category.findAll()
+  // const resData = await Category.findAll({
+  //   attributes: ['name', 'id', [sequelize.fn('COUNT', sequelize.col('name')), 'count']],
+  //   group: 'name',
+  //   where: {
+  //     articleId: { [Op.not]: null }
+  //   },
+  //   order: [[sequelize.fn('COUNT', sequelize.col('name')), 'desc']]
+  // })
   ctx.body = successResult(resData)
 }
 // 条件查询
@@ -79,9 +80,9 @@ const categoryCreate = async (ctx) => {
 }
 // 批量删除
 const categoryDelete = async (ctx) => {
-  const { ids } = ctx.request.body;
+  const { id } = ctx.request.body;
   await Category.destroy({
-    where: { id: { [Op.or]: ids } }
+    where: { id: id }
   }).then(res => {
     const returnValue = {
       code: 200,

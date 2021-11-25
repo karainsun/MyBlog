@@ -19,8 +19,14 @@ const sequelize = require('../../utils/sequelize')
 const articleList = async (ctx) => {
   let { pageNo, pageSize, title } = ctx.request.query
   title = (!title || _.isEmpty(title)) ? '' : title
-  const { count, rows } = await Article.findAndCountAll({
+  // const result = await sequelize.query(`SELECT count(DISTINCT article.id) as count FROM articles 
+  //   AS article LEFT OUTER JOIN tags AS tags ON article.id = tags.articleId LEFT JOIN categories AS 
+  //   category ON article.id = category.articleId WHERE (article.title LIKE '%%') `)
+  // const count = result[0][0].count
+   
+  const { rows, count } = await Article.findAndCountAll({
     order: [
+      ['top', 'DESC'], // 置顶排序
       ['created_at', 'DESC']
     ], // 倒序取最新
     limit: Number(pageSize),
@@ -32,10 +38,10 @@ const articleList = async (ctx) => {
         }
       }]
     },
-    include: [
-      { model: Tag, attributes: ['name', 'id'] },
-      { model: Category, attributes: ['name', 'id'] } 
-    ]
+    // include: [
+    //   { model: Tag, attributes: ['name', 'id'] },
+    //   { model: Category, attributes: ['name', 'id'] } 
+    // ]
   })
   const resData = {
     list: rows,
@@ -48,24 +54,45 @@ const articleList = async (ctx) => {
 }
 // 最新五条/全部文章
 const articleArchives = async (ctx) => {
-  let { limit } = ctx.request.query
+  let { limit, category, tags } = ctx.request.query
   let options = Object.assign({}, {
+    where: {
+      [Op.or]: [{
+        category: {
+          [Op.like]: `%${category}%`
+        },
+        tags: {
+          [Op.like]: `%${tags}%`
+        }
+      }]
+    },
     order: [
       ['created_at', 'DESC']
-    ],
-    include: [
-      { model: Tag, attributes: ['name', 'id'] },
-      { model: Category, attributes: ['name', 'id'] } 
     ]
   }, !limit || limit === 'undefined' ? null : { limit: Number(limit) })
   const resData = await Article.findAll(options) 
+  ctx.body = successResult(resData)
+}
+// 文章搜索
+const searchPost = async (ctx) => {
+  let { title } = ctx.request.query 
+  const resData = await Article.findAll({
+    where: {
+      title: {
+        [Op.like]: `%${title}%`
+      }
+    },
+    order: [
+      ['created_at', 'DESC']
+    ]
+  }) 
   ctx.body = successResult(resData)
 }
 // 个人信息
 const userInfo = async (ctx) => {
   const user = await User.findOne({
     where: {
-      username: '' // 指定要返回的用户到前台主页
+      username: 'Kayrain'
     }
   });
   if (user === null) {
@@ -113,10 +140,10 @@ const postDetail = async (ctx) => {
 
   const project = await Article.findOne({ 
     where: { id: id },
-    include: [
-      { model: Tag, attributes: ['name', 'id'] },
-      { model: Category, attributes: ['name', 'id'] } 
-    ]
+    // include: [
+    //   { model: Tag, attributes: ['name', 'id'] },
+    //   { model: Category, attributes: ['name', 'id'] } 
+    // ]
   });
   if (project === null) { 
     ctx.body = {
@@ -310,5 +337,6 @@ module.exports = {
   collectList,
   bannerList,
   makeMessage,
-  getMessage
+  getMessage,
+  searchPost
 }

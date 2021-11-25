@@ -1,8 +1,13 @@
 import axios from 'axios';
-import store from '@/store/index'
+import { createStore } from '@/store/index'
+
+const { store } = createStore();
+
+// export const baseHost = 'https://www.kayrain.cn/api'
+export const baseHost = 'http://localhost:3000'
 
 const ajax = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? '正式环境api' : '/api',
+  baseURL: process.env.NODE_ENV === 'production' ? `${baseHost}` : '/api',
   timeout: 3000
 });
 
@@ -22,7 +27,7 @@ ajax.interceptors.response.use(
     // 延长loading
     setTimeout(() => {
       store.commit('setLoading', false)
-    }, 500)
+    }, 100)
     if (res.status === 200) {
       return Promise.resolve(res.data);
     } else {

@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true, 
       comment: '头像',
-      defaultValue: 'http://cdn.kayrain.cn/defaultavatar.jpeg',
+      defaultValue: 'https://cdn.kayrain.cn/defaultavatar.jpeg',
     },
     sign: {
       type: DataTypes.STRING,

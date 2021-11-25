@@ -12,6 +12,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { checkTheme } from '@/utils'
+// import { localStorage } from '@/utils/global'
 
 export default defineComponent({
   setup() {

@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import dayjs from 'dayjs'
-import { Form, Row, Col, Input, Button, Table, message } from 'antd';
+import { Form, Row, Col, Input, Button, Table, message, Popconfirm } from 'antd';
 import { setHeight } from 'utils'
 import { tagList, tagCreate, tagUpdate, tagsDelete } from 'request'
 import ModalForm from 'components/modalForm';
@@ -183,7 +183,7 @@ const Tags: FC = () => {
           <Col span={2}>
             <Form.Item><Button htmlType="submit">搜索</Button></Form.Item>
           </Col>
-          {/* <Col span={2}>
+          <Col span={2}>
             <Form.Item><Button onClick={modalShow}>新建</Button></Form.Item>
           </Col>
           <Col span={2}>
@@ -198,7 +198,7 @@ const Tags: FC = () => {
               </Popconfirm>
             </Form.Item>
           </Col>
-          <Col span={2}>
+          {/* <Col span={2}>
             <Form.Item><Button onClick={tagToUpdate} type="primary" ghost>编辑</Button></Form.Item>
           </Col> */}
         </Row>

@@ -9,7 +9,15 @@ const useClickOutside = (elementRef: Ref<null | HTMLElement>) => {
     if (!attrValue) return
 
     const eleClass = attrValue.value.split(' ')[1]
-    if (eleClass === 'icon-send' || eleClass === 'reply-btn' || eleClass === 'icon-pen' || eleClass === 'icon-message') {
+    const classArr = [
+      'icon-send',
+      'reply-btn',
+      'icon-pen',
+      'icon-message',
+      'search-btn'
+    ]
+
+    if (classArr.includes(eleClass)) {
       return
     }
 

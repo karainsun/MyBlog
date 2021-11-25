@@ -31,7 +31,7 @@ router.post('/upload', async (ctx) => {
           status: 'success',
           data: {
             name: result.key,
-            url: `http://${qiniuConfig.origin}/${result.key}`
+            url: `https://${qiniuConfig.origin}/${result.key}`
           }
         }
       } else {
